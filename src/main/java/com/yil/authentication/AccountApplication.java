@@ -8,7 +8,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages = {"com.yil"})
-@OpenAPIDefinition(info = @Info(title = "ERP Authentication Api", version = "1.0", description = "ERP Information"))
+@OpenAPIDefinition(info = @Info(title = "Account Api", version = "1.0", description = "Yıldırım Information"))
 @SpringBootApplication
 public class AccountApplication {
 
