@@ -78,6 +78,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                         .password(MD5Util.encode("admin"))
                         .enabled(true)
                         .locked(false)
+                        .mail("admin@gmail.com")
                         .lastPasswordChangeTime(new Date())
                         .userTypeId(adminUserType.getId())
                         .build();
