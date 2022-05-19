@@ -113,13 +113,13 @@ public class UserController {
                 throw e;
             }
             String hashPassword = MD5Util.encode(dto.getPassword());
-            User user = User.builder()
-                    .userName(dto.getUserName())
-                    .password(hashPassword)
-                    .userTypeId(userType.getId())
-                    .enabled(dto.getEnabled())
-                    .locked(false)
-                    .build();
+            User user = new User();
+            user.setUserName(dto.getUserName());
+            user.setPassword(hashPassword);
+            user.setUserTypeId(userType.getId());
+            user.setEnabled(dto.getEnabled());
+            user.setLocked(dto.getLocked());
+            user.setMail(dto.getMail());
             user.setCreatedUserId(authenticatedUserId);
             user.setCreatedTime(new Date());
             user = userService.save(user);

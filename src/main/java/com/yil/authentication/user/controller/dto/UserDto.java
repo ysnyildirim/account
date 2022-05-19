@@ -21,4 +21,5 @@ public class UserDto {
     private Boolean locked;
     private Date lastPasswordChangeTime;
     private Long userTypeId;
+    private String mail;
 }

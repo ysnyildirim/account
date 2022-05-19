@@ -35,4 +35,6 @@ public class User extends AbstractEntity {
     private Boolean locked;
     @Column(name = "LastPasswordChangeTime")
     private Date lastPasswordChangeTime;
+    @Column(name = "Mail", nullable = false)
+    private String mail;
 }

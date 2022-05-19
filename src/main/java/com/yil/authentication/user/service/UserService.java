@@ -25,6 +25,7 @@ public class UserService {
                 .userName(user.getUserName())
                 .enabled(user.getEnabled())
                 .locked(user.getLocked())
+                .mail(user.getMail())
                 .userTypeId(user.getUserTypeId())
                 .build();
     }
@@ -48,10 +49,6 @@ public class UserService {
 
     public User save(User user) {
         return userRepository.save(user);
-    }
-
-    public void delete(Long id) {
-        userRepository.deleteById(id);
     }
 
     public Page<User> findAllByDeletedTimeIsNull(Pageable pageable) {
