@@ -37,4 +37,8 @@ public class User extends AbstractEntity {
     private Date lastPasswordChangeTime;
     @Column(name = "Mail", nullable = false)
     private String mail;
+    @Column(name = "PersonId")
+    private Long personId;
+    @Column(name = "CompanyId")
+    private Long companyId;
 }
