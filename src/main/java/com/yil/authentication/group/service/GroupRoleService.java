@@ -1,6 +1,6 @@
 package com.yil.authentication.group.service;
 
-import com.yil.authentication.group.controller.dto.GroupRoleDto;
+import com.yil.authentication.group.dto.GroupRoleDto;
 import com.yil.authentication.group.model.GroupRole;
 import com.yil.authentication.group.repository.GroupRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;

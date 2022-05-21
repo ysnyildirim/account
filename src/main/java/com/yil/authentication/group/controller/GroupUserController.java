@@ -1,8 +1,8 @@
 package com.yil.authentication.group.controller;
 
 import com.yil.authentication.base.ApiHeaders;
-import com.yil.authentication.group.controller.dto.CreateGroupUserDto;
-import com.yil.authentication.group.controller.dto.GroupUserDto;
+import com.yil.authentication.group.dto.CreateGroupUserDto;
+import com.yil.authentication.group.dto.GroupUserDto;
 import com.yil.authentication.group.model.GroupUser;
 import com.yil.authentication.group.service.GroupUserService;
 import com.yil.authentication.user.model.User;

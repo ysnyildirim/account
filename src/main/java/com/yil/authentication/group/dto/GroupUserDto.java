@@ -1,4 +1,4 @@
-package com.yil.authentication.group.controller.dto;
+package com.yil.authentication.group.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupRoleDto {
+public class GroupUserDto {
     private Long groupId;
-    private Long roleId;
+    private Long userId;
 }

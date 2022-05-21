@@ -120,6 +120,7 @@ public class UserController {
             user.setEnabled(dto.getEnabled());
             user.setLocked(dto.getLocked());
             user.setMail(dto.getMail());
+            user.setPersonId(dto.getPersonId());
             user.setCreatedUserId(authenticatedUserId);
             user.setCreatedTime(new Date());
             user = userService.save(user);

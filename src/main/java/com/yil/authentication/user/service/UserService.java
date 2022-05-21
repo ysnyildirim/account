@@ -26,6 +26,7 @@ public class UserService {
                 .enabled(user.getEnabled())
                 .locked(user.getLocked())
                 .mail(user.getMail())
+                .personId(user.getPersonId())
                 .userTypeId(user.getUserTypeId())
                 .build();
     }

@@ -1,4 +1,4 @@
-package com.yil.authentication.group.controller.dto;
+package com.yil.authentication.group.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

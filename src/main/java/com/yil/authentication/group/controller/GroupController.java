@@ -2,8 +2,8 @@ package com.yil.authentication.group.controller;
 
 import com.yil.authentication.base.ApiHeaders;
 import com.yil.authentication.base.PageDto;
-import com.yil.authentication.group.controller.dto.CreateGroupDto;
-import com.yil.authentication.group.controller.dto.GroupDto;
+import com.yil.authentication.group.dto.CreateGroupDto;
+import com.yil.authentication.group.dto.GroupDto;
 import com.yil.authentication.group.model.Group;
 import com.yil.authentication.group.service.GroupService;
 import org.apache.commons.logging.Log;

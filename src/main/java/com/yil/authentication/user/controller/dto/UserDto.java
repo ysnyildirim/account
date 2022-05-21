@@ -22,4 +22,5 @@ public class UserDto {
     private Date lastPasswordChangeTime;
     private Long userTypeId;
     private String mail;
+    private Long personId;
 }
