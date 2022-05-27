@@ -7,8 +7,6 @@ import com.yil.authentication.role.dto.CreateRoleDto;
 import com.yil.authentication.role.dto.RoleDto;
 import com.yil.authentication.role.model.Role;
 import com.yil.authentication.role.service.RoleService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +22,7 @@ import java.util.Date;
 @RequestMapping("/api/account/v1/roles")
 public class RoleController {
 
-     private final RoleService roleService;
+    private final RoleService roleService;
 
     @Autowired
     public RoleController(RoleService roleService) {

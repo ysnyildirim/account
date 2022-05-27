@@ -1,6 +1,8 @@
 package com.yil.authentication.user.controller;
 
-import com.yil.authentication.base.*;
+import com.yil.authentication.base.ApiHeaders;
+import com.yil.authentication.base.MD5Util;
+import com.yil.authentication.base.PageDto;
 import com.yil.authentication.exception.UserNameCannotBeUsedException;
 import com.yil.authentication.user.dto.CreateUserDto;
 import com.yil.authentication.user.dto.UserDto;
@@ -69,10 +71,10 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserDto> create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                 @Valid @RequestBody CreateUserDto dto) {
+                                          @Valid @RequestBody CreateUserDto dto) {
         if (userService.existsByUserName(dto.getUserName()))
-                throw new UserNameCannotBeUsedException();
-          UserType userType = userTypeService.findById(dto.getUserTypeId());
+            throw new UserNameCannotBeUsedException();
+        UserType userType = userTypeService.findById(dto.getUserTypeId());
         String hashPassword = null;
         try {
             hashPassword = MD5Util.encode(dto.getPassword());

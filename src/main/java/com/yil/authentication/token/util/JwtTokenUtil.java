@@ -1,4 +1,4 @@
-package com.yil.authentication.auth.util;
+package com.yil.authentication.token.util;
 
 import com.yil.authentication.user.model.User;
 import io.jsonwebtoken.*;

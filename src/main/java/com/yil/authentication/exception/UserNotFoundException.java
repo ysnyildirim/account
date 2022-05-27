@@ -14,4 +14,4 @@ import javax.persistence.EntityNotFoundException;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 @ApiException(code = ErrorCode.UserNotFound)
 public class UserNotFoundException extends EntityNotFoundException {
-    }
+}

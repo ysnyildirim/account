@@ -18,9 +18,9 @@ public enum ErrorCode {
     UserTypeNotFound(2000008, "User type not found"),
     GroupNameCannotBeUsed(2000009, "Group name cannot be used");
 
-    private int code;
+    private final int code;
 
-    private String message;
+    private final String message;
 
     ErrorCode(int code, String message) {
         this.code = code;

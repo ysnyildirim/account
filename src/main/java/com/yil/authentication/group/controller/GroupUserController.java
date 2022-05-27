@@ -7,8 +7,6 @@ import com.yil.authentication.group.model.GroupUser;
 import com.yil.authentication.group.service.GroupUserService;
 import com.yil.authentication.user.model.User;
 import com.yil.authentication.user.service.UserService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

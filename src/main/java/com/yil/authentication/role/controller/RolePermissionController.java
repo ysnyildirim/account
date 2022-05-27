@@ -7,8 +7,6 @@ import com.yil.authentication.role.model.Permission;
 import com.yil.authentication.role.model.RolePermission;
 import com.yil.authentication.role.service.PermissionService;
 import com.yil.authentication.role.service.RolePermissionService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

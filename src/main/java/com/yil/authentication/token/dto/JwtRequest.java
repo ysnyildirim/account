@@ -1,4 +1,4 @@
-package com.yil.authentication.auth.dto;
+package com.yil.authentication.token.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +13,10 @@ public class JwtRequest implements Serializable {
     private static final long serialVersionUID = 5926468583005150707L;
 
     @NotBlank
-    @Length(min = 1,max = 100)
+    @Length(min = 1, max = 100)
     private String username;
     @NotBlank
-    @Length(min = 1,max = 100)
+    @Length(min = 1, max = 100)
     private String password;
 
 }

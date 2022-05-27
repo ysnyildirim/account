@@ -1,7 +1,7 @@
 package com.yil.authentication.user.service;
 
-import com.yil.authentication.user.dto.UserTypeDto;
 import com.yil.authentication.exception.UserTypeNotFoundException;
+import com.yil.authentication.user.dto.UserTypeDto;
 import com.yil.authentication.user.model.UserType;
 import com.yil.authentication.user.repository.UserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

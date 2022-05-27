@@ -1,9 +1,9 @@
-package com.yil.authentication.auth.controller;
+package com.yil.authentication.token.controller;
 
-import com.yil.authentication.auth.dto.JwtRequest;
-import com.yil.authentication.auth.dto.JwtResponse;
-import com.yil.authentication.auth.util.JwtTokenUtil;
 import com.yil.authentication.base.MD5Util;
+import com.yil.authentication.token.dto.JwtRequest;
+import com.yil.authentication.token.dto.JwtResponse;
+import com.yil.authentication.token.util.JwtTokenUtil;
 import com.yil.authentication.user.model.User;
 import com.yil.authentication.user.service.UserService;
 import org.apache.commons.logging.Log;

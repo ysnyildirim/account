@@ -1,4 +1,4 @@
-package com.yil.authentication.auth.dto;
+package com.yil.authentication.token.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
