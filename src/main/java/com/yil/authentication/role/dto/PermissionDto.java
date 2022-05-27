@@ -1,4 +1,4 @@
-package com.yil.authentication.role.controller.dto;
+package com.yil.authentication.role.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

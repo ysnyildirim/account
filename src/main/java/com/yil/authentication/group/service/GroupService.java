@@ -1,5 +1,6 @@
 package com.yil.authentication.group.service;
 
+import com.yil.authentication.exception.GroupNotFoundException;
 import com.yil.authentication.group.dto.GroupDto;
 import com.yil.authentication.group.model.Group;
 import com.yil.authentication.group.repository.GroupRepository;
@@ -7,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 public class GroupService {
@@ -28,16 +27,23 @@ public class GroupService {
                 .build();
     }
 
-    public Group findById(Long id) throws EntityNotFoundException {
+    public Group findById(Long id) throws GroupNotFoundException {
         return groupRepository.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException("Group not found");
+            throw new GroupNotFoundException();
         });
     }
 
-    public Group findByName(String name) throws EntityNotFoundException {
+    public Group findByIdAndDeletedTimeIsNull(Long id) throws GroupNotFoundException {
+        Group group = groupRepository.findByIdAndDeletedTimeIsNull(id);
+        if (group == null)
+            throw new GroupNotFoundException();
+        return group;
+    }
+
+    public Group findByName(String name) throws GroupNotFoundException {
         Group group = groupRepository.findByNameAndDeletedTimeIsNull(name);
         if (group == null)
-            throw new EntityNotFoundException("Group not found");
+            throw new GroupNotFoundException();
         return group;
     }
 

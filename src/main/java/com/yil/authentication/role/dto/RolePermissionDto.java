@@ -1,4 +1,4 @@
-package com.yil.authentication.user.controller.dto;
+package com.yil.authentication.role.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRoleDto {
-    private Long userId;
+public class RolePermissionDto {
     private Long roleId;
+    private Long permissionId;
 }

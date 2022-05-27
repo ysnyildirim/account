@@ -13,6 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByDeletedTimeIsNull(Pageable pageable);
 
-    boolean existsByUserNameAndDeletedTimeIsNull(String userName);
+    boolean existsByUserName(String userName);
+
+    User findByIdAndDeletedTimeIsNull(Long id);
 
 }

@@ -15,4 +15,6 @@ public interface RoleRepository extends JpaRepository<Role, Long> {
     boolean existsByNameAndDeletedTimeIsNull(String name);
 
     Page<Role> findAllByDeletedTimeIsNull(Pageable pageable);
+
+    Role findByIdAndDeletedTimeIsNull(Long id);
 }

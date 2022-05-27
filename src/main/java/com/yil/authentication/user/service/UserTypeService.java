@@ -1,12 +1,12 @@
 package com.yil.authentication.user.service;
 
-import com.yil.authentication.user.controller.dto.UserTypeDto;
+import com.yil.authentication.user.dto.UserTypeDto;
+import com.yil.authentication.exception.UserTypeNotFoundException;
 import com.yil.authentication.user.model.UserType;
 import com.yil.authentication.user.repository.UserTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -37,9 +37,9 @@ public class UserTypeService {
         userTypeRepository.deleteById(id);
     }
 
-    public UserType findById(Long id) throws EntityNotFoundException {
+    public UserType findById(Long id) throws UserTypeNotFoundException {
         return userTypeRepository.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException();
+            throw new UserTypeNotFoundException();
         });
     }
 
@@ -47,9 +47,9 @@ public class UserTypeService {
         return userTypeRepository.findAllByRealPersonAndDeletedTimeIsNull(realPerson);
     }
 
-    public UserType findByName(String name) throws EntityNotFoundException {
+    public UserType findByName(String name) throws UserTypeNotFoundException {
         UserType userType = userTypeRepository.findByNameAndDeletedTimeIsNull(name);
-        if (userType == null) throw new EntityNotFoundException();
+        if (userType == null) throw new UserTypeNotFoundException();
         return userType;
     }
 

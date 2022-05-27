@@ -1,14 +1,13 @@
 package com.yil.authentication.role.service;
 
-import com.yil.authentication.role.controller.dto.RoleDto;
+import com.yil.authentication.exception.RoleNotFoundException;
+import com.yil.authentication.role.dto.RoleDto;
 import com.yil.authentication.role.model.Role;
 import com.yil.authentication.role.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 public class RoleService {
@@ -29,16 +28,23 @@ public class RoleService {
                 .build();
     }
 
-    public Role findById(Long id) throws EntityNotFoundException {
+    public Role findById(Long id) throws RoleNotFoundException {
         return roleRepository.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException("Role not found");
+            throw new RoleNotFoundException();
         });
     }
 
-    public Role findByName(String name) throws EntityNotFoundException {
+    public Role findByIdAndDeletedTimeIsNull(Long id) throws RoleNotFoundException {
+        Role role = roleRepository.findByIdAndDeletedTimeIsNull(id);
+        if (role == null)
+            throw new RoleNotFoundException();
+        return role;
+    }
+
+    public Role findByName(String name) throws RoleNotFoundException {
         Role role = roleRepository.findByNameAndDeletedTimeIsNull(name);
         if (role == null)
-            throw new EntityNotFoundException("Role not found");
+            throw new RoleNotFoundException();
         return role;
     }
 

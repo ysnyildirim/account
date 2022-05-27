@@ -1,14 +1,13 @@
 package com.yil.authentication.user.service;
 
-import com.yil.authentication.user.controller.dto.UserDto;
+import com.yil.authentication.user.dto.UserDto;
+import com.yil.authentication.exception.UserNotFoundException;
 import com.yil.authentication.user.model.User;
 import com.yil.authentication.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 public class UserService {
@@ -31,21 +30,28 @@ public class UserService {
                 .build();
     }
 
-    public User findById(Long id) throws EntityNotFoundException {
+    public User findById(Long id) throws UserNotFoundException {
         return userRepository.findById(id).orElseThrow(() -> {
-            return new EntityNotFoundException();
+            throw new UserNotFoundException();
         });
     }
 
-    public User findByUserNameAndDeletedTimeIsNull(String userName) throws EntityNotFoundException {
-        User user = userRepository.findByUserNameAndDeletedTimeIsNull(userName);
+    public User findByIdAndDeletedTimeIsNull(Long id) throws UserNotFoundException {
+        User user = userRepository.findByIdAndDeletedTimeIsNull(id);
         if (user == null)
-            throw new EntityNotFoundException();
+            throw new UserNotFoundException();
         return user;
     }
 
-    public boolean existsByUserNameAndDeletedTimeIsNull(String userName) {
-        return userRepository.existsByUserNameAndDeletedTimeIsNull(userName);
+    public User findByUserNameAndDeletedTimeIsNull(String userName) throws UserNotFoundException {
+        User user = userRepository.findByUserNameAndDeletedTimeIsNull(userName);
+        if (user == null)
+            throw new UserNotFoundException();
+        return user;
+    }
+
+    public boolean existsByUserName(String userName) {
+        return userRepository.existsByUserName(userName);
     }
 
     public User save(User user) {

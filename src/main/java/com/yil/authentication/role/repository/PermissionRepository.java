@@ -14,5 +14,7 @@ public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
     boolean existsByNameAndDeletedTimeIsNull(String name);
 
+    Permission findByIdAndDeletedTimeIsNull(Long id);
+
     Page<Permission> findAllByDeletedTimeIsNull(Pageable pageable);
 }

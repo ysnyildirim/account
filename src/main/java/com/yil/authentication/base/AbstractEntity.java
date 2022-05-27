@@ -1,5 +1,6 @@
 package com.yil.authentication.base;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +9,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
-import java.util.UUID;
 
+@Data
 @Getter
 @Setter
 @MappedSuperclass

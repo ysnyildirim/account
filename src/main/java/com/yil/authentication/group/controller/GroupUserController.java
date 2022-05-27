@@ -14,17 +14,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "v1/groups/{groupId}/users")
+@RequestMapping(value = "/api/account/v1/groups/{groupId}/users")
 public class GroupUserController {
 
-    private final Log logger = LogFactory.getLog(this.getClass());
     private final GroupUserService groupUserService;
     private final UserService userService;
 
@@ -36,41 +34,35 @@ public class GroupUserController {
 
     @GetMapping
     public ResponseEntity<List<GroupUserDto>> findAll(@PathVariable Long groupId) {
-        try {
-            List<GroupUser> data = groupUserService.findAllByGroupIdAndDeletedTimeIsNull(groupId);
-            List<GroupUserDto> dtoData = new ArrayList<>();
-            for (GroupUser groupUser : data) {
-                GroupUserDto dto = GroupUserService.toDto(groupUser);
-                dtoData.add(dto);
-            }
-            return ResponseEntity.ok(dtoData);
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
+        List<GroupUser> data = groupUserService.findAllByGroupIdAndDeletedTimeIsNull(groupId);
+        List<GroupUserDto> dtoData = new ArrayList<>();
+        for (GroupUser groupUser : data) {
+            GroupUserDto dto = GroupUserService.toDto(groupUser);
+            dtoData.add(dto);
         }
+        return ResponseEntity.ok(dtoData);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                 @PathVariable Long groupId,
-                                 @Valid @RequestBody CreateGroupUserDto dto) {
-        try {
-            User user = userService.findById(dto.getUserId());
-            List<GroupUser> groupUsers = groupUserService.findAllByGroupIdAndUserIdAndDeletedTimeIsNull(groupId, dto.getUserId());
-            if (!groupUsers.isEmpty())
-                return ResponseEntity.created(null).build();
-            GroupUser groupUser = new GroupUser();
-            groupUser.setGroupId(groupId);
-            groupUser.setUserId(user.getId());
-            groupUser.setCreatedUserId(authenticatedUserId);
-            groupUser.setCreatedTime(new Date());
-            groupUser = groupUserService.save(groupUser);
-            return ResponseEntity.created(null).build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
+    public ResponseEntity<GroupUserDto> create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+                                               @PathVariable Long groupId,
+                                               @Valid @RequestBody CreateGroupUserDto dto) {
+        User user = userService.findById(dto.getUserId());
+        List<GroupUser> groupUsers = groupUserService.findAllByGroupIdAndUserIdAndDeletedTimeIsNull(groupId, dto.getUserId());
+        GroupUserDto responce;
+        if (!groupUsers.isEmpty()) {
+            responce = GroupUserService.toDto(groupUsers.get(0));
+            return ResponseEntity.created(null).body(responce);
         }
+        GroupUser groupUser = new GroupUser();
+        groupUser.setGroupId(groupId);
+        groupUser.setUserId(user.getId());
+        groupUser.setCreatedUserId(authenticatedUserId);
+        groupUser.setCreatedTime(new Date());
+        groupUser = groupUserService.save(groupUser);
+        responce = GroupUserService.toDto(groupUser);
+        return ResponseEntity.created(null).body(responce);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -78,25 +70,15 @@ public class GroupUserController {
     public ResponseEntity delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long groupId,
                                  @PathVariable Long id) {
-        try {
-            List<GroupUser> groupUsers;
-            try {
-                groupUsers = groupUserService.findAllByGroupIdAndUserIdAndDeletedTimeIsNull(groupId, id);
-            } catch (EntityNotFoundException entityNotFoundException) {
-                return ResponseEntity.notFound().build();
-            } catch (Exception e) {
-                throw e;
-            }
-            for (GroupUser groupUser : groupUsers) {
-                groupUser.setDeletedUserId(authenticatedUserId);
-                groupUser.setDeletedTime(new Date());
-            }
-            groupUserService.saveAll(groupUsers);
+        List<GroupUser> groupUsers = groupUserService.findAllByGroupIdAndUserIdAndDeletedTimeIsNull(groupId, id);
+        if (groupUsers.isEmpty())
             return ResponseEntity.ok().build();
-        } catch (Exception exception) {
-            logger.error(null, exception);
-            return ResponseEntity.internalServerError().build();
+        for (GroupUser groupUser : groupUsers) {
+            groupUser.setDeletedUserId(authenticatedUserId);
+            groupUser.setDeletedTime(new Date());
         }
+        groupUserService.saveAll(groupUsers);
+        return ResponseEntity.ok().build();
     }
 
 }

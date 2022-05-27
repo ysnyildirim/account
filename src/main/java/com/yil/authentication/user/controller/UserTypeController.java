@@ -1,8 +1,8 @@
 package com.yil.authentication.user.controller;
 
 import com.yil.authentication.base.ApiHeaders;
-import com.yil.authentication.user.controller.dto.CreateUserTypeDto;
-import com.yil.authentication.user.controller.dto.UserTypeDto;
+import com.yil.authentication.user.dto.CreateUserTypeDto;
+import com.yil.authentication.user.dto.UserTypeDto;
 import com.yil.authentication.user.model.UserType;
 import com.yil.authentication.user.service.UserTypeService;
 import org.apache.commons.logging.Log;

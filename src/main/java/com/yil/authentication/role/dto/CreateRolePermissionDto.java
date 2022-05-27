@@ -1,15 +1,18 @@
-package com.yil.authentication.role.controller.dto;
+package com.yil.authentication.role.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RolePermissionDto {
-    private Long roleId;
+public class CreateRolePermissionDto {
+    @NotNull
     private Long permissionId;
 }

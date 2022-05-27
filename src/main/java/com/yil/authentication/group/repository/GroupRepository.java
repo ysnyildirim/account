@@ -14,4 +14,6 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     boolean existsByNameAndDeletedTimeIsNull(String name);
 
     Page<Group> findAllByDeletedTimeIsNull(Pageable pageable);
+
+    Group findByIdAndDeletedTimeIsNull(Long id);
 }

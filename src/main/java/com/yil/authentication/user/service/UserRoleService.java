@@ -1,6 +1,6 @@
 package com.yil.authentication.user.service;
 
-import com.yil.authentication.user.controller.dto.UserRoleDto;
+import com.yil.authentication.user.dto.UserRoleDto;
 import com.yil.authentication.user.model.UserRole;
 import com.yil.authentication.user.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;

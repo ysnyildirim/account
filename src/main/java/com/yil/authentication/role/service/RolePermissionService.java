@@ -1,6 +1,6 @@
 package com.yil.authentication.role.service;
 
-import com.yil.authentication.role.controller.dto.RolePermissionDto;
+import com.yil.authentication.role.dto.RolePermissionDto;
 import com.yil.authentication.role.model.RolePermission;
 import com.yil.authentication.role.repository.RolePermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

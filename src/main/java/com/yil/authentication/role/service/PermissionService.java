@@ -1,14 +1,13 @@
 package com.yil.authentication.role.service;
 
-import com.yil.authentication.role.controller.dto.PermissionDto;
+import com.yil.authentication.exception.PermissionNotFoundException;
+import com.yil.authentication.role.dto.PermissionDto;
 import com.yil.authentication.role.model.Permission;
 import com.yil.authentication.role.repository.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 public class PermissionService {
@@ -28,16 +27,23 @@ public class PermissionService {
                 .build();
     }
 
-    public Permission findById(Long id) throws EntityNotFoundException {
+    public Permission findById(Long id) throws PermissionNotFoundException {
         return permissionRepository.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException("Permission not found");
+            throw new PermissionNotFoundException();
         });
     }
 
-    public Permission findByName(String name) throws EntityNotFoundException {
+    public Permission findByIdAndDeletedTimeIsNull(Long id) throws PermissionNotFoundException {
+        Permission permission = permissionRepository.findByIdAndDeletedTimeIsNull(id);
+        if (permission == null)
+            throw new PermissionNotFoundException();
+        return permission;
+    }
+
+    public Permission findByName(String name) throws PermissionNotFoundException {
         Permission permission = permissionRepository.findByNameAndDeletedTimeIsNull(name);
         if (permission == null)
-            throw new EntityNotFoundException("Permission not found");
+            throw new PermissionNotFoundException();
         return permission;
     }
 
