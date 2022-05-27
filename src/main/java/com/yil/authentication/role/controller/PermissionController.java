@@ -1,6 +1,6 @@
 package com.yil.authentication.role.controller;
 
-import com.yil.authentication.base.ApiHeaders;
+import com.yil.authentication.base.ApiConstant;
 import com.yil.authentication.base.PageDto;
 import com.yil.authentication.role.dto.CreatePermissionDto;
 import com.yil.authentication.role.dto.PermissionDto;
@@ -35,8 +35,8 @@ public class PermissionController {
 
     @GetMapping
     public ResponseEntity<PageDto<PermissionDto>> findAll(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "1000") int size) {
+            @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
+            @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
         if (page < 0)
             page = 0;
         if (size <= 0 || size > 1000)
@@ -56,7 +56,7 @@ public class PermissionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<PermissionDto> create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity<PermissionDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                                 @Valid @RequestBody CreatePermissionDto dto) {
         if (permissionService.existsByNameAndDeletedTimeIsNull(dto.getName()))
             return ResponseEntity.badRequest().build();
@@ -76,7 +76,7 @@ public class PermissionController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<PermissionDto> replace(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity<PermissionDto> replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                                  @PathVariable Long id,
                                                  @Valid @RequestBody CreatePermissionDto dto) {
         Permission permission = permissionService.findById(id);
@@ -90,7 +90,7 @@ public class PermissionController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long id) {
         Permission entity = permissionService.findByIdAndDeletedTimeIsNull(id);
         entity.setDeletedUserId(authenticatedUserId);

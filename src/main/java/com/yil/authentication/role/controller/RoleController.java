@@ -1,6 +1,6 @@
 package com.yil.authentication.role.controller;
 
-import com.yil.authentication.base.ApiHeaders;
+import com.yil.authentication.base.ApiConstant;
 import com.yil.authentication.base.PageDto;
 import com.yil.authentication.exception.RoleNameCannotBeUsedException;
 import com.yil.authentication.role.dto.CreateRoleDto;
@@ -31,8 +31,8 @@ public class RoleController {
 
     @GetMapping
     public ResponseEntity<PageDto<RoleDto>> findAll(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "1000") int size) {
+            @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
+            @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
         if (page < 0)
             page = 0;
         if (size <= 0 || size > 1000)
@@ -52,7 +52,7 @@ public class RoleController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<RoleDto> create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity<RoleDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                           @Valid @RequestBody CreateRoleDto dto) {
         if (roleService.existsByNameAndDeletedTimeIsNull(dto.getName()))
             throw new RoleNameCannotBeUsedException();
@@ -68,7 +68,7 @@ public class RoleController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<RoleDto> replace(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity<RoleDto> replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                            @PathVariable Long id,
                                            @Valid @RequestBody CreateRoleDto dto) {
         Role role = roleService.findByIdAndDeletedTimeIsNull(id);
@@ -83,7 +83,7 @@ public class RoleController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long id) {
         Role entity = roleService.findByIdAndDeletedTimeIsNull(id);
         entity.setDeletedUserId(authenticatedUserId);

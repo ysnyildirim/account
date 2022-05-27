@@ -1,6 +1,6 @@
 package com.yil.authentication.role.controller;
 
-import com.yil.authentication.base.ApiHeaders;
+import com.yil.authentication.base.ApiConstant;
 import com.yil.authentication.role.dto.CreateRolePermissionDto;
 import com.yil.authentication.role.dto.RolePermissionDto;
 import com.yil.authentication.role.model.Permission;
@@ -43,7 +43,7 @@ public class RolePermissionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<RolePermissionDto> create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity<RolePermissionDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                                     @PathVariable Long roleId,
                                                     @Valid @RequestBody CreateRolePermissionDto dto) {
         Permission permission = permissionService.findById(dto.getPermissionId());
@@ -65,7 +65,7 @@ public class RolePermissionController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long roleId,
                                  @PathVariable Long id) {
         List<RolePermission> rolePermissions = rolePermissionService.findAllByRoleIdAndPermissionIdAndDeletedTimeIsNull(roleId, id);

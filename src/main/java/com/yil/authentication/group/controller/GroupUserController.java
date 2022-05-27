@@ -1,6 +1,6 @@
 package com.yil.authentication.group.controller;
 
-import com.yil.authentication.base.ApiHeaders;
+import com.yil.authentication.base.ApiConstant;
 import com.yil.authentication.group.dto.CreateGroupUserDto;
 import com.yil.authentication.group.dto.GroupUserDto;
 import com.yil.authentication.group.model.GroupUser;
@@ -43,7 +43,7 @@ public class GroupUserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<GroupUserDto> create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity<GroupUserDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                                @PathVariable Long groupId,
                                                @Valid @RequestBody CreateGroupUserDto dto) {
         User user = userService.findById(dto.getUserId());
@@ -65,7 +65,7 @@ public class GroupUserController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long groupId,
                                  @PathVariable Long id) {
         List<GroupUser> groupUsers = groupUserService.findAllByGroupIdAndUserIdAndDeletedTimeIsNull(groupId, id);

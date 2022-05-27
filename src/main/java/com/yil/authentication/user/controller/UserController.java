@@ -1,6 +1,6 @@
 package com.yil.authentication.user.controller;
 
-import com.yil.authentication.base.ApiHeaders;
+import com.yil.authentication.base.ApiConstant;
 import com.yil.authentication.base.MD5Util;
 import com.yil.authentication.base.PageDto;
 import com.yil.authentication.exception.UserNameCannotBeUsedException;
@@ -41,8 +41,8 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<PageDto<UserDto>> findAll(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "1000") int size) {
+            @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
+            @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
         if (page < 0)
             page = 0;
         if (size <= 0 || size > 1000)
@@ -70,7 +70,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserDto> create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity<UserDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                           @Valid @RequestBody CreateUserDto dto) {
         if (userService.existsByUserName(dto.getUserName()))
             throw new UserNameCannotBeUsedException();
@@ -97,7 +97,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @Valid @PathVariable Long id) {
         User user = userService.findByIdAndDeletedTimeIsNull(id);
         user.setDeletedUserId(authenticatedUserId);
@@ -108,7 +108,7 @@ public class UserController {
 
     @PutMapping("/{id}/lock")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity lock(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity lock(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                @PathVariable Long id) {
         User user = userService.findById(id);
         user.setLocked(true);
@@ -119,7 +119,7 @@ public class UserController {
 
     @PutMapping("/{id}/unlock")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity unlock(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity unlock(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long id) {
         User user = userService.findById(id);
         user.setLocked(false);
@@ -130,7 +130,7 @@ public class UserController {
 
     @PutMapping("/{id}/active")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity active(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity active(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long id) {
         User user = userService.findById(id);
         user.setEnabled(true);
@@ -141,7 +141,7 @@ public class UserController {
 
     @PutMapping("/{id}/inactive")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity inactive(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity inactive(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                    @PathVariable Long id) {
         User user = userService.findById(id);
         user.setEnabled(false);
@@ -151,7 +151,7 @@ public class UserController {
 
     @PutMapping("/{id}/password")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity password(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity password(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                    @PathVariable Long id,
                                    @RequestBody UserPasswordDto dto) {
         User user = userService.findById(id);

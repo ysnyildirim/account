@@ -1,6 +1,6 @@
 package com.yil.authentication.group.controller;
 
-import com.yil.authentication.base.ApiHeaders;
+import com.yil.authentication.base.ApiConstant;
 import com.yil.authentication.group.dto.CreateGroupRoleDto;
 import com.yil.authentication.group.dto.GroupRoleDto;
 import com.yil.authentication.group.model.GroupRole;
@@ -46,7 +46,7 @@ public class GroupRoleController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<GroupRoleDto> create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity<GroupRoleDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                                @PathVariable Long groupId,
                                                @Valid @RequestBody CreateGroupRoleDto request) {
         Role role = roleService.findById(request.getRoleId());
@@ -68,7 +68,7 @@ public class GroupRoleController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long groupId,
                                  @PathVariable Long id) {
         List<GroupRole> groupRoles = groupRoleService.findAllByGroupIdAndRoleIdAndDeletedTimeIsNull(groupId, id);

@@ -1,6 +1,6 @@
 package com.yil.authentication.user.controller;
 
-import com.yil.authentication.base.ApiHeaders;
+import com.yil.authentication.base.ApiConstant;
 import com.yil.authentication.exception.UserRoleNotFound;
 import com.yil.authentication.role.model.Role;
 import com.yil.authentication.role.service.RoleService;
@@ -44,7 +44,7 @@ public class UserRoleController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long userId,
                                  @Valid @RequestBody CreateUserRoleDto dto) {
         Role role = roleService.findByIdAndDeletedTimeIsNull(dto.getRoleId());
@@ -62,7 +62,7 @@ public class UserRoleController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long userId,
                                  @PathVariable Long id) {
         List<UserRole> userRoles = userRoleService.findAllByUserIdAndRoleIdAndDeletedTimeIsNull(userId, id);

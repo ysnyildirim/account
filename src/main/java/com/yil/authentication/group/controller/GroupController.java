@@ -1,6 +1,6 @@
 package com.yil.authentication.group.controller;
 
-import com.yil.authentication.base.ApiHeaders;
+import com.yil.authentication.base.ApiConstant;
 import com.yil.authentication.base.PageDto;
 import com.yil.authentication.exception.GroupNameCannotBeUsed;
 import com.yil.authentication.group.dto.CreateGroupDto;
@@ -33,8 +33,8 @@ public class GroupController {
 
     @GetMapping
     public ResponseEntity<PageDto<GroupDto>> findAll(
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "1000") int size) {
+            @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
+            @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
         if (page < 0)
             page = 0;
         if (size <= 0 || size > 1000)
@@ -54,7 +54,7 @@ public class GroupController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<GroupDto> create(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity<GroupDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                            @Valid @RequestBody CreateGroupDto request) {
         if (groupService.existsByNameAndDeletedTimeIsNull(request.getName()))
             throw new GroupNameCannotBeUsed();
@@ -74,7 +74,7 @@ public class GroupController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity replace(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                   @PathVariable Long id,
                                   @Valid @RequestBody CreateGroupDto request) {
         Group group = groupService.findByIdAndDeletedTimeIsNull(id);
@@ -88,7 +88,7 @@ public class GroupController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity delete(@RequestHeader(value = ApiHeaders.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+    public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long id) {
         Group entity = groupService.findByIdAndDeletedTimeIsNull(id);
         entity.setDeletedUserId(authenticatedUserId);
