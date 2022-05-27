@@ -2,7 +2,7 @@
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
 
-package com.yil.authentication.error;
+package com.yil.authentication.base;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

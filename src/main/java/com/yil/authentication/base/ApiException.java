@@ -2,9 +2,7 @@
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
 
-package com.yil.authentication.error;
-
-import com.yil.authentication.error.ErrorCode;
+package com.yil.authentication.base;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
