@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Component
@@ -27,9 +28,14 @@ public class JwtTokenUtil implements Serializable {
         final Date createdDate = new Date(System.currentTimeMillis());
         final Date expirationDate = calculateExpirationDate(createdDate);
         Map<String, Object> claims = new HashMap<>();
-        claims.put("uid", user.getId());
+        claims.put("userId", user.getId());
+        claims.put("mail", user.getMail());
+        claims.put("lastPasswordChangeTime", user.getLastPasswordChangeTime());
+        claims.put("personId", user.getPersonId());
+        claims.put("userTypeId", user.getUserTypeId());
         return Jwts.builder()
                 .setClaims(claims)
+                .setId(UUID.randomUUID().toString())
                 .setSubject(user.getUserName())
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
@@ -38,9 +44,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public Long getUserId(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
-        return (Long) getClaimFromToken(token, f -> {
-            return f.get("uid");
-        });
+        return (Long) getClaimFromToken(token, f -> f.get("userId"));
     }
 
     //retrieve username from jwt token
