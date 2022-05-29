@@ -8,6 +8,8 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+    RoleActionNotFound(2000017, "Role action not found"),
+    ActionNotFound(2000016, "Action not found"),
     RolePermissionNotFound(2000015, "Role permission not found"),
     GroupRoleNotFound(2000014, "Group role not found"),
     GroupUserNotFound(2000013, "Group user not found"),

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -19,13 +18,6 @@ public class RolePermissionService {
         this.rolePermissionRepository = rolePermissionRepository;
     }
 
-
-    public RolePermission findById(Long id) throws EntityNotFoundException {
-        return rolePermissionRepository.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException();
-        });
-    }
-
     public RolePermission save(RolePermission rolePermission) {
         return rolePermissionRepository.save(rolePermission);
     }
@@ -33,11 +25,6 @@ public class RolePermissionService {
     public List<RolePermission> saveAll(List<RolePermission> roles) {
         return rolePermissionRepository.saveAll(roles);
     }
-
-    public void delete(Long id) {
-        rolePermissionRepository.deleteById(id);
-    }
-
 
     public List<RolePermission> findAllByRoleIdAndPermissionIdAndDeletedTimeIsNull(Long roleId, Long permissionId) {
         return rolePermissionRepository.findAllByRoleIdAndPermissionIdAndDeletedTimeIsNull(roleId, permissionId);
