@@ -2,7 +2,7 @@
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
 
-package com.yil.account.util;
+package com.yil.account.auth;
 
 import com.yil.account.user.model.User;
 import io.jsonwebtoken.*;
@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 @Component
@@ -92,5 +89,23 @@ public class JwtTokenUtil implements Serializable {
     private Date calculateExpirationDate(Date createdDate) {
         return new Date(createdDate.getTime() + expiration * 1000);
     }
+
+    public String refreshToken(String token) {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        c.add(Calendar.MINUTE, 5 * 60);
+        Date createdDate = c.getTime();
+        Date expirationDate = calculateExpirationDate(createdDate);
+        Claims claims = getAllClaimsFromToken(token);
+        claims.setIssuedAt(createdDate);
+        claims.setExpiration(expirationDate);
+        claims.setId(UUID.randomUUID().toString());
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+    }
+
 
 }

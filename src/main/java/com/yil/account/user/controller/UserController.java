@@ -6,17 +6,15 @@ import com.yil.account.base.PageDto;
 import com.yil.account.exception.*;
 import com.yil.account.user.dto.CreateUserDto;
 import com.yil.account.user.dto.UserDto;
-import com.yil.account.user.dto.UserLoginDto;
 import com.yil.account.user.dto.UserPasswordDto;
 import com.yil.account.user.model.User;
 import com.yil.account.user.model.UserType;
 import com.yil.account.user.service.UserService;
 import com.yil.account.user.service.UserTypeService;
-import com.yil.account.util.JwtTokenUtil;
+import com.yil.account.auth.JwtTokenUtil;
 import lombok.SneakyThrows;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
@@ -152,11 +149,11 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/password")
+    @PutMapping("/{id}/changePassword")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity password(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                   @PathVariable Long id,
-                                   @RequestBody UserPasswordDto request) throws UserNotFoundException, NoSuchAlgorithmException, LockedUserException, DisabledUserException, WrongPasswordException {
+    public ResponseEntity changePassword(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+                                         @PathVariable Long id,
+                                         @RequestBody UserPasswordDto request) throws UserNotFoundException, NoSuchAlgorithmException, LockedUserException, DisabledUserException, WrongPasswordException {
         User user = userService.getActiveUser(id);
         String currentPassword = MD5Util.encode(request.getCurrentPassword());
         if (!user.getPassword().equals(currentPassword))
@@ -168,15 +165,4 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/login")
-    public ResponseEntity<UserLoginDto> login(@Valid @RequestParam @NotBlank @Length(min = 1, max = 100) String userName,
-                                              @Valid @RequestParam @NotBlank @Length(min = 1, max = 100) String password) throws NoSuchAlgorithmException, DisabledUserException, UserNotFoundException, LockedUserException, WrongPasswordException {
-        User user = userService.getActiveUser(userName);
-        String myHash = MD5Util.encode(password);
-        if (!user.getPassword().equals(myHash))
-            throw new WrongPasswordException();
-        String token = jwtTokenUtil.generateToken(user);
-        return ResponseEntity.ok(new UserLoginDto(token));
-    }
 }
