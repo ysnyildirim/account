@@ -1,0 +1,19 @@
+/*
+ * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
+ */
+
+package com.yil.account.user.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserLoginDto implements Serializable {
+    private static final long serialVersionUID = -8091879091924046844L;
+    private String token;
+}
