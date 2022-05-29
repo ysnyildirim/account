@@ -8,6 +8,9 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+    RolePermissionNotFound(2000015, "Role permission not found"),
+    GroupRoleNotFound(2000014, "Group role not found"),
+    GroupUserNotFound(2000013, "Group user not found"),
     WrongPassword(2000012, "Wrong password"),
     LockedUser(2000011, "User locked"),
     DisabledUser(2000010, "User disabled"),

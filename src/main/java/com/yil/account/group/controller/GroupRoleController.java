@@ -3,6 +3,7 @@ package com.yil.account.group.controller;
 import com.yil.account.base.ApiConstant;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.GroupNotFoundException;
+import com.yil.account.exception.GroupRoleNotFound;
 import com.yil.account.exception.RoleNotFoundException;
 import com.yil.account.group.dto.CreateGroupRoleDto;
 import com.yil.account.group.model.Group;
@@ -87,12 +88,10 @@ public class GroupRoleController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long groupId,
-                                 @PathVariable Long id) throws RoleNotFoundException, GroupNotFoundException {
-        Role role = roleService.findByIdAndDeletedTimeIsNull(id);
-        Group group = groupService.findByIdAndDeletedTimeIsNull(groupId);
-        List<GroupRole> groupRoles = groupRoleService.findAllByGroupIdAndRoleIdAndDeletedTimeIsNull(group.getId(), role.getId());
+                                 @PathVariable Long id) throws RoleNotFoundException, GroupNotFoundException, GroupRoleNotFound {
+        List<GroupRole> groupRoles = groupRoleService.findAllByGroupIdAndRoleIdAndDeletedTimeIsNull(groupId, id);
         if (groupRoles.isEmpty())
-            return ResponseEntity.ok().build();
+            throw new GroupRoleNotFound();
         for (GroupRole groupRole : groupRoles) {
             groupRole.setDeletedUserId(authenticatedUserId);
             groupRole.setDeletedTime(new Date());

@@ -4,6 +4,8 @@ import com.yil.account.group.dto.GroupUserDto;
 import com.yil.account.group.model.GroupUser;
 import com.yil.account.group.repository.GroupUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -43,12 +45,11 @@ public class GroupUserService {
         groupUserRepository.deleteById(id);
     }
 
-    public List<GroupUser> findAllByGroupIdAndDeletedTimeIsNull(Long groupId) {
-        return groupUserRepository.findAllByGroupIdAndDeletedTimeIsNull(groupId);
-    }
-
     public List<GroupUser> findAllByGroupIdAndUserIdAndDeletedTimeIsNull(Long groupId, Long userId) {
         return groupUserRepository.findAllByGroupIdAndUserIdAndDeletedTimeIsNull(groupId, userId);
     }
 
+    public Page<GroupUser> findAllByGroupIdAndDeletedTimeIsNull(Pageable pageable, Long groupId) {
+        return groupUserRepository.findAllByGroupIdAndDeletedTimeIsNull(pageable, groupId);
+    }
 }

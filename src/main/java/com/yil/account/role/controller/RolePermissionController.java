@@ -4,6 +4,7 @@ import com.yil.account.base.ApiConstant;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.PermissionNotFoundException;
 import com.yil.account.exception.RoleNotFoundException;
+import com.yil.account.exception.RolePermissionNotFound;
 import com.yil.account.role.dto.CreateRolePermissionDto;
 import com.yil.account.role.dto.PermissionDto;
 import com.yil.account.role.model.Permission;
@@ -87,12 +88,10 @@ public class RolePermissionController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long roleId,
-                                 @PathVariable Long id) throws RoleNotFoundException, PermissionNotFoundException {
-        Role role = roleService.findByIdAndDeletedTimeIsNull(roleId);
-        Permission permission = permissionService.findByIdAndDeletedTimeIsNull(id);
-        List<RolePermission> rolePermissions = rolePermissionService.findAllByRoleIdAndPermissionIdAndDeletedTimeIsNull(role.getId(), permission.getId());
+                                 @PathVariable Long id) throws RoleNotFoundException, PermissionNotFoundException, RolePermissionNotFound {
+          List<RolePermission> rolePermissions = rolePermissionService.findAllByRoleIdAndPermissionIdAndDeletedTimeIsNull(roleId, id);
         if (rolePermissions.isEmpty())
-            return ResponseEntity.ok().build();
+            throw new RolePermissionNotFound();
         for (RolePermission rolePermission : rolePermissions) {
             rolePermission.setDeletedUserId(authenticatedUserId);
             rolePermission.setDeletedTime(new Date());
