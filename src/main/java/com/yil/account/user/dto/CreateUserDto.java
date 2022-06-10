@@ -32,6 +32,8 @@ public class CreateUserDto {
     @NotBlank
     @Email
     private String mail;
+    @NotNull
+    private Boolean passwordNeedsChanged;
 
     private Long personId;
 }

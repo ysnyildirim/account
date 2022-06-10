@@ -7,18 +7,18 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "UserType")
+@Table(name = "USER_TYPE")
 public class UserType extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "UserType_Sequence_Generator",
-            sequenceName = "Seq_UserType",
+    @SequenceGenerator(name = "USER_TYPE_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_USER_TYPE",
             allocationSize = 1)
-    @GeneratedValue(generator = "UserType_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "USER_TYPE_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "Name", nullable = false, length = 100)
+    @Column(name = "NAME", nullable = false, length = 100)
     private String name;
-    @Column(name = "RealPerson", nullable = false)
+    @Column(name = "REAL_PERSON", nullable = false)
     private Boolean realPerson;
 
 }

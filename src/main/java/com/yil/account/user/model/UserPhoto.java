@@ -1,6 +1,6 @@
 package com.yil.account.user.model;
 
-import com.yil.account.base.AbstractEntity;
+import com.yil.account.base.IEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,20 +10,24 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "USER_ROLE")
+@Table(name = "USER_PHOTO")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRole extends AbstractEntity {
+public class UserPhoto implements IEntity {
     @Id
-    @SequenceGenerator(name = "USER_ROLE_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_USER_ROLE",
+    @SequenceGenerator(name = "USER_PHOTO_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_USER_PHOTO",
             allocationSize = 1)
-    @GeneratedValue(generator = "USER_ROLE_SEQUENCE_GENERATOR")
+    @GeneratedValue(generator = "USER_PHOTO_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;
     @Column(name = "USER_ID", nullable = false)
     private Long userId;
-    @Column(name = "ROLE_ID", nullable = false)
-    private Long roleId;
+    @Column(name = "DOCUMENT_ID", nullable = false)
+    private Long documentId;
+
 }
+
+
+

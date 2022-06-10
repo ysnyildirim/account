@@ -10,20 +10,20 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "GroupRole")
+@Table(name = "GROUP_ROLE")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupRole extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "GroupRole_Sequence_Generator",
-            sequenceName = "Seq_GroupRole",
+    @SequenceGenerator(name = "GROUP_ROLE_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_GROUP_ROLE",
             allocationSize = 1)
-    @GeneratedValue(generator = "GroupRole_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "GROUP_ROLE_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "GroupId", nullable = false)
+    @Column(name = "GROUP_ID", nullable = false)
     private Long groupId;
-    @Column(name = "RoleId", nullable = false)
+    @Column(name = "ROLE_ID", nullable = false)
     private Long roleId;
 }

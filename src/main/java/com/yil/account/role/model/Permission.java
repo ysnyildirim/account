@@ -7,19 +7,19 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "Permission")
+@Table(name = "PERMISSION")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Permission extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "Permission_Sequence_Generator",
-            sequenceName = "Seq_Permission",
+    @SequenceGenerator(name = "PERMISSION_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_PERMISSION",
             allocationSize = 1)
-    @GeneratedValue(generator = "Permission_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "PERMISSION_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "Name", nullable = false, length = 1000)
+    @Column(name = "NAME", nullable = false, length = 1000)
     private String name;
 }

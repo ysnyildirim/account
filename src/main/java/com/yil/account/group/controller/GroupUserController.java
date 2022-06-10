@@ -13,6 +13,7 @@ import com.yil.account.group.service.GroupUserService;
 import com.yil.account.user.dto.UserDto;
 import com.yil.account.user.model.User;
 import com.yil.account.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/account/v1/groups/{groupId}/users")
 public class GroupUserController {
@@ -33,13 +35,6 @@ public class GroupUserController {
     private final GroupUserService groupUserService;
     private final UserService userService;
     private final GroupService groupService;
-
-    @Autowired
-    public GroupUserController(GroupUserService groupUserService, UserService userService, GroupService groupService) {
-        this.groupUserService = groupUserService;
-        this.userService = userService;
-        this.groupService = groupService;
-    }
 
     @GetMapping
     public ResponseEntity<PageDto<UserDto>> findAll(@PathVariable Long groupId,

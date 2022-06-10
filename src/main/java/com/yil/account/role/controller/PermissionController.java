@@ -7,6 +7,7 @@ import com.yil.account.role.dto.CreatePermissionDto;
 import com.yil.account.role.dto.PermissionDto;
 import com.yil.account.role.model.Permission;
 import com.yil.account.role.service.PermissionService;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,13 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/account/v1/permissions")
 public class PermissionController {
 
     private final Log logger = LogFactory.getLog(this.getClass());
     private final PermissionService permissionService;
-
-    @Autowired
-    public PermissionController(PermissionService permissionService) {
-        this.permissionService = permissionService;
-    }
 
     @GetMapping
     public ResponseEntity<PageDto<PermissionDto>> findAll(

@@ -1,5 +1,6 @@
 package com.yil.account.user.controller;
 
+import com.yil.account.auth.JwtTokenUtil;
 import com.yil.account.base.ApiConstant;
 import com.yil.account.base.MD5Util;
 import com.yil.account.base.PageDto;
@@ -11,11 +12,9 @@ import com.yil.account.user.model.User;
 import com.yil.account.user.model.UserType;
 import com.yil.account.user.service.UserService;
 import com.yil.account.user.service.UserTypeService;
-import com.yil.account.auth.JwtTokenUtil;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,22 +26,14 @@ import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/account/v1/users")
 public class UserController {
 
-    private final Log logger = LogFactory.getLog(this.getClass());
     private final UserService userService;
     private final UserTypeService userTypeService;
     private final JwtTokenUtil jwtTokenUtil;
-
-
-    @Autowired
-    public UserController(UserService userService, UserTypeService userTypeService, JwtTokenUtil jwtTokenUtil) {
-        this.userService = userService;
-        this.userTypeService = userTypeService;
-        this.jwtTokenUtil = jwtTokenUtil;
-    }
 
     @GetMapping
     public ResponseEntity<PageDto<UserDto>> findAll(
@@ -66,18 +57,17 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping(value = "/userName={username}")
+    @GetMapping(value = "/userName={userName}")
     public ResponseEntity<UserDto> findByUserName(@PathVariable String userName) throws UserNotFoundException {
         User user = userService.findByUserNameAndDeletedTimeIsNull(userName);
         UserDto dto = UserService.toDto(user);
         return ResponseEntity.ok(dto);
     }
 
-    @SneakyThrows
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                          @Valid @RequestBody CreateUserDto request) throws UserNameCannotBeUsedException, UserTypeNotFoundException {
+                                          @Valid @RequestBody CreateUserDto request) throws UserNameCannotBeUsedException, UserTypeNotFoundException, NoSuchAlgorithmException {
         if (userService.existsByUserName(request.getUserName()))
             throw new UserNameCannotBeUsedException();
         UserType userType = userTypeService.findById(request.getUserTypeId());
@@ -89,6 +79,7 @@ public class UserController {
         user.setEnabled(request.getEnabled());
         user.setLocked(request.getLocked());
         user.setMail(request.getMail());
+        user.setPasswordNeedsChanged(request.getPasswordNeedsChanged());
         user.setPersonId(request.getPersonId());
         user.setCreatedUserId(authenticatedUserId);
         user.setCreatedTime(new Date());
@@ -149,7 +140,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/changePassword")
+    @PutMapping("/{id}/change-password")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity changePassword(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                          @PathVariable Long id,

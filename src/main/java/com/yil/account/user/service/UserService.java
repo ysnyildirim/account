@@ -6,19 +6,17 @@ import com.yil.account.exception.UserNotFoundException;
 import com.yil.account.user.dto.UserDto;
 import com.yil.account.user.model.User;
 import com.yil.account.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+
+@RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserRepository userRepository;
-
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public static UserDto toDto(User user) {
         return UserDto.builder()

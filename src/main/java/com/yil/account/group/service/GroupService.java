@@ -4,19 +4,16 @@ import com.yil.account.exception.GroupNotFoundException;
 import com.yil.account.group.dto.GroupDto;
 import com.yil.account.group.model.Group;
 import com.yil.account.group.repository.GroupRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class GroupService {
     private final GroupRepository groupRepository;
-
-    @Autowired
-    public GroupService(GroupRepository groupRepository) {
-        this.groupRepository = groupRepository;
-    }
 
     public static GroupDto toDto(Group group) {
         if (group == null)

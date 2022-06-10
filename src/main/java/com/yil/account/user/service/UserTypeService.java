@@ -4,20 +4,17 @@ import com.yil.account.exception.UserTypeNotFoundException;
 import com.yil.account.user.dto.UserTypeDto;
 import com.yil.account.user.model.UserType;
 import com.yil.account.user.repository.UserTypeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class UserTypeService {
 
     private final UserTypeRepository userTypeRepository;
-
-    @Autowired
-    public UserTypeService(UserTypeRepository userTypeRepository) {
-        this.userTypeRepository = userTypeRepository;
-    }
 
     public static UserTypeDto toDto(UserType userType) throws NullPointerException {
         if (userType == null)

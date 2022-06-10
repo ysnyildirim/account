@@ -13,6 +13,7 @@ import com.yil.account.role.model.RolePermission;
 import com.yil.account.role.service.PermissionService;
 import com.yil.account.role.service.RolePermissionService;
 import com.yil.account.role.service.RoleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/account/v1/roles/{roleId}/permissions")
 public class RolePermissionController {
@@ -33,13 +35,6 @@ public class RolePermissionController {
     private final RolePermissionService rolePermissionService;
     private final PermissionService permissionService;
     private final RoleService roleService;
-
-    @Autowired
-    public RolePermissionController(RolePermissionService rolePermissionService, PermissionService permissionService, RoleService roleService) {
-        this.rolePermissionService = rolePermissionService;
-        this.permissionService = permissionService;
-        this.roleService = roleService;
-    }
 
     @GetMapping
     public ResponseEntity<PageDto<PermissionDto>> findAll(@PathVariable Long roleId,

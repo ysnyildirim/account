@@ -4,19 +4,16 @@ import com.yil.account.exception.RoleNotFoundException;
 import com.yil.account.role.dto.RoleDto;
 import com.yil.account.role.model.Role;
 import com.yil.account.role.repository.RoleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class RoleService {
     private final RoleRepository roleRepository;
-
-    @Autowired
-    public RoleService(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
 
     public static RoleDto toDto(Role role) {
         if (role == null)

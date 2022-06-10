@@ -4,19 +4,16 @@ import com.yil.account.exception.PermissionNotFoundException;
 import com.yil.account.role.dto.PermissionDto;
 import com.yil.account.role.model.Permission;
 import com.yil.account.role.repository.PermissionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PermissionService {
     private final PermissionRepository permissionRepository;
-
-    @Autowired
-    public PermissionService(PermissionRepository permissionRepository) {
-        this.permissionRepository = permissionRepository;
-    }
 
     public static PermissionDto toDto(Permission permission) {
         if (permission == null)

@@ -12,6 +12,7 @@ import com.yil.account.exception.WrongPasswordException;
 import com.yil.account.user.dto.JwtResponce;
 import com.yil.account.user.model.User;
 import com.yil.account.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,19 +23,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.security.NoSuchAlgorithmException;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/account/v1/auth")
 public class JwtController {
 
     private final JwtTokenUtil jwtTokenUtil;
-
     private final UserService userService;
-
-    @Autowired
-    public JwtController(JwtTokenUtil jwtTokenUtil, UserService userService) {
-        this.jwtTokenUtil = jwtTokenUtil;
-        this.userService = userService;
-    }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/login")

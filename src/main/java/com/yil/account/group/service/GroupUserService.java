@@ -3,6 +3,7 @@ package com.yil.account.group.service;
 import com.yil.account.group.dto.GroupUserDto;
 import com.yil.account.group.model.GroupUser;
 import com.yil.account.group.repository.GroupUserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,13 +13,9 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class GroupUserService {
     private final GroupUserRepository groupUserRepository;
-
-    @Autowired
-    public GroupUserService(GroupUserRepository groupUserRepository) {
-        this.groupUserRepository = groupUserRepository;
-    }
 
     public static GroupUserDto toDto(GroupUser f) throws NullPointerException {
         if (f == null)

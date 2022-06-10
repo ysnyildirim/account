@@ -7,17 +7,17 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "RoleAction")
+@Table(name = "ROLE_ACTİON")
 public class RoleAction extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "RoleAction_Sequence_Generator",
-            sequenceName = "Seq_RoleAction",
+    @SequenceGenerator(name = "ROLE_ACTİON_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_ROLE_ACTİON",
             allocationSize = 1)
-    @GeneratedValue(generator = "RoleAction_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "ROLE_ACTİON_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "RoleId", nullable = false)
+    @Column(name = "ROLE_ID", nullable = false)
     private Long roleId;
-    @Column(name = "ActionId", nullable = false)
+    @Column(name = "ACTION_ID", nullable = false)
     private Long actionId;
 }

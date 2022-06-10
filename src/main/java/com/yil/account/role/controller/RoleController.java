@@ -8,6 +8,7 @@ import com.yil.account.role.dto.CreateRoleDto;
 import com.yil.account.role.dto.RoleDto;
 import com.yil.account.role.model.Role;
 import com.yil.account.role.service.RoleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,16 +20,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/account/v1/roles")
 public class RoleController {
 
     private final RoleService roleService;
-
-    @Autowired
-    public RoleController(RoleService roleService) {
-        this.roleService = roleService;
-    }
 
     @GetMapping
     public ResponseEntity<PageDto<RoleDto>> findAll(

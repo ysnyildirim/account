@@ -6,9 +6,7 @@ import com.yil.account.user.dto.CreateUserTypeDto;
 import com.yil.account.user.dto.UserTypeDto;
 import com.yil.account.user.model.UserType;
 import com.yil.account.user.service.UserTypeService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,17 +16,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "v1/user-types")
 public class UserTypeController {
 
-    private final Log logger = LogFactory.getLog(this.getClass());
     private final UserTypeService userTypeService;
-
-    @Autowired
-    public UserTypeController(UserTypeService userTypeService) {
-        this.userTypeService = userTypeService;
-    }
 
     @GetMapping
     public ResponseEntity<List<UserTypeDto>> findAll(@RequestParam(required = false) Boolean realPerson) {

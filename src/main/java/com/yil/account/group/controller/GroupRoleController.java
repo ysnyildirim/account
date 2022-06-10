@@ -13,6 +13,7 @@ import com.yil.account.group.service.GroupService;
 import com.yil.account.role.dto.RoleDto;
 import com.yil.account.role.model.Role;
 import com.yil.account.role.service.RoleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/account/v1/groups/{groupId}/roles")
 public class GroupRoleController {
@@ -34,12 +36,6 @@ public class GroupRoleController {
     private final RoleService roleService;
     private final GroupService groupService;
 
-    @Autowired
-    public GroupRoleController(GroupRoleService groupRoleService, RoleService roleService, GroupService groupService) {
-        this.groupRoleService = groupRoleService;
-        this.roleService = roleService;
-        this.groupService = groupService;
-    }
 
     @GetMapping
     public ResponseEntity<PageDto<RoleDto>> findAll(@PathVariable Long groupId,

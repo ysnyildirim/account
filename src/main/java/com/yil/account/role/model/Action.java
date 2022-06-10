@@ -7,19 +7,19 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "Action")
+@Table(name = "ACTION")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Action extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "Action_Sequence_Generator",
-            sequenceName = "Seq_Action",
+    @SequenceGenerator(name = "ACTION_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_ACTION",
             allocationSize = 1)
-    @GeneratedValue(generator = "Action_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "ACTION_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "Value", nullable = false, length = 1000)
+    @Column(name = "VALUE", nullable = false, length = 1000)
     private String value;
 }

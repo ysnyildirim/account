@@ -4,19 +4,16 @@ import com.yil.account.exception.ActionNotFoundException;
 import com.yil.account.role.dto.ActionDto;
 import com.yil.account.role.model.Action;
 import com.yil.account.role.repository.ActionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ActionService {
     private final ActionRepository actionRepository;
-
-    @Autowired
-    public ActionService(ActionRepository actionRepository) {
-        this.actionRepository = actionRepository;
-    }
 
     public static ActionDto toDto(Action action) {
         if (action == null)

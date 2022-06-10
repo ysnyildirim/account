@@ -13,15 +13,15 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "\"Group\"")
+@Table(name = "\"GROUP\"")
 public class Group extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "Group_Sequence_Generator",
-            sequenceName = "Seq_Group",
+    @SequenceGenerator(name = "GROUP_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_GROUP",
             allocationSize = 1)
-    @GeneratedValue(generator = "Group_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "GROUP_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "Name", nullable = false, unique = true, length = 100)
+    @Column(name = "NAME", nullable = false, unique = true, length = 100)
     private String name;
 }

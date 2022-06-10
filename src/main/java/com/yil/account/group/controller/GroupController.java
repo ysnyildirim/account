@@ -8,6 +8,7 @@ import com.yil.account.group.dto.CreateGroupDto;
 import com.yil.account.group.dto.GroupDto;
 import com.yil.account.group.model.Group;
 import com.yil.account.group.service.GroupService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,16 +22,12 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/account/v1/groups")
 public class GroupController {
 
     private final GroupService groupService;
-
-    @Autowired
-    public GroupController(GroupService groupService) {
-        this.groupService = groupService;
-    }
 
     @GetMapping
     public ResponseEntity<PageDto<GroupDto>> findAll(

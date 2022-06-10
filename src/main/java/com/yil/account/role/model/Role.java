@@ -9,21 +9,21 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Role")
+@Table(name = "ROLE")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Role extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "RoleId_Sequence_Generator",
-            sequenceName = "Seq_RoleId",
+    @SequenceGenerator(name = "ROLE_ID_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_ROLE_ID",
             allocationSize = 1)
-    @GeneratedValue(generator = "RoleId_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "ROLE_ID_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "Name", nullable = false, length = 1000)
+    @Column(name = "NAME", nullable = false, length = 1000)
     private String name;
-    @Column(name = "Description", nullable = false, length = 4000)
+    @Column(name = "DESCRIPTION", nullable = false, length = 4000)
     private String description;
 }

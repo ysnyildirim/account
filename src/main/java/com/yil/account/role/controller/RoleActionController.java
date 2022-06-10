@@ -13,6 +13,7 @@ import com.yil.account.role.model.RoleAction;
 import com.yil.account.role.service.ActionService;
 import com.yil.account.role.service.RoleActionService;
 import com.yil.account.role.service.RoleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/account/v1/roles/{roleId}/actions")
 public class RoleActionController {
@@ -34,12 +36,6 @@ public class RoleActionController {
     private final ActionService actionService;
     private final RoleService roleService;
 
-    @Autowired
-    public RoleActionController(RoleActionService roleActionService, ActionService actionService, RoleService roleService) {
-        this.roleActionService = roleActionService;
-        this.actionService = actionService;
-        this.roleService = roleService;
-    }
 
     @GetMapping
     public ResponseEntity<PageDto<ActionDto>> findAll(@PathVariable Long roleId,

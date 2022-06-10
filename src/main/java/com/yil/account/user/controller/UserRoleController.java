@@ -13,6 +13,7 @@ import com.yil.account.user.model.User;
 import com.yil.account.user.model.UserRole;
 import com.yil.account.user.service.UserRoleService;
 import com.yil.account.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/api/account/v1/users/{userId}/roles")
 public class UserRoleController {
@@ -33,13 +35,6 @@ public class UserRoleController {
     private final UserRoleService userRoleService;
     private final RoleService roleService;
     private final UserService userService;
-
-    @Autowired
-    public UserRoleController(UserRoleService userRoleService, RoleService roleService, UserService userService) {
-        this.userRoleService = userRoleService;
-        this.roleService = roleService;
-        this.userService = userService;
-    }
 
     @GetMapping
     public ResponseEntity<PageDto<RoleDto>> findAll(@PathVariable Long userId,

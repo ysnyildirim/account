@@ -14,29 +14,34 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "User")
+@Table(name = "USER")
 public class User extends AbstractEntity {
     @Id
-    @SequenceGenerator(name = "User_Sequence_Generator",
-            sequenceName = "Seq_User",
+    @SequenceGenerator(name = "USER_SEQUENCE_GENERATOR",
+            sequenceName = "SEQ_USER",
             allocationSize = 1)
-    @GeneratedValue(generator = "User_Sequence_Generator")
-    @Column(name = "Id")
+    @GeneratedValue(generator = "USER_SEQUENCE_GENERATOR")
+    @Column(name = "ID")
     private Long id;
-    @Column(name = "UserName", nullable = false, unique = true, length = 100)
+    @Column(name = "USER_NAME", nullable = false, unique = true, length = 100)
     private String userName;
-    @Column(name = "Password", nullable = false, length = 100)
+    @Column(name = "PASSWORD", nullable = false, length = 100)
     private String password;
-    @Column(name = "UserTypeId", nullable = false)
+    @Column(name = "USER_TYPE_ID", nullable = false)
     private Long userTypeId;
-    @Column(name = "Enabled", nullable = false)
+    @Column(name = "ENABLED", nullable = false)
     private Boolean enabled;
-    @Column(name = "Locked", nullable = false)
+    @Column(name = "LOCKED", nullable = false)
     private Boolean locked;
-    @Column(name = "LastPasswordChangeTime")
-    private Date lastPasswordChangeTime;
-    @Column(name = "Mail", nullable = false)
+    @Column(name = "MAIL", nullable = false)
     private String mail;
-    @Column(name = "PersonId")
+    @Column(name = "PERSON_ID")
     private Long personId;
+    @Column(name = "PASSWORD_NEEDS_CHANGED")
+    private Boolean passwordNeedsChanged;
+    @Column(name = "LAST_PASSWORD_CHANGE_TIME")
+    private Date lastPasswordChangeTime;
+    @Column(name = "USER_PHOTO_ID")
+    private Long userPhotoId;
+
 }

@@ -23,4 +23,6 @@ public class UserDto {
     private Long userTypeId;
     private String mail;
     private Long personId;
+    private Boolean passwordNeedsChanged;
+    private Long userPhotoId;
 }

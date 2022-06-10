@@ -2,6 +2,7 @@ package com.yil.account.user.service;
 
 import com.yil.account.user.model.UserRole;
 import com.yil.account.user.repository.UserRoleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,13 +12,9 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserRoleService {
     private final UserRoleRepository userRoleRepository;
-
-    @Autowired
-    public UserRoleService(UserRoleRepository userRoleRepository) {
-        this.userRoleRepository = userRoleRepository;
-    }
 
     public UserRole findById(Long id) throws EntityNotFoundException {
         return userRoleRepository.findById(id).orElseThrow(() -> {
