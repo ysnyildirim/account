@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "ROLE_PERMİSSİON")
+@Table(name = "ROLE_PERMISSION")
 public class RolePermission extends AbstractEntity {
     @Id
     @SequenceGenerator(name = "ROLE_PERMISSION_SEQUENCE_GENERATOR",
