@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class RolePermission extends AbstractEntity {
     @Id
     @SequenceGenerator(name = "ROLE_PERMISSION_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_ROLE_PERMISSION",
+            sequenceName = "SEQ_ROLE_PERMISSION_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "ROLE_PERMISSION_SEQUENCE_GENERATOR")
     @Column(name = "ID")

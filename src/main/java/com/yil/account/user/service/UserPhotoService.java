@@ -1,5 +1,7 @@
 package com.yil.account.user.service;
 
+import com.yil.account.exception.UserPhotoNotFound;
+import com.yil.account.user.dto.UserPhotoDto;
 import com.yil.account.user.model.UserPhoto;
 import com.yil.account.user.repository.UserPhotoRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -15,10 +16,8 @@ import java.util.List;
 public class UserPhotoService {
     private final UserPhotoRepository userPhotoRepository;
 
-    public UserPhoto findById(Long id) throws EntityNotFoundException {
-        return userPhotoRepository.findById(id).orElseThrow(() -> {
-            throw new EntityNotFoundException();
-        });
+    public UserPhoto findById(Long id) throws UserPhotoNotFound {
+        return userPhotoRepository.findById(id).orElseThrow(() -> new UserPhotoNotFound());
     }
 
     public UserPhoto save(UserPhoto userPhoto) {
@@ -37,8 +36,19 @@ public class UserPhotoService {
         return userPhotoRepository.findAllByUserIdAndDeletedTimeIsNull(pageable, userId);
     }
 
-    public List<UserPhoto> findAllByUserIdAndPhotoIdAndDeletedTimeIsNull(Long userId, Long roleId) {
-        return userPhotoRepository.findAllByUserIdAndPhotoIdAndDeletedTimeIsNull(userId, roleId);
+    public UserPhoto findByIdAndUserIdAndDeletedTimeIsNull(Long id, Long userId) throws UserPhotoNotFound {
+        UserPhoto userPhoto = userPhotoRepository.findByIdAndUserIdAndDeletedTimeIsNull(id, userId);
+        if (userPhoto==null)
+            throw new UserPhotoNotFound();
+        return userPhoto;
     }
 
+    public static UserPhotoDto toDto(UserPhoto userPhoto) {
+        return UserPhotoDto.builder()
+                .id(userPhoto.getId())
+                .content(userPhoto.getContent())
+                .extension(userPhoto.getExtension())
+                .name(userPhoto.getName())
+                .build();
+    }
 }

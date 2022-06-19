@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class UserRole extends AbstractEntity {
     @Id
     @SequenceGenerator(name = "USER_ROLE_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_USER_ROLE",
+            sequenceName = "SEQ_USER_ROLE_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "USER_ROLE_SEQUENCE_GENERATOR")
     @Column(name = "ID")

@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class GroupRole extends AbstractEntity {
     @Id
     @SequenceGenerator(name = "GROUP_ROLE_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_GROUP_ROLE",
+            sequenceName = "SEQ_GROUP_ROLE_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "GROUP_ROLE_SEQUENCE_GENERATOR")
     @Column(name = "ID")

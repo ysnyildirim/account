@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class RoleAction extends AbstractEntity {
     @Id
     @SequenceGenerator(name = "ROLE_ACTION_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_ROLE_ACTION",
+            sequenceName = "SEQ_ROLE_ACTION_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "ROLE_ACTION_SEQUENCE_GENERATOR")
     @Column(name = "ID")

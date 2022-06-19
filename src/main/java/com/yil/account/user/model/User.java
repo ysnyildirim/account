@@ -14,11 +14,11 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USER")
+@Table(name = "USER" )
 public class User extends AbstractEntity {
     @Id
     @SequenceGenerator(name = "USER_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_USER",
+            sequenceName = "SEQ_USER_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "USER_SEQUENCE_GENERATOR")
     @Column(name = "ID")
@@ -41,7 +41,5 @@ public class User extends AbstractEntity {
     private Boolean passwordNeedsChanged;
     @Column(name = "LAST_PASSWORD_CHANGE_TIME")
     private Date lastPasswordChangeTime;
-    @Column(name = "USER_PHOTO_ID")
-    private Long userPhotoId;
 
 }

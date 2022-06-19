@@ -206,6 +206,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         if (entity == null) {
             entity = new Group();
             entity.setName(name);
+            entity.setDescription("");
             groupService.save(entity);
         }
         return entity;

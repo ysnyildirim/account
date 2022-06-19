@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
+ */
+
 package com.yil.account.user.dto;
 
 import lombok.AllArgsConstructor;
@@ -6,8 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -15,24 +17,13 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateUserDto {
+public class CreateUserPhotoDto {
     @NotBlank
     @Length(min = 1, max = 100)
-    private String userName;
+    private String name;
     @NotBlank
     @Length(min = 1, max = 100)
-    private String password;
+    private String extension;
     @NotNull
-    @Min(value = 1)
-    private Long userTypeId;
-    @NotNull
-    private Boolean enabled;
-    @NotNull
-    private Boolean locked;
-    @NotBlank
-    @Email
-    private String mail;
-    @NotNull
-    private Boolean passwordNeedsChanged;
-    private Long personId;
+    private Byte[] content;
 }

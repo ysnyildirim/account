@@ -24,5 +24,4 @@ public class UserDto {
     private String mail;
     private Long personId;
     private Boolean passwordNeedsChanged;
-    private Long userPhotoId;
 }

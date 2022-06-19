@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class UserType extends AbstractEntity {
     @Id
     @SequenceGenerator(name = "USER_TYPE_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_USER_TYPE",
+            sequenceName = "SEQ_USER_TYPE_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "USER_TYPE_SEQUENCE_GENERATOR")
     @Column(name = "ID")

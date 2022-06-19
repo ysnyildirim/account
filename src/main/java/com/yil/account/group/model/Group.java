@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Group extends AbstractEntity {
     @Id
     @SequenceGenerator(name = "GROUP_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_GROUP",
+            sequenceName = "SEQ_GROUP_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "GROUP_SEQUENCE_GENERATOR")
     @Column(name = "ID")
@@ -26,7 +26,7 @@ public class Group extends AbstractEntity {
     private String name;
     @Column(name = "MANAGER_USER_ID")
     private Long managerUserId;
-    @Column(name = "DESCRIPTION", nullable = false, unique = true, length = 100)
+    @Column(name = "DESCRIPTION", length = 100)
     private String description;
     @Column(name = "MAIL")
     private String email;

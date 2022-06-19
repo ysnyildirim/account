@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Permission extends AbstractEntity {
     @Id
     @SequenceGenerator(name = "PERMISSION_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_PERMISSION",
+            sequenceName = "SEQ_PERMISSION_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "PERMISSION_SEQUENCE_GENERATOR")
     @Column(name = "ID")
