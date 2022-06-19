@@ -26,4 +26,6 @@ public class Role extends AbstractEntity {
     private String name;
     @Column(name = "DESCRIPTION", nullable = false, length = 4000)
     private String description;
+    @Column(name = "ASSIGNABLE",nullable = false)
+    private Boolean assignable;
 }

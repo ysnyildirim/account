@@ -22,6 +22,7 @@ public class RoleService {
                 .id(role.getId())
                 .name(role.getName())
                 .description(role.getDescription())
+                .assignable(role.getAssignable())
                 .build();
     }
 

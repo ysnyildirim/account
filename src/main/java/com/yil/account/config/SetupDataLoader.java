@@ -192,6 +192,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
             role = new Role();
             role.setName(name);
             role.setDescription(desc);
+            role.setAssignable(false);
             roleService.save(role);
         }
         return role;

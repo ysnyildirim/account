@@ -57,6 +57,7 @@ public class RoleController {
         Role entity = new Role();
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
+        entity.setAssignable(dto.getAssignable());
         entity.setCreatedUserId(authenticatedUserId);
         entity.setCreatedTime(new Date());
         entity = roleService.save(entity);
@@ -73,6 +74,7 @@ public class RoleController {
         if (roleService.existsByNameAndDeletedTimeIsNull(dto.getName()))
             throw new RoleNameCannotBeUsedException();
         role.setName(dto.getName());
+        role.setAssignable(dto.getAssignable());
         role.setDescription(dto.getDescription());
         role = roleService.save(role);
         RoleDto responce = RoleService.toDto(role);
