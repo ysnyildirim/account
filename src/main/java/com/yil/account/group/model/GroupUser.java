@@ -26,4 +26,6 @@ public class GroupUser extends AbstractEntity {
     private Long userId;
     @Column(name = "GROUP_ID", nullable = false)
     private Long groupId;
+    @Column(name = "GROUP_USER_TYPE_ID", nullable = false)
+    private Integer groupUserTypeId;
 }
