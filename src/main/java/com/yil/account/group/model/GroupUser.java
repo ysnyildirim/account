@@ -13,7 +13,13 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "GROUP_USER")
+@Table(name = "GROUP_USER",
+        indexes = {
+                @Index(name = "IDX_GROUP_USER_USER_ID", columnList = "USER_ID"),
+                @Index(name = "IDX_GROUP_USER_GROUP_USER_TYPE_ID", columnList = "GROUP_USER_TYPE_ID"),
+                @Index(name = "IDX_GROUP_USER_GROUP_GROUP_ID", columnList = "GROUP_ID")
+        },
+        uniqueConstraints = @UniqueConstraint(name = "UNQ_CONS_GROUP_USER_GROUP", columnNames = {"USER_ID", "GROUP_USER_TYPE_ID", "GROUP_ID"}))
 public class GroupUser extends AbstractEntity {
     @Id
     @SequenceGenerator(name = "GROUP_USER_SEQUENCE_GENERATOR",
