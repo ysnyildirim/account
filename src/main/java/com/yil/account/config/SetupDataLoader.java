@@ -1,7 +1,10 @@
 package com.yil.account.config;
 
 import com.yil.account.base.MD5Util;
+import com.yil.account.exception.GroupUserNotFoundException;
 import com.yil.account.group.model.Group;
+import com.yil.account.group.model.GroupUserType;
+import com.yil.account.group.repository.GroupUserTypeDao;
 import com.yil.account.group.service.GroupRoleService;
 import com.yil.account.group.service.GroupService;
 import com.yil.account.group.service.GroupUserService;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.Random;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextStartedEvent> {
@@ -51,6 +55,9 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         System.out.println("Start Up Events");
         System.out.println(new Date(event.getTimestamp()));
         System.out.println("----------------------");
+
+
+        initGroupUserTypes();
 
 
         UserType adminUserType = null;
@@ -91,6 +98,21 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         permissions();
         roles();
         groups();
+    }
+
+    @Autowired
+    private GroupUserTypeDao groupUserTypeDao;
+
+    private void initGroupUserTypes() {
+        addGroupUserType(GroupUserType.builder().id(1).name("ADMIN").description("Group admins").build());
+        addGroupUserType(GroupUserType.builder().id(2).name("MANAGER").description("Group managers").build());
+        addGroupUserType(GroupUserType.builder().id(3).name("USER").description("Group users").build());
+    }
+
+    private void addGroupUserType(GroupUserType type) {
+        if (groupUserTypeDao.existsById(type.getId()))
+            return;
+        groupUserTypeDao.save(type);
     }
 
     private void permissions() {

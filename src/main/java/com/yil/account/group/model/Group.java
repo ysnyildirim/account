@@ -24,10 +24,10 @@ public class Group extends AbstractEntity {
     private Long id;
     @Column(name = "NAME", nullable = false, unique = true, length = 100)
     private String name;
-    @Column(name = "MANAGER_USER_ID")
-    private Long managerUserId;
     @Column(name = "DESCRIPTION", length = 100)
     private String description;
     @Column(name = "MAIL")
     private String email;
+    @Column(name = "GROUP_TYPE_ID", nullable = false)
+    private Integer groupTypeId;
 }
