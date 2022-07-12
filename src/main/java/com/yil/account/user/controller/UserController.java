@@ -5,6 +5,7 @@ import com.yil.account.base.ApiConstant;
 import com.yil.account.base.MD5Util;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.*;
+import com.yil.account.role.service.PermissionService;
 import com.yil.account.user.dto.CreateUserDto;
 import com.yil.account.user.dto.UserDto;
 import com.yil.account.user.dto.UserPasswordDto;
@@ -12,9 +13,8 @@ import com.yil.account.user.model.User;
 import com.yil.account.user.model.UserType;
 import com.yil.account.user.service.UserService;
 import com.yil.account.user.service.UserTypeService;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -153,6 +153,18 @@ public class UserController {
         user.setPassword(newPassword);
         user.setLastPasswordChangeTime(new Date());
         userService.save(user);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @Autowired
+    private final PermissionService permissionService;
+
+    @GetMapping(value = "/{id}/exists-permission")
+    @ResponseStatus(value = HttpStatus.OK)
+    public ResponseEntity<String> existsPermission(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+                                                   @PathVariable Long id,
+                                                   @RequestBody UserPasswordDto request) {
         return ResponseEntity.ok().build();
     }
 

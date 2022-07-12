@@ -3,14 +3,15 @@ package com.yil.account.role.controller;
 import com.yil.account.base.ApiConstant;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.PermissionNotFoundException;
-import com.yil.account.role.dto.CreatePermissionDto;
+import com.yil.account.exception.PermissionTypeNotFoundException;
+import com.yil.account.role.dto.PermissionRequest;
 import com.yil.account.role.dto.PermissionDto;
 import com.yil.account.role.model.Permission;
 import com.yil.account.role.service.PermissionService;
+import com.yil.account.role.service.PermissionTypeService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -52,14 +53,18 @@ public class PermissionController {
         return ResponseEntity.ok(dto);
     }
 
+    private final PermissionTypeService permissionTypeService;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<PermissionDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                                @Valid @RequestBody CreatePermissionDto dto) {
-        if (permissionService.existsByNameAndDeletedTimeIsNull(dto.getName()))
-            return ResponseEntity.badRequest().build();
+                                                @Valid @RequestBody PermissionRequest dto) throws PermissionTypeNotFoundException {
+        if(permissionTypeService.existsById(dto.getPermissionTypeId()))
+            throw new PermissionTypeNotFoundException();
         Permission entity = new Permission();
         entity.setName(dto.getName());
+        entity.setPermissionTypeId(dto.getPermissionTypeId());
+        entity.setDescription(dto.getDescription());
         entity.setCreatedUserId(authenticatedUserId);
         entity.setCreatedTime(new Date());
         entity = permissionService.save(entity);
@@ -76,7 +81,7 @@ public class PermissionController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PermissionDto> replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                                  @PathVariable Long id,
-                                                 @Valid @RequestBody CreatePermissionDto dto) throws PermissionNotFoundException {
+                                                 @Valid @RequestBody PermissionRequest dto) throws PermissionNotFoundException {
         Permission permission = permissionService.findById(id);
         if (permissionService.existsByNameAndDeletedTimeIsNull(dto.getName()))
             return ResponseEntity.badRequest().build();

@@ -22,4 +22,8 @@ public class Permission extends AbstractEntity {
     private Long id;
     @Column(name = "NAME", nullable = false, length = 1000)
     private String name;
+    @Column(name = "DESCRIPTION", nullable = false, length = 4000)
+    private String description;
+    @Column(name = "PERMISSION_TYPE_ID", nullable = false)
+    private Integer permissionTypeId;
 }
