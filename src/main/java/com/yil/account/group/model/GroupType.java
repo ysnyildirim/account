@@ -18,7 +18,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-@Table(schema = "USR", name = "GROUP_TYPE")
+@Table(schema = "GRP", name = "GROUP_TYPE")
 public class GroupType implements IEntity {
     @Id
     @SequenceGenerator(name = "GROUP_TYPE_SEQUENCE_GENERATOR",

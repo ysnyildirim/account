@@ -7,13 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserTypeRepository extends JpaRepository<UserType, Long> {
+public interface UserTypeRepository extends JpaRepository<UserType, Integer> {
 
-    List<UserType> findAllByRealPersonAndDeletedTimeIsNull(Boolean realPerson);
-
-    UserType findByNameAndDeletedTimeIsNull(String name);
-
-    List<UserType> findAllByDeletedTimeIsNull();
-
-    UserType findByIdAndDeletedTimeIsNull(Long id);
 }

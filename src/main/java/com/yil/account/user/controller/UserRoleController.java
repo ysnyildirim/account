@@ -9,12 +9,10 @@ import com.yil.account.role.dto.RoleDto;
 import com.yil.account.role.model.Role;
 import com.yil.account.role.service.RoleService;
 import com.yil.account.user.dto.CreateUserRoleDto;
-import com.yil.account.user.model.User;
 import com.yil.account.user.model.UserRole;
 import com.yil.account.user.service.UserRoleService;
 import com.yil.account.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -45,11 +42,11 @@ public class UserRoleController {
         if (size <= 0 || size > 1000)
             size = 1000;
         Pageable pageable = PageRequest.of(page, size);
-        Page<UserRole> data = userRoleService.findAllByUserIdAndDeletedTimeIsNull(pageable, userId);
+        Page<UserRole> data = userRoleService.findAllById_UserId(pageable, userId);
         List<RoleDto> dtoData = new ArrayList<>();
         for (UserRole userRole : data.getContent()) {
-            Role role = roleService.findByIdAndDeletedTimeIsNull(userRole.getRoleId());
-            RoleDto dto = RoleService.toDto(role);
+            Role role = roleService.findById(userRole.getId().getRoleId());
+            RoleDto dto = RoleService.convert(role);
             dtoData.add(dto);
         }
         PageDto<RoleDto> pageDto = new PageDto<>();
@@ -65,17 +62,16 @@ public class UserRoleController {
     public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long userId,
                                  @Valid @RequestBody CreateUserRoleDto request) throws RoleNotFoundException, UserNotFoundException {
-        Role role = roleService.findByIdAndDeletedTimeIsNull(request.getRoleId());
-        User user= userService.findByIdAndDeletedTimeIsNull(userId);
-        List<UserRole> userRoles = userRoleService.findAllByUserIdAndRoleIdAndDeletedTimeIsNull(userId, request.getRoleId());
-        if (!userRoles.isEmpty())
-            return ResponseEntity.created(null).build();
-        UserRole userRole = new UserRole();
-        userRole.setUserId(user.getId());
-        userRole.setRoleId(role.getId());
-        userRole.setCreatedUserId(authenticatedUserId);
-        userRole.setCreatedTime(new Date());
-        userRole = userRoleService.save(userRole);
+        if (!roleService.existsById(request.getRoleId()))
+            throw new RoleNotFoundException();
+        if (!userService.existsById(userId))
+            throw new UserNotFoundException();
+        UserRole.Pk id = UserRole.Pk.builder().userId(userId).roleId(request.getRoleId()).build();
+        if (!userRoleService.existsById(id)) {
+            UserRole userRole = new UserRole();
+            userRole.setId(id);
+            userRole = userRoleService.save(userRole);
+        }
         return ResponseEntity.created(null).build();
     }
 
@@ -84,14 +80,8 @@ public class UserRoleController {
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long userId,
                                  @PathVariable Long id) throws UserRoleNotFound {
-        List<UserRole> userRoles = userRoleService.findAllByUserIdAndRoleIdAndDeletedTimeIsNull(userId, id);
-        if (userRoles.isEmpty())
-            throw new UserRoleNotFound();
-        for (UserRole userRole : userRoles) {
-            userRole.setDeletedUserId(authenticatedUserId);
-            userRole.setDeletedTime(new Date());
-        }
-        userRoleService.saveAll(userRoles);
+        UserRole.Pk pk = UserRole.Pk.builder().userId(userId).roleId(id).build();
+        userRoleService.deleteById(pk);
         return ResponseEntity.ok().build();
     }
 

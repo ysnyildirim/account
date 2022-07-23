@@ -24,13 +24,13 @@ public class CreateUserDto {
     private String password;
     @NotNull
     @Min(value = 1)
-    private Long userTypeId;
+    private Integer userTypeId;
     @NotNull
     private Boolean enabled;
     @NotNull
     private Boolean locked;
-    @NotBlank
-    @Email
+   //@NotBlank
+   //@Email
     private String mail;
     @NotNull
     private Boolean passwordNeedsChanged;

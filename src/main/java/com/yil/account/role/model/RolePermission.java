@@ -1,23 +1,31 @@
 package com.yil.account.role.model;
 
-import com.yil.account.base.AbstractEntity;
+import com.yil.account.base.IEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Data
-@Table(name = "ROLE_PERMISSION")
-public class RolePermission extends AbstractEntity {
-    @Id
-    @SequenceGenerator(name = "ROLE_PERMISSION_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_ROLE_PERMISSION_ID",
-            allocationSize = 1)
-    @GeneratedValue(generator = "ROLE_PERMISSION_SEQUENCE_GENERATOR")
-    @Column(name = "ID")
-    private Long id;
-    @Column(name = "ROLE_ID", nullable = false)
-    private Long roleId;
-    @Column(name = "PERMISSION_ID", nullable = false)
-    private Long permissionId;
+@Table(schema = "RL", name = "ROLE_PERMISSION")
+public class RolePermission implements IEntity {
+
+    @EmbeddedId
+    private Pk id;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Embeddable
+    public static class Pk implements Serializable {
+        @Column(name = "ROLE_ID", nullable = false)
+        private Long roleId;
+        @Column(name = "PERMISSION_ID", nullable = false)
+        private Long permissionId;
+    }
 }

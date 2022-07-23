@@ -5,7 +5,6 @@ import com.yil.account.user.dto.UserTypeDto;
 import com.yil.account.user.model.UserType;
 import com.yil.account.user.repository.UserTypeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +13,9 @@ import java.util.List;
 @Service
 public class UserTypeService {
 
+    public static final int Admin = 1;
+    public static final int User = 2;
+    public static final int Staff = 3;
     private final UserTypeRepository userTypeRepository;
 
     public static UserTypeDto toDto(UserType userType) throws NullPointerException {
@@ -22,7 +24,6 @@ public class UserTypeService {
         return UserTypeDto.builder()
                 .id(userType.getId())
                 .name(userType.getName())
-                .realPerson(userType.getRealPerson())
                 .build();
     }
 
@@ -30,32 +31,20 @@ public class UserTypeService {
         return userTypeRepository.save(userType);
     }
 
-    public void delete(Long id) {
+    public void deleteById(int id) {
         userTypeRepository.deleteById(id);
     }
 
-    public UserType findById(Long id) throws UserTypeNotFoundException {
+    public UserType findById(int id) throws UserTypeNotFoundException {
         return userTypeRepository.findById(id).orElseThrow(() -> new UserTypeNotFoundException());
     }
 
-    public List<UserType> findAllByRealPersonAndDeletedTimeIsNull(Boolean realPerson) {
-        return userTypeRepository.findAllByRealPersonAndDeletedTimeIsNull(realPerson);
+    public boolean existsById(int id)  {
+        return userTypeRepository.existsById(id);
     }
 
-    public UserType findByName(String name) throws UserTypeNotFoundException {
-        UserType userType = userTypeRepository.findByNameAndDeletedTimeIsNull(name);
-        if (userType == null) throw new UserTypeNotFoundException();
-        return userType;
+    public List<UserType> findAll() {
+        return userTypeRepository.findAll();
     }
 
-    public List<UserType> findAllByDeletedTimeIsNull() {
-        return userTypeRepository.findAllByDeletedTimeIsNull();
-    }
-
-    public UserType findByIdAndDeletedTimeIsNull(Long id) throws UserTypeNotFoundException {
-        UserType userType = userTypeRepository.findByIdAndDeletedTimeIsNull(id);
-        if (userType == null)
-            throw new UserTypeNotFoundException();
-        return userType;
-    }
 }

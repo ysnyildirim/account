@@ -1,9 +1,10 @@
 package com.yil.account.group.service;
 
+import com.yil.account.exception.GroupRoleNotFound;
+import com.yil.account.group.dto.GroupRoleDto;
 import com.yil.account.group.model.GroupRole;
 import com.yil.account.group.repository.GroupRoleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,14 @@ import java.util.List;
 public class GroupRoleService {
     private final GroupRoleRepository groupRoleRepository;
 
+    public static GroupRoleDto convert(GroupRole groupRole) {
+        return GroupRoleDto
+                .builder()
+                .roleId(groupRole.getId().getRoleId())
+                .groupId(groupRole.getId().getGroupId())
+                .build();
+    }
+
     public GroupRole save(GroupRole groupRole) {
         return groupRoleRepository.save(groupRole);
     }
@@ -23,15 +32,23 @@ public class GroupRoleService {
         return groupRoleRepository.saveAll(roles);
     }
 
-    public void delete(Long id) {
+    public void delete(GroupRole.Pk id) {
         groupRoleRepository.deleteById(id);
     }
 
-    public List<GroupRole> findAllByGroupIdAndRoleIdAndDeletedTimeIsNull(Long groupId, Long roleId) {
-        return groupRoleRepository.findAllByGroupIdAndRoleIdAndDeletedTimeIsNull(groupId, roleId);
+    public GroupRole findById(GroupRole.Pk id) throws GroupRoleNotFound {
+        return groupRoleRepository.findById(id).orElseThrow(GroupRoleNotFound::new);
     }
 
-    public Page<GroupRole> findAllByGroupIdAndDeletedTimeIsNull(Pageable pageable, Long groupId) {
-        return groupRoleRepository.findAllByGroupIdAndDeletedTimeIsNull(pageable, groupId);
+    public boolean existsById(GroupRole.Pk id) {
+        return groupRoleRepository.existsById(id);
+    }
+
+    public Page<GroupRole> findAllById_GroupId(Pageable pageable, Long groupId) {
+        return groupRoleRepository.findAllById_GroupId(pageable, groupId);
+    }
+
+    public List<GroupRole> findAllById_GroupId(Long groupId) {
+        return groupRoleRepository.findAllById_GroupId(groupId);
     }
 }

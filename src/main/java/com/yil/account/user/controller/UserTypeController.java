@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,12 +23,8 @@ public class UserTypeController {
     private final UserTypeService userTypeService;
 
     @GetMapping
-    public ResponseEntity<List<UserTypeDto>> findAll(@RequestParam(required = false) Boolean realPerson) {
-        List<UserType> data;
-        if (realPerson != null)
-            data = userTypeService.findAllByRealPersonAndDeletedTimeIsNull(realPerson);
-        else
-            data = userTypeService.findAllByDeletedTimeIsNull();
+    public ResponseEntity<List<UserTypeDto>> findAll( ) {
+        List<UserType> data = userTypeService.findAll();
         List<UserTypeDto> dtoData = new ArrayList<>();
         data.forEach(f -> {
             dtoData.add(UserTypeService.toDto(f));
@@ -39,7 +34,7 @@ public class UserTypeController {
 
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserTypeDto> findById(@PathVariable Long id) throws UserTypeNotFoundException {
+    public ResponseEntity<UserTypeDto> findById(@PathVariable Integer id) throws UserTypeNotFoundException {
         UserType userType = userTypeService.findById(id);
         UserTypeDto dto = UserTypeService.toDto(userType);
         return ResponseEntity.ok(dto);
@@ -51,9 +46,6 @@ public class UserTypeController {
                                               @Valid @RequestBody CreateUserTypeDto request) {
         UserType userType = new UserType();
         userType.setName(request.getName());
-        userType.setRealPerson(request.getRealPerson());
-        userType.setCreatedUserId(authenticatedUserId);
-        userType.setCreatedTime(new Date());
         userType = userTypeService.save(userType);
         UserTypeDto dto = UserTypeService.toDto(userType);
         return ResponseEntity.created(null).body(dto);
@@ -62,10 +54,9 @@ public class UserTypeController {
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserTypeDto> replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                               @PathVariable Long id,
+                                               @PathVariable Integer id,
                                                @Valid @RequestBody CreateUserTypeDto request) throws UserTypeNotFoundException {
-        UserType userType = userTypeService.findByIdAndDeletedTimeIsNull(id);
-        userType.setRealPerson(request.getRealPerson());
+        UserType userType = userTypeService.findById(id);
         userType.setName(request.getName());
         userType = userTypeService.save(userType);
         UserTypeDto dto = UserTypeService.toDto(userType);
@@ -75,11 +66,8 @@ public class UserTypeController {
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                         @PathVariable Long id) throws UserTypeNotFoundException {
-        UserType userType = userTypeService.findByIdAndDeletedTimeIsNull(id);
-        userType.setDeletedUserId(authenticatedUserId);
-        userType.setDeletedTime(new Date());
-        userTypeService.save(userType);
+                                         @PathVariable Integer id) throws UserTypeNotFoundException {
+        userTypeService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 

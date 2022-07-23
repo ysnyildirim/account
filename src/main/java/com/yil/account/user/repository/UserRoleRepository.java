@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
+public interface UserRoleRepository extends JpaRepository<UserRole, UserRole.Pk> {
 
-    Page<UserRole> findAllByUserIdAndDeletedTimeIsNull(Pageable pageable, Long userId);
+    Page<UserRole> findAllById_UserId(Pageable pageable, Long userId);
 
-    List<UserRole> findAllByUserIdAndRoleIdAndDeletedTimeIsNull(Long userId, Long roleId);
+    List<UserRole> findAllById_UserId(Long userId);
 
 }

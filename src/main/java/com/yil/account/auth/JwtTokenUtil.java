@@ -40,22 +40,12 @@ public class JwtTokenUtil implements Serializable {
                 .compact();
     }
 
+    private Date calculateExpirationDate(Date createdDate) {
+        return new Date(createdDate.getTime() + expiration * 1000);
+    }
+
     public Long getUserId(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
         return (Long) getClaimFromToken(token, f -> f.get("userId"));
-    }
-
-    //retrieve username from jwt token
-    public String getUserNameFromToken(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
-        return getClaimFromToken(token, Claims::getSubject);
-    }
-
-    //retrieve expiration date from jwt token
-    public Date getExpirationDateFromToken(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
-        return getClaimFromToken(token, Claims::getExpiration);
-    }
-
-    public Date getIssuedAtDateFromToken(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
-        return getClaimFromToken(token, Claims::getIssuedAt);
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
@@ -73,6 +63,20 @@ public class JwtTokenUtil implements Serializable {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
+    //retrieve username from jwt token
+    public String getUserNameFromToken(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    //retrieve expiration date from jwt token
+    public Date getExpirationDateFromToken(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    public Date getIssuedAtDateFromToken(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
+        return getClaimFromToken(token, Claims::getIssuedAt);
+    }
+
     //check if the token has expired
     private Boolean isTokenExpired(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
         final Date expiration = getExpirationDateFromToken(token);
@@ -84,10 +88,6 @@ public class JwtTokenUtil implements Serializable {
             return false;
         final String userName = getUserNameFromToken(token);
         return true;
-    }
-
-    private Date calculateExpirationDate(Date createdDate) {
-        return new Date(createdDate.getTime() + expiration * 1000);
     }
 
     public String refreshToken(String token) {

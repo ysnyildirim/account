@@ -1,24 +1,28 @@
 package com.yil.account.user.model;
 
-import com.yil.account.base.AbstractEntity;
+import com.yil.account.base.IEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "USER_TYPE")
-public class UserType extends AbstractEntity {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(schema = "USR", name = "USER_TYPE")
+public class UserType implements IEntity {
     @Id
     @SequenceGenerator(name = "USER_TYPE_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_USER_TYPE_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "USER_TYPE_SEQUENCE_GENERATOR")
     @Column(name = "ID")
-    private Long id;
+    private Integer id;
     @Column(name = "NAME", nullable = false, length = 100)
     private String name;
-    @Column(name = "REAL_PERSON", nullable = false)
-    private Boolean realPerson;
 
 }

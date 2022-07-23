@@ -2,20 +2,22 @@
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
 
-package com.yil.account.role.dto;
+package com.yil.account.group.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateRoleActionDto {
-    @NotNull
-    private Long actionId;
+public class GroupRoleDto implements Serializable {
+
+    private Long groupId;
+    private Long roleId;
+
 }

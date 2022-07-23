@@ -1,6 +1,7 @@
 package com.yil.account.role.controller;
 
 import com.yil.account.base.ApiConstant;
+import com.yil.account.base.Mapper;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.RoleNameCannotBeUsedException;
 import com.yil.account.exception.RoleNotFoundException;
@@ -9,7 +10,6 @@ import com.yil.account.role.dto.RoleDto;
 import com.yil.account.role.model.Role;
 import com.yil.account.role.service.RoleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +26,7 @@ import java.util.Date;
 public class RoleController {
 
     private final RoleService roleService;
+    private final Mapper<Role, RoleDto> mapper = new Mapper<Role, RoleDto>(RoleService::convert);
 
     @GetMapping
     public ResponseEntity<PageDto<RoleDto>> findAll(
@@ -36,15 +37,14 @@ public class RoleController {
         if (size <= 0 || size > 1000)
             size = 1000;
         Pageable pageable = PageRequest.of(page, size);
-        Page<Role> rolePage = roleService.findAllByDeletedTimeIsNull(pageable);
-        PageDto<RoleDto> pageDto = PageDto.toDto(rolePage, RoleService::toDto);
+        Page<Role> rolePage = roleService.findAll(pageable);
+        PageDto<RoleDto> pageDto = mapper.map(roleService.findAll(pageable));
         return ResponseEntity.ok(pageDto);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<RoleDto> findById(@PathVariable Long id) throws RoleNotFoundException {
-        Role entity = roleService.findById(id);
-        RoleDto dto = RoleService.toDto(entity);
+        RoleDto dto = mapper.map(roleService.findById(id));
         return ResponseEntity.ok(dto);
     }
 
@@ -58,10 +58,11 @@ public class RoleController {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setAssignable(dto.getAssignable());
+        entity.setInheritable(dto.getInheritable());
         entity.setCreatedUserId(authenticatedUserId);
         entity.setCreatedTime(new Date());
         entity = roleService.save(entity);
-        RoleDto responce = RoleService.toDto(entity);
+        RoleDto responce = mapper.map(entity);
         return ResponseEntity.created(null).body(responce);
     }
 
@@ -70,14 +71,15 @@ public class RoleController {
     public ResponseEntity<RoleDto> replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                            @PathVariable Long id,
                                            @Valid @RequestBody CreateRoleDto dto) throws RoleNotFoundException, RoleNameCannotBeUsedException {
-        Role role = roleService.findByIdAndDeletedTimeIsNull(id);
-        if (roleService.existsByNameAndDeletedTimeIsNull(dto.getName()))
+        Role role = roleService.findById(id);
+        if (!role.getName().equals(dto.getName()) && roleService.existsByNameAndDeletedTimeIsNull(dto.getName()))
             throw new RoleNameCannotBeUsedException();
         role.setName(dto.getName());
-        role.setAssignable(dto.getAssignable());
         role.setDescription(dto.getDescription());
+        role.setAssignable(dto.getAssignable());
+        role.setInheritable(dto.getInheritable());
         role = roleService.save(role);
-        RoleDto responce = RoleService.toDto(role);
+        RoleDto responce = mapper.map(role);
         return ResponseEntity.ok(responce);
     }
 
@@ -85,10 +87,7 @@ public class RoleController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long id) throws RoleNotFoundException {
-        Role entity = roleService.findByIdAndDeletedTimeIsNull(id);
-        entity.setDeletedUserId(authenticatedUserId);
-        entity.setDeletedTime(new Date());
-        roleService.save(entity);
+        roleService.delete(id);
         return ResponseEntity.ok().build();
     }
 

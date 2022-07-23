@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,13 +15,13 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserDto implements Serializable {
     private Long id;
     private String userName;
     private Boolean enabled;
     private Boolean locked;
     private Date lastPasswordChangeTime;
-    private Long userTypeId;
+    private Integer userTypeId;
     private String mail;
     private Long personId;
     private Boolean passwordNeedsChanged;

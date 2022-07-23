@@ -14,4 +14,6 @@ import javax.validation.constraints.NotNull;
 public class CreateGroupUserDto {
     @NotNull
     private Long userId;
+    @NotNull
+    private Integer groupUserTypeId;
 }

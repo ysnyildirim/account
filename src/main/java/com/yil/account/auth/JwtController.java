@@ -14,7 +14,6 @@ import com.yil.account.user.model.User;
 import com.yil.account.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +34,11 @@ public class JwtController {
     @GetMapping(value = "/login")
     public ResponseEntity<JwtResponce> login(@Valid @RequestParam @NotBlank @Length(min = 1, max = 100) String userName,
                                              @Valid @RequestParam @NotBlank @Length(min = 1, max = 100) String password) throws NoSuchAlgorithmException, DisabledUserException, UserNotFoundException, LockedUserException, WrongPasswordException {
-        User user = userService.getActiveUser(userName);
+        User user = userService.findByUserName(userName);
+        if (!user.isEnabled())
+            throw new DisabledUserException();
+        if (user.isLocked())
+            throw new LockedUserException();
         String myHash = MD5Util.encode(password);
         if (!user.getPassword().equals(myHash))
             throw new WrongPasswordException();

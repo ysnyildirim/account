@@ -7,10 +7,10 @@ import com.yil.account.base.PageDto;
 import com.yil.account.exception.*;
 import com.yil.account.role.service.PermissionService;
 import com.yil.account.user.dto.CreateUserDto;
+import com.yil.account.user.dto.CreateUserResponse;
 import com.yil.account.user.dto.UserDto;
 import com.yil.account.user.dto.UserPasswordDto;
 import com.yil.account.user.model.User;
-import com.yil.account.user.model.UserType;
 import com.yil.account.user.service.UserService;
 import com.yil.account.user.service.UserTypeService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +34,8 @@ public class UserController {
     private final UserService userService;
     private final UserTypeService userTypeService;
     private final JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private final PermissionService permissionService;
 
     @GetMapping
     public ResponseEntity<PageDto<UserDto>> findAll(
@@ -44,38 +46,38 @@ public class UserController {
         if (size <= 0 || size > 1000)
             size = 1000;
         Pageable pageable = PageRequest.of(page, size);
-        Page<User> userPage = userService.findAllByDeletedTimeIsNull(pageable);
-        PageDto<UserDto> pageDto = PageDto.toDto(userPage, UserService::toDto);
+        Page<User> userPage = userService.findAll(pageable);
+        PageDto<UserDto> pageDto = PageDto.toDto(userPage, UserService::convert);
         return ResponseEntity.ok(pageDto);
     }
-
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDto> findById(@PathVariable Long id) throws UserNotFoundException {
         User user = userService.findById(id);
-        UserDto dto = UserService.toDto(user);
+        UserDto dto = UserService.convert(user);
         return ResponseEntity.ok(dto);
     }
 
     @GetMapping(value = "/userName={userName}")
     public ResponseEntity<UserDto> findByUserName(@PathVariable String userName) throws UserNotFoundException {
-        User user = userService.findByUserNameAndDeletedTimeIsNull(userName);
-        UserDto dto = UserService.toDto(user);
+        User user = userService.findByUserName(userName);
+        UserDto dto = UserService.convert(user);
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                          @Valid @RequestBody CreateUserDto request) throws UserNameCannotBeUsedException, UserTypeNotFoundException, NoSuchAlgorithmException {
+    public ResponseEntity<CreateUserResponse> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+                                                     @Valid @RequestBody CreateUserDto request) throws UserNameCannotBeUsedException, UserTypeNotFoundException, NoSuchAlgorithmException {
         if (userService.existsByUserName(request.getUserName()))
             throw new UserNameCannotBeUsedException();
-        UserType userType = userTypeService.findById(request.getUserTypeId());
+        if (!userTypeService.existsById(request.getUserTypeId()))
+            throw new UserTypeNotFoundException();
         String hashPassword = MD5Util.encode(request.getPassword());
         User user = new User();
         user.setUserName(request.getUserName());
         user.setPassword(hashPassword);
-        user.setUserTypeId(userType.getId());
+        user.setUserTypeId(request.getUserTypeId());
         user.setEnabled(request.getEnabled());
         user.setLocked(request.getLocked());
         user.setMail(request.getMail());
@@ -84,16 +86,14 @@ public class UserController {
         user.setCreatedUserId(authenticatedUserId);
         user.setCreatedTime(new Date());
         user = userService.save(user);
-        return ResponseEntity.ok().build();
+        CreateUserResponse createUserResponse = CreateUserResponse.builder().id(user.getId()).build();
+        return ResponseEntity.created(null).body(createUserResponse);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @Valid @PathVariable Long id) throws UserNotFoundException {
-        User user = userService.findByIdAndDeletedTimeIsNull(id);
-        user.setDeletedUserId(authenticatedUserId);
-        user.setDeletedTime(new Date());
-        userService.save(user);
+        userService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
@@ -107,7 +107,6 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-
     @PutMapping("/{id}/unlock")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity unlock(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
@@ -118,7 +117,6 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-
     @PutMapping("/{id}/active")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity active(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
@@ -128,7 +126,6 @@ public class UserController {
         userService.save(user);
         return ResponseEntity.ok().build();
     }
-
 
     @PutMapping("/{id}/inactive")
     @ResponseStatus(HttpStatus.OK)
@@ -145,7 +142,11 @@ public class UserController {
     public ResponseEntity changePassword(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                          @PathVariable Long id,
                                          @RequestBody UserPasswordDto request) throws UserNotFoundException, NoSuchAlgorithmException, LockedUserException, DisabledUserException, WrongPasswordException {
-        User user = userService.getActiveUser(id);
+        User user = userService.findById(id);
+        if (!user.isEnabled())
+            throw new DisabledUserException();
+        if (user.isLocked())
+            throw new LockedUserException();
         String currentPassword = MD5Util.encode(request.getCurrentPassword());
         if (!user.getPassword().equals(currentPassword))
             throw new WrongPasswordException();
@@ -156,16 +157,15 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-
-    @Autowired
-    private final PermissionService permissionService;
-
-    @GetMapping(value = "/{id}/exists-permission")
+    @GetMapping(value = "/{id}/permission-id={permissionId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public ResponseEntity<String> existsPermission(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                                   @PathVariable Long id,
-                                                   @RequestBody UserPasswordDto request) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity existsPermission(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+                                           @PathVariable Long id,
+                                           @PathVariable Long permissionId) {
+        if (userService.existsByPermission(id, permissionId))
+            return ResponseEntity.noContent().build();
+        else
+            return ResponseEntity.ok().build();
     }
 
 }

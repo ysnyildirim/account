@@ -4,8 +4,8 @@ import com.yil.account.base.ApiConstant;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.PermissionNotFoundException;
 import com.yil.account.exception.PermissionTypeNotFoundException;
-import com.yil.account.role.dto.PermissionRequest;
 import com.yil.account.role.dto.PermissionDto;
+import com.yil.account.role.dto.PermissionRequest;
 import com.yil.account.role.model.Permission;
 import com.yil.account.role.service.PermissionService;
 import com.yil.account.role.service.PermissionTypeService;
@@ -31,6 +31,7 @@ public class PermissionController {
 
     private final Log logger = LogFactory.getLog(this.getClass());
     private final PermissionService permissionService;
+    private final PermissionTypeService permissionTypeService;
 
     @GetMapping
     public ResponseEntity<PageDto<PermissionDto>> findAll(
@@ -41,25 +42,23 @@ public class PermissionController {
         if (size <= 0 || size > 1000)
             size = 1000;
         Pageable pageable = PageRequest.of(page, size);
-        Page<Permission> permissionPage = permissionService.findAllByDeletedTimeIsNull(pageable);
-        PageDto<PermissionDto> pageDto = PageDto.toDto(permissionPage, PermissionService::toDto);
+        Page<Permission> permissionPage = permissionService.findAll(pageable);
+        PageDto<PermissionDto> pageDto = PageDto.toDto(permissionPage, PermissionService::convert);
         return ResponseEntity.ok(pageDto);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PermissionDto> findById(@PathVariable Long id) throws PermissionNotFoundException {
         Permission entity = permissionService.findById(id);
-        PermissionDto dto = PermissionService.toDto(entity);
+        PermissionDto dto = PermissionService.convert(entity);
         return ResponseEntity.ok(dto);
     }
-
-    private final PermissionTypeService permissionTypeService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<PermissionDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                                 @Valid @RequestBody PermissionRequest dto) throws PermissionTypeNotFoundException {
-        if(permissionTypeService.existsById(dto.getPermissionTypeId()))
+        if (permissionTypeService.existsById(dto.getPermissionTypeId()))
             throw new PermissionTypeNotFoundException();
         Permission entity = new Permission();
         entity.setName(dto.getName());
@@ -73,7 +72,7 @@ public class PermissionController {
                 .path("/{id}")
                 .buildAndExpand(entity.getId())
                 .toUri();
-        PermissionDto responce = PermissionService.toDto(entity);
+        PermissionDto responce = PermissionService.convert(entity);
         return ResponseEntity.created(uri).body(responce);
     }
 
@@ -83,11 +82,11 @@ public class PermissionController {
                                                  @PathVariable Long id,
                                                  @Valid @RequestBody PermissionRequest dto) throws PermissionNotFoundException {
         Permission permission = permissionService.findById(id);
-        if (permissionService.existsByNameAndDeletedTimeIsNull(dto.getName()))
+        if (permissionService.existsByName(dto.getName()))
             return ResponseEntity.badRequest().build();
         permission.setName(dto.getName());
         permission = permissionService.save(permission);
-        PermissionDto responce = PermissionService.toDto(permission);
+        PermissionDto responce = PermissionService.convert(permission);
         return ResponseEntity.ok(responce);
     }
 
@@ -95,10 +94,7 @@ public class PermissionController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long id) throws PermissionNotFoundException {
-        Permission entity = permissionService.findByIdAndDeletedTimeIsNull(id);
-        entity.setDeletedUserId(authenticatedUserId);
-        entity.setDeletedTime(new Date());
-        permissionService.save(entity);
+        permissionService.delete(id);
         return ResponseEntity.ok().build();
     }
 

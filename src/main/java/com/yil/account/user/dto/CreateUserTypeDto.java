@@ -17,6 +17,4 @@ public class CreateUserTypeDto {
     @NotBlank
     @Length(min = 1, max = 100)
     private String name;
-    @NotNull
-    private Boolean realPerson;
 }

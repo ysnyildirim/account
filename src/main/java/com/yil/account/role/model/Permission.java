@@ -1,18 +1,19 @@
 package com.yil.account.role.model;
 
-import com.yil.account.base.AbstractEntity;
+import com.yil.account.base.IEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "PERMISSION")
+@Table(schema = "RL",name = "PERMISSION")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Permission extends AbstractEntity {
+public class Permission implements IEntity {
     @Id
     @SequenceGenerator(name = "PERMISSION_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_PERMISSION_ID",
@@ -26,4 +27,9 @@ public class Permission extends AbstractEntity {
     private String description;
     @Column(name = "PERMISSION_TYPE_ID", nullable = false)
     private Integer permissionTypeId;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATED_TIME")
+    private Date createdTime;
+    @Column(name = "CREATED_USER_ID")
+    private Long createdUserId;
 }

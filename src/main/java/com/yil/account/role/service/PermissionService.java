@@ -5,19 +5,18 @@ import com.yil.account.role.dto.PermissionDto;
 import com.yil.account.role.model.Permission;
 import com.yil.account.role.repository.PermissionRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import javax.validation.constraints.NotNull;
 
 @Service
 @RequiredArgsConstructor
 public class PermissionService {
     private final PermissionRepository permissionRepository;
 
-    public static PermissionDto toDto(Permission permission) {
-        if (permission == null)
-            throw new NullPointerException();
+    public static PermissionDto convert(@NotNull Permission permission) {
         return PermissionDto.builder()
                 .id(permission.getId())
                 .name(permission.getName())
@@ -28,22 +27,15 @@ public class PermissionService {
         return permissionRepository.findById(id).orElseThrow(() -> new PermissionNotFoundException());
     }
 
-    public Permission findByIdAndDeletedTimeIsNull(Long id) throws PermissionNotFoundException {
-        Permission permission = permissionRepository.findByIdAndDeletedTimeIsNull(id);
-        if (permission == null)
-            throw new PermissionNotFoundException();
-        return permission;
-    }
-
     public Permission findByName(String name) throws PermissionNotFoundException {
-        Permission permission = permissionRepository.findByNameAndDeletedTimeIsNull(name);
+        Permission permission = permissionRepository.findByName(name);
         if (permission == null)
             throw new PermissionNotFoundException();
         return permission;
     }
 
-    public boolean existsByNameAndDeletedTimeIsNull(String name) {
-        return permissionRepository.existsByNameAndDeletedTimeIsNull(name);
+    public boolean existsByName(String name) {
+        return permissionRepository.existsByName(name);
     }
 
     public Permission save(Permission user) {
@@ -54,7 +46,11 @@ public class PermissionService {
         permissionRepository.deleteById(id);
     }
 
-    public Page<Permission> findAllByDeletedTimeIsNull(Pageable pageable) {
-        return permissionRepository.findAllByDeletedTimeIsNull(pageable);
+    public Page<Permission> findAll(Pageable pageable) {
+        return permissionRepository.findAll(pageable);
+    }
+
+    public boolean existsById(Long id) {
+        return permissionRepository.existsById(id);
     }
 }

@@ -9,9 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface GroupUserRepository extends JpaRepository<GroupUser, Long> {
+public interface GroupUserRepository extends JpaRepository<GroupUser, GroupUser.Pk> {
 
-    List<GroupUser> findAllByGroupIdAndUserIdAndDeletedTimeIsNull(Long groupId, Long userId);
+    Page<GroupUser> findAllById_GroupId(Pageable pageable, Long groupId);
 
-    Page<GroupUser> findAllByGroupIdAndDeletedTimeIsNull(Pageable pageable, Long groupId);
+    List<GroupUser> findAllById_UserId(Long userId);
+
 }

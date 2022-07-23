@@ -8,13 +8,11 @@ import com.yil.account.exception.RolePermissionNotFound;
 import com.yil.account.role.dto.CreateRolePermissionDto;
 import com.yil.account.role.dto.PermissionDto;
 import com.yil.account.role.model.Permission;
-import com.yil.account.role.model.Role;
 import com.yil.account.role.model.RolePermission;
 import com.yil.account.role.service.PermissionService;
 import com.yil.account.role.service.RolePermissionService;
 import com.yil.account.role.service.RoleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -45,11 +42,11 @@ public class RolePermissionController {
         if (size <= 0 || size > 1000)
             size = 1000;
         Pageable pageable = PageRequest.of(page, size);
-        Page<RolePermission> data = rolePermissionService.findAllByRoleIdAndDeletedTimeIsNull(pageable, roleId);
+        Page<RolePermission> data = rolePermissionService.findAllById_RoleId(pageable, roleId);
         List<PermissionDto> dtoData = new ArrayList<>();
         for (RolePermission rolePermission : data.getContent()) {
-            Permission permission = permissionService.findById(rolePermission.getPermissionId());
-            PermissionDto permissionDto = PermissionService.toDto(permission);
+            Permission permission = permissionService.findById(rolePermission.getId().getPermissionId());
+            PermissionDto permissionDto = PermissionService.convert(permission);
             dtoData.add(permissionDto);
         }
         PageDto<PermissionDto> pageDto = new PageDto<>();
@@ -65,17 +62,16 @@ public class RolePermissionController {
     public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long roleId,
                                  @Valid @RequestBody CreateRolePermissionDto dto) throws PermissionNotFoundException, RoleNotFoundException {
-        Role role = roleService.findByIdAndDeletedTimeIsNull(roleId);
-        Permission permission = permissionService.findById(dto.getPermissionId());
-        List<RolePermission> rolePermissions = rolePermissionService.findAllByRoleIdAndPermissionIdAndDeletedTimeIsNull(role.getId(), permission.getId());
-        if (!rolePermissions.isEmpty())
-            return ResponseEntity.created(null).build();
-        RolePermission rolePermission = new RolePermission();
-        rolePermission.setRoleId(role.getId());
-        rolePermission.setPermissionId(permission.getId());
-        rolePermission.setCreatedUserId(authenticatedUserId);
-        rolePermission.setCreatedTime(new Date());
-        rolePermission = rolePermissionService.save(rolePermission);
+        if (!roleService.existsById(roleId))
+            throw new RoleNotFoundException();
+        if (!permissionService.existsById(dto.getPermissionId()))
+            throw new PermissionNotFoundException();
+        RolePermission.Pk id = RolePermission.Pk.builder().build();
+        if (!rolePermissionService.existsById(id)) {
+            RolePermission rolePermission = new RolePermission();
+            rolePermission.setId(id);
+            rolePermission = rolePermissionService.save(rolePermission);
+        }
         return ResponseEntity.created(null).build();
     }
 
@@ -84,14 +80,8 @@ public class RolePermissionController {
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long roleId,
                                  @PathVariable Long id) throws RoleNotFoundException, PermissionNotFoundException, RolePermissionNotFound {
-          List<RolePermission> rolePermissions = rolePermissionService.findAllByRoleIdAndPermissionIdAndDeletedTimeIsNull(roleId, id);
-        if (rolePermissions.isEmpty())
-            throw new RolePermissionNotFound();
-        for (RolePermission rolePermission : rolePermissions) {
-            rolePermission.setDeletedUserId(authenticatedUserId);
-            rolePermission.setDeletedTime(new Date());
-        }
-        rolePermissionService.saveAll(rolePermissions);
+        RolePermission.Pk pk = RolePermission.Pk.builder().build();
+        rolePermissionService.delete(pk);
         return ResponseEntity.ok().build();
     }
 

@@ -16,6 +16,15 @@ import java.util.List;
 public class UserPhotoService {
     private final UserPhotoRepository userPhotoRepository;
 
+    public static UserPhotoDto toDto(UserPhoto userPhoto) {
+        return UserPhotoDto.builder()
+                .id(userPhoto.getId())
+                .content(userPhoto.getContent())
+                .extension(userPhoto.getExtension())
+                .name(userPhoto.getName())
+                .build();
+    }
+
     public UserPhoto findById(Long id) throws UserPhotoNotFound {
         return userPhotoRepository.findById(id).orElseThrow(() -> new UserPhotoNotFound());
     }
@@ -33,22 +42,13 @@ public class UserPhotoService {
     }
 
     public Page<UserPhoto> findAllByUserIdAndDeletedTimeIsNull(Pageable pageable, Long userId) {
-        return userPhotoRepository.findAllByUserIdAndDeletedTimeIsNull(pageable, userId);
+        return userPhotoRepository.findAllByUserId(pageable, userId);
     }
 
     public UserPhoto findByIdAndUserIdAndDeletedTimeIsNull(Long id, Long userId) throws UserPhotoNotFound {
-        UserPhoto userPhoto = userPhotoRepository.findByIdAndUserIdAndDeletedTimeIsNull(id, userId);
-        if (userPhoto==null)
+        UserPhoto userPhoto = userPhotoRepository.findByIdAndUserId(id, userId);
+        if (userPhoto == null)
             throw new UserPhotoNotFound();
         return userPhoto;
-    }
-
-    public static UserPhotoDto toDto(UserPhoto userPhoto) {
-        return UserPhotoDto.builder()
-                .id(userPhoto.getId())
-                .content(userPhoto.getContent())
-                .extension(userPhoto.getExtension())
-                .name(userPhoto.getName())
-                .build();
     }
 }

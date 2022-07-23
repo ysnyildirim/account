@@ -5,7 +5,6 @@ import com.yil.account.role.dto.RoleDto;
 import com.yil.account.role.model.Role;
 import com.yil.account.role.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,14 +14,13 @@ import org.springframework.stereotype.Service;
 public class RoleService {
     private final RoleRepository roleRepository;
 
-    public static RoleDto toDto(Role role) {
-        if (role == null)
-            throw new NullPointerException();
+    public static RoleDto convert(Role role) {
         return RoleDto.builder()
                 .id(role.getId())
                 .name(role.getName())
                 .description(role.getDescription())
-                .assignable(role.getAssignable())
+                .assignable(role.isAssignable())
+                .inheritable(role.isInheritable())
                 .build();
     }
 
@@ -30,22 +28,19 @@ public class RoleService {
         return roleRepository.findById(id).orElseThrow(() -> new RoleNotFoundException());
     }
 
-    public Role findByIdAndDeletedTimeIsNull(Long id) throws RoleNotFoundException {
-        Role role = roleRepository.findByIdAndDeletedTimeIsNull(id);
-        if (role == null)
-            throw new RoleNotFoundException();
-        return role;
+    public boolean existsById(Long id) {
+        return roleRepository.existsById(id);
     }
 
     public Role findByName(String name) throws RoleNotFoundException {
-        Role role = roleRepository.findByNameAndDeletedTimeIsNull(name);
+        Role role = roleRepository.findByName(name);
         if (role == null)
             throw new RoleNotFoundException();
         return role;
     }
 
     public boolean existsByNameAndDeletedTimeIsNull(String name) {
-        return roleRepository.existsByNameAndDeletedTimeIsNull(name);
+        return roleRepository.existsByName(name);
     }
 
     public Role save(Role user) {
@@ -56,7 +51,7 @@ public class RoleService {
         roleRepository.deleteById(id);
     }
 
-    public Page<Role> findAllByDeletedTimeIsNull(Pageable pageable) {
-        return roleRepository.findAllByDeletedTimeIsNull(pageable);
+    public Page<Role> findAll(Pageable pageable) {
+        return roleRepository.findAll(pageable);
     }
 }

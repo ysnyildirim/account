@@ -6,7 +6,6 @@ import com.yil.account.exception.UserNotFoundException;
 import com.yil.account.exception.UserPhotoNotFound;
 import com.yil.account.user.dto.CreateUserPhotoDto;
 import com.yil.account.user.dto.UserPhotoDto;
-import com.yil.account.user.model.User;
 import com.yil.account.user.model.UserPhoto;
 import com.yil.account.user.service.UserPhotoService;
 import com.yil.account.user.service.UserService;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -43,7 +41,7 @@ public class UserPhotoController {
         Page<UserPhoto> data = userPhotoService.findAllByUserIdAndDeletedTimeIsNull(pageable, userId);
         List<UserPhotoDto> dtoData = new ArrayList<>();
         for (UserPhoto userPhoto : data.getContent()) {
-            UserPhotoDto dto = userPhotoService.toDto(userPhoto);
+            UserPhotoDto dto = UserPhotoService.toDto(userPhoto);
             dtoData.add(dto);
         }
         PageDto<UserPhotoDto> pageDto = new PageDto<>();
@@ -67,14 +65,13 @@ public class UserPhotoController {
     public ResponseEntity<UserPhotoDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                                @PathVariable Long userId,
                                                @Valid @RequestBody CreateUserPhotoDto request) throws UserNotFoundException {
-        User user = userService.findByIdAndDeletedTimeIsNull(userId);
+        if (!userService.existsById(userId))
+            throw new UserNotFoundException();
         UserPhoto userPhoto = new UserPhoto();
-        userPhoto.setUserId(user.getId());
+        userPhoto.setUserId(userId);
         userPhoto.setContent(request.getContent());
         userPhoto.setExtension(request.getExtension());
         userPhoto.setName(request.getName());
-        userPhoto.setCreatedUserId(authenticatedUserId);
-        userPhoto.setCreatedTime(new Date());
         userPhoto = userPhotoService.save(userPhoto);
         UserPhotoDto dto = UserPhotoService.toDto(userPhoto);
         return ResponseEntity.created(null).body(dto);
@@ -100,10 +97,7 @@ public class UserPhotoController {
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long userId,
                                  @PathVariable Long id) throws UserPhotoNotFound {
-        UserPhoto userPhoto = userPhotoService.findByIdAndUserIdAndDeletedTimeIsNull(id, userId);
-        userPhoto.setDeletedUserId(authenticatedUserId);
-        userPhoto.setDeletedTime(new Date());
-        userPhotoService.save(userPhoto);
+        userPhotoService.delete(id);
         return ResponseEntity.ok().build();
     }
 

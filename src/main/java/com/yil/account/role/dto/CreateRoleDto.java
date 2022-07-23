@@ -22,4 +22,6 @@ public class CreateRoleDto {
     private String description;
     @NotNull
     private Boolean assignable;
+    @NotNull
+    private Boolean inheritable;
 }

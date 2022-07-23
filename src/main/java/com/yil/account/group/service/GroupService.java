@@ -5,7 +5,6 @@ import com.yil.account.group.dto.GroupDto;
 import com.yil.account.group.model.Group;
 import com.yil.account.group.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,22 +27,23 @@ public class GroupService {
         return groupRepository.findById(id).orElseThrow(() -> new GroupNotFoundException());
     }
 
+    public boolean existsById(Long id) {
+        return groupRepository.existsById(id);
+    }
+
     public Group findByIdAndDeletedTimeIsNull(Long id) throws GroupNotFoundException {
-        Group group = groupRepository.findByIdAndDeletedTimeIsNull(id);
-        if (group == null)
-            throw new GroupNotFoundException();
-        return group;
+        return groupRepository.findById(id).orElseThrow(GroupNotFoundException::new);
     }
 
     public Group findByName(String name) throws GroupNotFoundException {
-        Group group = groupRepository.findByNameAndDeletedTimeIsNull(name);
+        Group group = groupRepository.findByName(name);
         if (group == null)
             throw new GroupNotFoundException();
         return group;
     }
 
     public boolean existsByNameAndDeletedTimeIsNull(String name) {
-        return groupRepository.existsByNameAndDeletedTimeIsNull(name);
+        return groupRepository.existsByName(name);
     }
 
     public Group save(Group user) {
@@ -54,7 +54,7 @@ public class GroupService {
         groupRepository.deleteById(id);
     }
 
-    public Page<Group> findAllByDeletedTimeIsNull(Pageable pageable) {
-        return groupRepository.findAllByDeletedTimeIsNull(pageable);
+    public Page<Group> findAll(Pageable pageable) {
+        return groupRepository.findAll(pageable);
     }
 }

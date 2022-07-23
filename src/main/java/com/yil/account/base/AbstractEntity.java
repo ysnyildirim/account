@@ -1,6 +1,5 @@
 package com.yil.account.base;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

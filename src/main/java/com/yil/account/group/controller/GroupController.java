@@ -9,7 +9,6 @@ import com.yil.account.group.dto.GroupDto;
 import com.yil.account.group.model.Group;
 import com.yil.account.group.service.GroupService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +37,7 @@ public class GroupController {
         if (size <= 0 || size > 1000)
             size = 1000;
         Pageable pageable = PageRequest.of(page, size);
-        Page<Group> groupPage = groupService.findAllByDeletedTimeIsNull(pageable);
+        Page<Group> groupPage = groupService.findAll(pageable);
         PageDto<GroupDto> pageDto = PageDto.toDto(groupPage, GroupService::toDto);
         return ResponseEntity.ok(pageDto);
     }
@@ -88,10 +87,7 @@ public class GroupController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long id) throws GroupNotFoundException {
-        Group entity = groupService.findByIdAndDeletedTimeIsNull(id);
-        entity.setDeletedUserId(authenticatedUserId);
-        entity.setDeletedTime(new Date());
-        groupService.save(entity);
+        groupService.delete(id);
         return ResponseEntity.ok().build();
     }
 

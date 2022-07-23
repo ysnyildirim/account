@@ -6,13 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 
 @Repository
-public interface RolePermissionRepository extends JpaRepository<RolePermission, Long> {
+public interface RolePermissionRepository extends JpaRepository<RolePermission, RolePermission.Pk> {
 
-    List<RolePermission> findAllByRoleIdAndPermissionIdAndDeletedTimeIsNull(Long roleId, Long permissionId);
+    Page<RolePermission> findAllById_RoleId(Pageable pageable, Long roleId);
 
-    Page<RolePermission> findAllByRoleIdAndDeletedTimeIsNull(Pageable pageable, Long roleId);
 }
