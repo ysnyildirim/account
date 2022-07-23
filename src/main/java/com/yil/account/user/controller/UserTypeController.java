@@ -23,7 +23,7 @@ public class UserTypeController {
     private final UserTypeService userTypeService;
 
     @GetMapping
-    public ResponseEntity<List<UserTypeDto>> findAll( ) {
+    public ResponseEntity<List<UserTypeDto>> findAll() {
         List<UserType> data = userTypeService.findAll();
         List<UserTypeDto> dtoData = new ArrayList<>();
         data.forEach(f -> {

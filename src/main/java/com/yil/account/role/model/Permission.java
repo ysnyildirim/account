@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(schema = "RL",name = "PERMISSION")
+@Table(schema = "RL", name = "PERMISSION")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

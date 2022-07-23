@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
-@Table(schema = "GRP",name = "GROUP_ROLE")
+@Table(schema = "GRP", name = "GROUP_ROLE")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

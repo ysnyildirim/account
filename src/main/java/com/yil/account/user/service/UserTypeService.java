@@ -39,7 +39,7 @@ public class UserTypeService {
         return userTypeRepository.findById(id).orElseThrow(() -> new UserTypeNotFoundException());
     }
 
-    public boolean existsById(int id)  {
+    public boolean existsById(int id) {
         return userTypeRepository.existsById(id);
     }
 

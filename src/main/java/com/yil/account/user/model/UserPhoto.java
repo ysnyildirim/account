@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(schema = "USR",name = "USER_PHOTO",
+@Table(schema = "USR", name = "USER_PHOTO",
         indexes = {
                 @Index(name = "IDX_USER_PHOTO_USER_ID", columnList = "USER_ID")})
 @Builder

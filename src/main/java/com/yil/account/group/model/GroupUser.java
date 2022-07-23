@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(schema = "GRP",name = "GROUP_USER")
+@Table(schema = "GRP", name = "GROUP_USER")
 public class GroupUser implements IEntity {
 
     @EmbeddedId
