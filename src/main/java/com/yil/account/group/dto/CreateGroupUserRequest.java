@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateGroupUserDto {
+public class CreateGroupUserRequest {
     @NotNull
     private Long userId;
     @NotNull

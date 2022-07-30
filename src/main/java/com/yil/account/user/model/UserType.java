@@ -16,7 +16,8 @@ import javax.persistence.*;
 @Table(schema = "USR", name = "USER_TYPE")
 public class UserType implements IEntity {
     @Id
-    @SequenceGenerator(name = "USER_TYPE_SEQUENCE_GENERATOR",
+    @SequenceGenerator(schema = "USR",
+            name = "USER_TYPE_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_USER_TYPE_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "USER_TYPE_SEQUENCE_GENERATOR")

@@ -16,4 +16,7 @@ public class CreateGroupDto {
     @NotBlank
     @Length(min = 1, max = 100)
     private String name;
+    @Length(min = 1, max = 100)
+    private String description;
+    private String email;
 }

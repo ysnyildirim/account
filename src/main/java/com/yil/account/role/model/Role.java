@@ -19,26 +19,21 @@ import java.util.Date;
 @Builder
 public class Role implements IEntity {
     @Id
-    @SequenceGenerator(name = "ROLE_ID_SEQUENCE_GENERATOR",
+    @SequenceGenerator(schema = "RL",
+            name = "ROLE_ID_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_ROLE_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "ROLE_ID_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;
-    @Column(name = "PARENT_ID")
-    private Long parentId;
     @Column(name = "NAME", nullable = false, length = 1000)
     private String name;
-    @Column(name = "DESCRIPTION", nullable = false, length = 4000)
+    @Column(name = "DESCRIPTION", length = 4000)
     private String description;
     @Type(type = "org.hibernate.type.NumericBooleanType")
     @ColumnDefault(value = "0")
     @Column(name = "ASSIGNABLE", nullable = false)
     private boolean assignable;
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    @ColumnDefault(value = "0")
-    @Column(name = "INTERITABLE", nullable = false)
-    private boolean inheritable;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_TIME")
     private Date createdTime;

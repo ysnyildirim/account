@@ -5,11 +5,13 @@ import com.yil.account.base.Mapper;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.GroupNotFoundException;
 import com.yil.account.exception.GroupUserNotFound;
+import com.yil.account.exception.GroupUserNotFoundException;
 import com.yil.account.exception.UserNotFoundException;
-import com.yil.account.group.dto.CreateGroupUserDto;
+import com.yil.account.group.dto.CreateGroupUserRequest;
 import com.yil.account.group.model.GroupUser;
 import com.yil.account.group.service.GroupService;
 import com.yil.account.group.service.GroupUserService;
+import com.yil.account.group.service.GroupUserTypeService;
 import com.yil.account.user.dto.UserDto;
 import com.yil.account.user.model.User;
 import com.yil.account.user.service.UserService;
@@ -34,6 +36,7 @@ public class GroupUserController {
     private final UserService userService;
     private final GroupService groupService;
     private final Mapper<User, UserDto> userMapper = new Mapper<User, UserDto>(UserService::convert);
+    private final GroupUserTypeService groupUserTypeService;
 
     @GetMapping
     public ResponseEntity<PageDto<UserDto>> findAll(@PathVariable Long groupId,
@@ -62,11 +65,13 @@ public class GroupUserController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long groupId,
-                                 @Valid @RequestBody CreateGroupUserDto dto) throws UserNotFoundException, GroupNotFoundException {
-        if (groupService.existsById(groupId))
+                                 @Valid @RequestBody CreateGroupUserRequest dto) throws UserNotFoundException, GroupNotFoundException, GroupUserNotFoundException {
+        if (!groupService.existsById(groupId))
             throw new GroupNotFoundException();
-        if (userService.existsById(groupId))
+        if (!userService.existsById(dto.getUserId()))
             throw new UserNotFoundException();
+        if (!groupUserTypeService.existsById(dto.getGroupUserTypeId()))
+            throw new GroupUserNotFoundException();
         GroupUser.Pk id = GroupUser.Pk.builder().groupId(groupId).userId(dto.getUserId()).groupUserTypeId(dto.getGroupUserTypeId()).build();
         if (!groupUserService.existsById(id)) {
             GroupUser groupUser = new GroupUser();

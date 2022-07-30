@@ -19,7 +19,8 @@ import java.util.Date;
 @Table(schema = "USR", name = "USER")
 public class User implements IEntity {
     @Id
-    @SequenceGenerator(name = "USER_SEQUENCE_GENERATOR",
+    @SequenceGenerator(schema = "USR",
+            name = "USER_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_USER_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "USER_SEQUENCE_GENERATOR")

@@ -13,9 +13,6 @@ import java.util.List;
 @Service
 public class UserTypeService {
 
-    public static final int Admin = 1;
-    public static final int User = 2;
-    public static final int Staff = 3;
     private final UserTypeRepository userTypeRepository;
 
     public static UserTypeDto toDto(UserType userType) throws NullPointerException {

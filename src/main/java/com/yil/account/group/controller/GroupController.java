@@ -57,6 +57,8 @@ public class GroupController {
             throw new GroupNameCannotBeUsed();
         Group entity = new Group();
         entity.setName(request.getName());
+        entity.setDescription(request.getDescription());
+        entity.setEmail(request.getEmail());
         entity.setCreatedUserId(authenticatedUserId);
         entity.setCreatedTime(new Date());
         entity = groupService.save(entity);

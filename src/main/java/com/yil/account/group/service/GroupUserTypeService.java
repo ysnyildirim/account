@@ -18,10 +18,6 @@ import java.util.List;
 @Service
 public class GroupUserTypeService {
 
-    public static final int Admin = 1;
-    public static final int Manager = 2;
-    public static final int User = 3;
-
     private final GroupUserTypeDao groupUserTypeDao;
 
     private static GroupUserTypeDto convert(GroupUserType groupUserType) {

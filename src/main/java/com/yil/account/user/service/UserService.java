@@ -1,15 +1,14 @@
 package com.yil.account.user.service;
 
 import com.yil.account.exception.UserNotFoundException;
-import com.yil.account.group.model.GroupRole;
 import com.yil.account.group.model.GroupUser;
 import com.yil.account.group.service.GroupRoleService;
+import com.yil.account.group.service.GroupService;
 import com.yil.account.group.service.GroupUserService;
-import com.yil.account.role.model.RolePermission;
 import com.yil.account.role.service.RolePermissionService;
+import com.yil.account.role.service.RoleService;
 import com.yil.account.user.dto.UserDto;
 import com.yil.account.user.model.User;
-import com.yil.account.user.model.UserRole;
 import com.yil.account.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,10 +22,11 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final UserRoleService userRoleService;
     private final RolePermissionService rolePermissionService;
     private final GroupUserService groupUserService;
     private final GroupRoleService groupRoleService;
+    private final RoleService roleService;
+    private final GroupService groupService;
 
     public static UserDto convert(User user) {
         return UserDto.builder()
@@ -72,18 +72,10 @@ public class UserService {
     }
 
     public boolean existsByPermission(Long id, Long permissionId) {
-        List<UserRole> userRoles = userRoleService.findAllById_UserId(id);
-        for (UserRole userRole : userRoles) {
-            if (rolePermissionService.existsById(RolePermission.Pk.builder().roleId(userRole.getId().getRoleId()).permissionId(permissionId).build()))
-                return true;
-        }
         List<GroupUser> groupUsers = groupUserService.findAllById_UserId(id);
         for (GroupUser groupUser : groupUsers) {
-            List<GroupRole> groupRoles = groupRoleService.findAllById_GroupId(groupUser.getId().getGroupId());
-            for (GroupRole groupRole : groupRoles) {
-                if (rolePermissionService.existsById(RolePermission.Pk.builder().roleId(groupRole.getId().getRoleId()).permissionId(permissionId).build()))
-                    return true;
-            }
+            if (groupService.existsGroupPermission(groupUser.getId().getGroupId(), permissionId))
+                return true;
         }
         return false;
     }

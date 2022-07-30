@@ -82,6 +82,7 @@ public class UserController {
         user.setLocked(request.getLocked());
         user.setMail(request.getMail());
         user.setPasswordNeedsChanged(request.getPasswordNeedsChanged());
+        user.setLastPasswordChangeTime(new Date());
         user.setPersonId(request.getPersonId());
         user.setCreatedUserId(authenticatedUserId);
         user.setCreatedTime(new Date());

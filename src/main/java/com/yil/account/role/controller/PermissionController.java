@@ -3,15 +3,11 @@ package com.yil.account.role.controller;
 import com.yil.account.base.ApiConstant;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.PermissionNotFoundException;
-import com.yil.account.exception.PermissionTypeNotFoundException;
 import com.yil.account.role.dto.PermissionDto;
 import com.yil.account.role.dto.PermissionRequest;
 import com.yil.account.role.model.Permission;
 import com.yil.account.role.service.PermissionService;
-import com.yil.account.role.service.PermissionTypeService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +25,7 @@ import java.util.Date;
 @RequestMapping("/api/account/v1/permissions")
 public class PermissionController {
 
-    private final Log logger = LogFactory.getLog(this.getClass());
     private final PermissionService permissionService;
-    private final PermissionTypeService permissionTypeService;
 
     @GetMapping
     public ResponseEntity<PageDto<PermissionDto>> findAll(
@@ -57,12 +51,9 @@ public class PermissionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<PermissionDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                                @Valid @RequestBody PermissionRequest dto) throws PermissionTypeNotFoundException {
-        if (permissionTypeService.existsById(dto.getPermissionTypeId()))
-            throw new PermissionTypeNotFoundException();
+                                                @Valid @RequestBody PermissionRequest dto)  {
         Permission entity = new Permission();
         entity.setName(dto.getName());
-        entity.setPermissionTypeId(dto.getPermissionTypeId());
         entity.setDescription(dto.getDescription());
         entity.setCreatedUserId(authenticatedUserId);
         entity.setCreatedTime(new Date());
@@ -85,6 +76,7 @@ public class PermissionController {
         if (permissionService.existsByName(dto.getName()))
             return ResponseEntity.badRequest().build();
         permission.setName(dto.getName());
+        permission.setDescription(dto.getDescription());
         permission = permissionService.save(permission);
         PermissionDto responce = PermissionService.convert(permission);
         return ResponseEntity.ok(responce);

@@ -58,7 +58,6 @@ public class RoleController {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setAssignable(dto.getAssignable());
-        entity.setInheritable(dto.getInheritable());
         entity.setCreatedUserId(authenticatedUserId);
         entity.setCreatedTime(new Date());
         entity = roleService.save(entity);
@@ -77,7 +76,6 @@ public class RoleController {
         role.setName(dto.getName());
         role.setDescription(dto.getDescription());
         role.setAssignable(dto.getAssignable());
-        role.setInheritable(dto.getInheritable());
         role = roleService.save(role);
         RoleDto responce = mapper.map(role);
         return ResponseEntity.ok(responce);

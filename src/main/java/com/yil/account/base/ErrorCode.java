@@ -8,7 +8,6 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
-    PermissionTypeNotFound(2000019, "Permission type not found"),
     UserPhotoNotFound(2000018, "User photo not found"),
     RoleActionNotFound(2000017, "Role action not found"),
     ActionNotFound(2000016, "Action not found"),

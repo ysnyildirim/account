@@ -19,7 +19,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserPhoto implements IEntity {
     @Id
-    @SequenceGenerator(name = "USER_PHOTO_SEQUENCE_GENERATOR",
+    @SequenceGenerator(schema = "USR",
+            name = "USER_PHOTO_SEQUENCE_GENERATOR",
             sequenceName = "SEQ_USER_PHOTO_ID",
             allocationSize = 1)
     @GeneratedValue(generator = "USER_PHOTO_SEQUENCE_GENERATOR")

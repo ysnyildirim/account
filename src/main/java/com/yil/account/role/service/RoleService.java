@@ -20,7 +20,6 @@ public class RoleService {
                 .name(role.getName())
                 .description(role.getDescription())
                 .assignable(role.isAssignable())
-                .inheritable(role.isInheritable())
                 .build();
     }
 
