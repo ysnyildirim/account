@@ -4,7 +4,6 @@ import com.yil.account.base.ApiConstant;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.PermissionNotFoundException;
 import com.yil.account.exception.RoleNotFoundException;
-import com.yil.account.exception.RolePermissionNotFound;
 import com.yil.account.role.dto.CreateRolePermissionDto;
 import com.yil.account.role.dto.PermissionDto;
 import com.yil.account.role.model.Permission;
@@ -66,12 +65,10 @@ public class RolePermissionController {
             throw new RoleNotFoundException();
         if (!permissionService.existsById(dto.getPermissionId()))
             throw new PermissionNotFoundException();
-        RolePermission.Pk id = RolePermission.Pk.builder().build();
-        if (!rolePermissionService.existsById(id)) {
-            RolePermission rolePermission = new RolePermission();
-            rolePermission.setId(id);
-            rolePermission = rolePermissionService.save(rolePermission);
-        }
+        RolePermission.Pk id = RolePermission.Pk.builder().permissionId(dto.getPermissionId()).roleId(roleId).build();
+        RolePermission rolePermission = new RolePermission();
+        rolePermission.setId(id);
+        rolePermissionService.save(rolePermission);
         return ResponseEntity.created(null).build();
     }
 
@@ -79,8 +76,8 @@ public class RolePermissionController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long roleId,
-                                 @PathVariable Long id) throws RoleNotFoundException, PermissionNotFoundException, RolePermissionNotFound {
-        RolePermission.Pk pk = RolePermission.Pk.builder().build();
+                                 @PathVariable Long id) {
+        RolePermission.Pk pk = RolePermission.Pk.builder().roleId(roleId).permissionId(id).build();
         rolePermissionService.delete(pk);
         return ResponseEntity.ok().build();
     }

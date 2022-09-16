@@ -4,7 +4,7 @@ import com.yil.account.exception.GroupNotFoundException;
 import com.yil.account.group.dto.GroupDto;
 import com.yil.account.group.model.Group;
 import com.yil.account.group.model.GroupRole;
-import com.yil.account.group.repository.GroupRepository;
+import com.yil.account.group.repository.GroupDao;
 import com.yil.account.role.model.RolePermission;
 import com.yil.account.role.service.RolePermissionService;
 import com.yil.account.role.service.RoleService;
@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class GroupService {
-    private final GroupRepository groupRepository;
+    private final GroupDao groupDao;
     private final GroupRoleService groupRoleService;
     private final RolePermissionService rolePermissionService;
     private final RoleService roleService;
@@ -33,38 +33,38 @@ public class GroupService {
     }
 
     public Group findById(Long id) throws GroupNotFoundException {
-        return groupRepository.findById(id).orElseThrow(() -> new GroupNotFoundException());
+        return groupDao.findById(id).orElseThrow(() -> new GroupNotFoundException());
     }
 
     public boolean existsById(Long id) {
-        return groupRepository.existsById(id);
+        return groupDao.existsById(id);
     }
 
     public Group findByIdAndDeletedTimeIsNull(Long id) throws GroupNotFoundException {
-        return groupRepository.findById(id).orElseThrow(GroupNotFoundException::new);
+        return groupDao.findById(id).orElseThrow(GroupNotFoundException::new);
     }
 
     public Group findByName(String name) throws GroupNotFoundException {
-        Group group = groupRepository.findByName(name);
+        Group group = groupDao.findByName(name);
         if (group == null)
             throw new GroupNotFoundException();
         return group;
     }
 
     public boolean existsByNameAndDeletedTimeIsNull(String name) {
-        return groupRepository.existsByName(name);
+        return groupDao.existsByName(name);
     }
 
     public Group save(Group user) {
-        return groupRepository.save(user);
+        return groupDao.save(user);
     }
 
     public void delete(Long id) {
-        groupRepository.deleteById(id);
+        groupDao.deleteById(id);
     }
 
     public Page<Group> findAll(Pageable pageable) {
-        return groupRepository.findAll(pageable);
+        return groupDao.findAll(pageable);
     }
 
     public boolean existsGroupPermission(long groupId, long permissionId) {

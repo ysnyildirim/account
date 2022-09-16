@@ -4,13 +4,15 @@ import com.yil.account.base.MD5Util;
 import com.yil.account.group.model.Group;
 import com.yil.account.group.model.GroupRole;
 import com.yil.account.group.model.GroupUserType;
+import com.yil.account.group.repository.GroupDao;
 import com.yil.account.group.repository.GroupUserTypeDao;
 import com.yil.account.group.service.GroupRoleService;
-import com.yil.account.group.service.GroupService;
 import com.yil.account.role.model.Permission;
+import com.yil.account.role.model.PermissionType;
 import com.yil.account.role.model.Role;
 import com.yil.account.role.model.RolePermission;
-import com.yil.account.role.service.PermissionService;
+import com.yil.account.role.repository.PermissionDao;
+import com.yil.account.role.repository.PermissionTypeDao;
 import com.yil.account.role.service.RolePermissionService;
 import com.yil.account.role.service.RoleService;
 import com.yil.account.user.model.User;
@@ -47,6 +49,10 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
     public static Permission permissionGercek;
     public static Permission permissionTuzel;
 
+    public static PermissionType permissionTypeSystem;
+    public static PermissionType permissionTypeWorkflow;
+    public static PermissionType permissionTypeAnother;
+
     public static User adminUser;
 
     @Autowired
@@ -56,15 +62,19 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
     @Autowired
     private UserTypeService userTypeService;
     @Autowired
-    private PermissionService permissionService;
+    private PermissionDao permissionDao;
     @Autowired
-    private GroupService groupService;
+    private GroupDao groupDao;
     @Autowired
     private GroupRoleService groupRoleService;
     @Autowired
     private GroupUserTypeDao groupUserTypeDao;
     @Autowired
     private RolePermissionService rolePermissionService;
+
+
+    @Autowired
+    private PermissionTypeDao permissionTypeDao;
 
     @Override
     public void onApplicationEvent(ContextStartedEvent event) {
@@ -73,15 +83,16 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         System.out.println("----------------------");
 
         try {
-            initUserTypes();
-            initGroupUserTypes();
-            initDefaultUsers();
-            initDefaultPermissions();
-            initDefaultRoles();
-            initDefaultGroups();
-
-
-            initSikayet();
+//            initUserTypes();
+//            initGroupUserTypes();
+//            initDefaultPermissionTypes();
+//            initDefaultUsers();
+//            initDefaultPermissions();
+//            initDefaultRoles();
+//            initDefaultGroups();
+//
+//
+//            initSikayet();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,18 +102,27 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
 
     private void initUserTypes() {
         userTypeAdmin = UserType.builder().id(1).name("Admin").build();
-        addUserType(userTypeAdmin);
+        userTypeService.save(userTypeAdmin);
         userTypeStandartUser = UserType.builder().id(2).name("Standart User").build();
-        addUserType(userTypeStandartUser);
+        userTypeService.save(userTypeStandartUser);
     }
 
     private void initGroupUserTypes() {
         groupUserTypeAdmin = GroupUserType.builder().id(1).name("ADMIN").description("Group admins").build();
-        addGroupUserType(groupUserTypeAdmin);
+        groupUserTypeDao.save(groupUserTypeAdmin);
         groupUserTypeManager = GroupUserType.builder().id(2).name("MANAGER").description("Group managers").build();
-        addGroupUserType(groupUserTypeManager);
+        groupUserTypeDao.save(groupUserTypeManager);
         groupUserTypeUser = GroupUserType.builder().id(3).name("USER").description("Group users").build();
-        addGroupUserType(groupUserTypeUser);
+        groupUserTypeDao.save(groupUserTypeUser);
+    }
+
+    private void initDefaultPermissionTypes() {
+        permissionTypeSystem = PermissionType.builder().id(1).name("Sistem").build();
+        permissionTypeDao.save(permissionTypeSystem);
+        permissionTypeWorkflow = PermissionType.builder().id(2).name("İş Akışı").build();
+        permissionTypeDao.save(permissionTypeWorkflow);
+        permissionTypeAnother = PermissionType.builder().id(3).name("Diğer").build();
+        permissionTypeDao.save(permissionTypeAnother);
     }
 
     private void initDefaultUsers() throws NoSuchAlgorithmException {
@@ -118,7 +138,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .passwordNeedsChanged(false)
                 .userTypeId(userTypeAdmin.getId())
                 .build();
-        addUser(adminUser);
+        userService.save(adminUser);
     }
 
     private void initDefaultPermissions() {
@@ -126,31 +146,31 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .id(1l)
                 .name("Herkes")
                 .description("Herkes")
+                .permissionTypeId(permissionTypeAnother.getId())
                 .createdTime(new Date())
                 .createdUserId(adminUser.getId())
                 .build();
-
-        addPermission(permissionHerkes);
+        permissionDao.save(permissionHerkes);
 
         permissionGercek = Permission.builder()
                 .id(2l)
                 .name("Gerçek Kişi")
                 .description("Gerçek kişi")
+                .permissionTypeId(permissionTypeAnother.getId())
                 .createdTime(new Date())
                 .createdUserId(adminUser.getId())
                 .build();
-        addPermission(permissionGercek);
+        permissionDao.save(permissionGercek);
 
         permissionTuzel = Permission.builder()
                 .id(3l)
                 .name("Tüzel Kişi")
                 .description("Tüzel kişi")
+                .permissionTypeId(permissionTypeAnother.getId())
                 .createdTime(new Date())
                 .createdUserId(adminUser.getId())
                 .build();
-        addPermission(permissionTuzel);
-
-
+        permissionDao.save(permissionTuzel);
     }
 
     private void initDefaultRoles() {
@@ -162,7 +182,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .createdTime(new Date())
                 .createdUserId(adminUser.getId())
                 .build();
-        addRole(roleHerkes);
+        roleService.save(roleHerkes);
         addRolePermission(RolePermission.builder().id(RolePermission.Pk.builder().roleId(roleHerkes.getId()).permissionId(permissionHerkes.getId()).build()).build());
         roleGercek = Role.builder()
                 .id(2l)
@@ -172,7 +192,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .createdTime(new Date())
                 .createdUserId(adminUser.getId())
                 .build();
-        addRole(roleGercek);
+        roleService.save(roleGercek);
         addRolePermission(RolePermission.builder().id(RolePermission.Pk.builder().roleId(roleGercek.getId()).permissionId(permissionGercek.getId()).build()).build());
         roleTuzel = Role.builder()
                 .id(3l)
@@ -182,7 +202,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .createdTime(new Date())
                 .createdUserId(adminUser.getId())
                 .build();
-        addRole(roleTuzel);
+        roleService.save(roleTuzel);
         addRolePermission(RolePermission.builder().id(RolePermission.Pk.builder().roleId(roleTuzel.getId()).permissionId(permissionTuzel.getId()).build()).build());
     }
 
@@ -196,7 +216,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .createdUserId(adminUser.getId())
                 .createdTime(new Date())
                 .build();
-        addGroup(groupHerkes);
+        groupDao.save(groupHerkes);
 
         addGroupRole(GroupRole.builder().id(GroupRole.Pk.builder().roleId(roleHerkes.getId()).groupId(groupHerkes.getId()).build()).build());
 
@@ -209,7 +229,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .createdUserId(adminUser.getId())
                 .createdTime(new Date())
                 .build();
-        addGroup(groupGercekKisiler);
+        groupDao.save(groupGercekKisiler);
 
         addGroupRole(GroupRole.builder().id(GroupRole.Pk.builder().roleId(roleGercek.getId()).groupId(groupGercekKisiler.getId()).build()).build());
 
@@ -222,14 +242,14 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .createdUserId(adminUser.getId())
                 .createdTime(new Date())
                 .build();
-        addGroup(groupTuzelKisiler);
+        groupDao.save(groupTuzelKisiler);
 
         addGroupRole(GroupRole.builder().id(GroupRole.Pk.builder().roleId(roleTuzel.getId()).groupId(groupTuzelKisiler.getId()).build()).build());
     }
 
     private void initSikayet() {
 
-        addPermission(Permission.builder()
+        permissionDao.save(Permission.builder()
                 .id(4l)
                 .name("İşletmeler Tarafından Tüketici Şikayeti Cevaplama Yetkisi")
                 .description("İşletmeler tarafından tüketici şikayetlerini cevaplama yetkisidir.")
@@ -237,7 +257,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .createdUserId(adminUser.getId())
                 .build());
 
-        addPermission(Permission.builder()
+        permissionDao.save(Permission.builder()
                 .id(5l)
                 .name("Kurum Tarafından Tüketici Şikayeti Cevaplama Yetkisi")
                 .description("Kurum kullanıcıları tarafından tüketici şikayetlerini cevaplama yetkisidir.")
@@ -245,8 +265,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .createdUserId(adminUser.getId())
                 .build());
 
-
-        addRole(Role.builder()
+        roleService.save(Role.builder()
                 .id(4l)
                 .name("Tüketici Şikayet İşletme")
                 .description("Tüketici şikayet sistemindeki işletmeler")
@@ -257,7 +276,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
 
         addRolePermission(RolePermission.builder().id(RolePermission.Pk.builder().permissionId(4l).roleId(4l).build()).build());
 
-        addRole(Role.builder()
+        roleService.save(Role.builder()
                 .id(5l)
                 .name("Tüketici Şikayet Kurum")
                 .description("Tüketici şikayet sistemindeki kurum")
@@ -268,14 +287,14 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
 
         addRolePermission(RolePermission.builder().id(RolePermission.Pk.builder().permissionId(5l).roleId(5l).build()).build());
 
-        addGroup(Group.builder().id(4L)
+        groupDao.save(Group.builder().id(4L)
                 .name("Tüketici Şikayet İşletme")
                 .description("Tüketici şikayet sistemindeki işletmelerin bulunduğu grup")
                 .createdTime(new Date())
                 .createdUserId(adminUser.getId())
                 .email("a@gmail.com").build());
 
-        addGroup(Group.builder().id(5L)
+        groupDao.save(Group.builder().id(5L)
                 .name("Tüketici Şikayet Kurum")
                 .description("Tüketici şikayet sistemindeki kurum kullanıcılarının bulunduğu grup")
                 .createdTime(new Date())
@@ -286,46 +305,10 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         addGroupRole(GroupRole.builder().id(GroupRole.Pk.builder().groupId(5l).roleId(5l).build()).build());
     }
 
-    private void addUserType(UserType type) {
-        if (userTypeService.existsById(type.getId()))
-            return;
-        userTypeService.save(type);
-    }
-
-    private void addGroupUserType(GroupUserType type) {
-        if (groupUserTypeDao.existsById(type.getId()))
-            return;
-        groupUserTypeDao.save(type);
-    }
-
-    private void addUser(User user) {
-        if (userService.existsById(user.getId()))
-            return;
-        userService.save(user);
-    }
-
-    private void addPermission(Permission permission) {
-        if (permissionService.existsById(permission.getId()))
-            return;
-        permissionService.save(permission);
-    }
-
-    private void addRole(Role role) {
-        if (roleService.existsById(role.getId()))
-            return;
-        roleService.save(role);
-    }
-
     private void addRolePermission(RolePermission rolePermission) {
         if (rolePermissionService.existsById(rolePermission.getId()))
             return;
         rolePermissionService.save(rolePermission);
-    }
-
-    private void addGroup(Group group) {
-        if (groupService.existsById(group.getId()))
-            return;
-        groupService.save(group);
     }
 
     private void addGroupRole(GroupRole groupRole) {

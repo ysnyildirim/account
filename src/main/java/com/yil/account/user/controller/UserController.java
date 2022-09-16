@@ -164,9 +164,9 @@ public class UserController {
                                            @PathVariable Long id,
                                            @PathVariable Long permissionId) {
         if (userService.existsByPermission(id, permissionId))
-            return ResponseEntity.noContent().build();
-        else
             return ResponseEntity.ok().build();
+        else
+            return ResponseEntity.noContent().build();
     }
 
 }

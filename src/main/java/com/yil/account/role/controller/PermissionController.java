@@ -3,6 +3,7 @@ package com.yil.account.role.controller;
 import com.yil.account.base.ApiConstant;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.PermissionNotFoundException;
+import com.yil.account.role.dto.CreatePermissionDto;
 import com.yil.account.role.dto.PermissionDto;
 import com.yil.account.role.dto.PermissionRequest;
 import com.yil.account.role.model.Permission;
@@ -50,8 +51,8 @@ public class PermissionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<PermissionDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                                @Valid @RequestBody PermissionRequest dto)  {
+    public ResponseEntity<CreatePermissionDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+                                                      @Valid @RequestBody PermissionRequest dto) {
         Permission entity = new Permission();
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
@@ -63,8 +64,7 @@ public class PermissionController {
                 .path("/{id}")
                 .buildAndExpand(entity.getId())
                 .toUri();
-        PermissionDto responce = PermissionService.convert(entity);
-        return ResponseEntity.created(uri).body(responce);
+        return ResponseEntity.created(uri).body(CreatePermissionDto.builder().id(entity.getId()).build());
     }
 
     @PutMapping(value = "/{id}")
