@@ -26,6 +26,7 @@ public class JwtTokenUtil implements Serializable {
         final Date expirationDate = calculateExpirationDate(createdDate);
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
+        claims.put("userName", user.getUserName());
         claims.put("mail", user.getMail());
         claims.put("lastPasswordChangeTime", user.getLastPasswordChangeTime());
         claims.put("personId", user.getPersonId());
