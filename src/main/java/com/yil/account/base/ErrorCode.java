@@ -8,6 +8,7 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+    JwtExpired(2000020, "Token expired"),
     PermissionTypeNotFound(2000019, "Permission type not found"),
     UserPhotoNotFound(2000018, "User photo not found"),
     RoleActionNotFound(2000017, "Role action not found"),

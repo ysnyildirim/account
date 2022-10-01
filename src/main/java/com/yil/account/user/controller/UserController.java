@@ -1,8 +1,8 @@
 package com.yil.account.user.controller;
 
-import com.yil.account.auth.JwtTokenUtil;
 import com.yil.account.base.ApiConstant;
 import com.yil.account.base.MD5Util;
+import com.yil.account.base.Mapper;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.*;
 import com.yil.account.role.service.PermissionService;
@@ -15,7 +15,6 @@ import com.yil.account.user.service.UserService;
 import com.yil.account.user.service.UserTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -33,9 +32,10 @@ public class UserController {
 
     private final UserService userService;
     private final UserTypeService userTypeService;
-    private final JwtTokenUtil jwtTokenUtil;
     @Autowired
     private final PermissionService permissionService;
+    private final Mapper<User, UserDto> mapper = new Mapper<>(UserService::toDto);
+
 
     @GetMapping
     public ResponseEntity<PageDto<UserDto>> findAll(
@@ -46,23 +46,17 @@ public class UserController {
         if (size <= 0 || size > 1000)
             size = 1000;
         Pageable pageable = PageRequest.of(page, size);
-        Page<User> userPage = userService.findAll(pageable);
-        PageDto<UserDto> pageDto = PageDto.toDto(userPage, UserService::convert);
-        return ResponseEntity.ok(pageDto);
+        return ResponseEntity.ok(mapper.map(userService.findAll(pageable)));
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDto> findById(@PathVariable Long id) throws UserNotFoundException {
-        User user = userService.findById(id);
-        UserDto dto = UserService.convert(user);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(mapper.map(userService.findById(id)));
     }
 
     @GetMapping(value = "/userName={userName}")
     public ResponseEntity<UserDto> findByUserName(@PathVariable String userName) throws UserNotFoundException {
-        User user = userService.findByUserName(userName);
-        UserDto dto = UserService.convert(user);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(mapper.map(userService.findByUserName(userName)));
     }
 
     @PostMapping

@@ -35,7 +35,7 @@ public class GroupUserController {
     private final GroupUserService groupUserService;
     private final UserService userService;
     private final GroupService groupService;
-    private final Mapper<User, UserDto> userMapper = new Mapper<User, UserDto>(UserService::convert);
+    private final Mapper<User, UserDto> userMapper = new Mapper<User, UserDto>(UserService::toDto);
     private final GroupUserTypeService groupUserTypeService;
 
     @GetMapping

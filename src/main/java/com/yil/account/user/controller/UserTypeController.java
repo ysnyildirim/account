@@ -17,7 +17,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "v1/user-types")
+@RequestMapping(value = "/api/account/v1/user-types")
 public class UserTypeController {
 
     private final UserTypeService userTypeService;

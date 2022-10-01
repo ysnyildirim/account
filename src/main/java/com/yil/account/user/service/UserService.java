@@ -28,7 +28,7 @@ public class UserService {
     private final RoleService roleService;
     private final GroupService groupService;
 
-    public static UserDto convert(User user) {
+    public static UserDto toDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
                 .userName(user.getUserName())

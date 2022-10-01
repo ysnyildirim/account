@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
-
 package com.yil.account.auth;
 
 import com.yil.account.user.model.User;
@@ -28,9 +27,6 @@ public class JwtTokenUtil implements Serializable {
         claims.put("userId", user.getId());
         claims.put("userName", user.getUserName());
         claims.put("mail", user.getMail());
-        claims.put("lastPasswordChangeTime", user.getLastPasswordChangeTime());
-        claims.put("personId", user.getPersonId());
-        claims.put("userTypeId", user.getUserTypeId());
         return Jwts.builder()
                 .setClaims(claims)
                 .setId(UUID.randomUUID().toString())
@@ -50,7 +46,6 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
-
         String authToken = token;
         if (token != null && token.startsWith("Bearer ")) {
             authToken = token.substring(7);
@@ -59,17 +54,14 @@ public class JwtTokenUtil implements Serializable {
         return claimsResolver.apply(claims);
     }
 
-    //for retrieveing any information from token we will need the secret key
     private Claims getAllClaimsFromToken(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
-    //retrieve username from jwt token
     public String getUserNameFromToken(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    //retrieve expiration date from jwt token
     public Date getExpirationDateFromToken(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
         return getClaimFromToken(token, Claims::getExpiration);
     }
@@ -78,7 +70,6 @@ public class JwtTokenUtil implements Serializable {
         return getClaimFromToken(token, Claims::getIssuedAt);
     }
 
-    //check if the token has expired
     private Boolean isTokenExpired(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
@@ -101,12 +92,10 @@ public class JwtTokenUtil implements Serializable {
         claims.setIssuedAt(createdDate);
         claims.setExpiration(expirationDate);
         claims.setId(UUID.randomUUID().toString());
-
         return Jwts.builder()
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
-
 
 }
