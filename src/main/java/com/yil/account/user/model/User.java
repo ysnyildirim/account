@@ -37,7 +37,7 @@ public class User implements IEntity {
     @Column(name = "ENABLED", nullable = false)
     private boolean enabled;
     @Type(type = "org.hibernate.type.NumericBooleanType")
-    @ColumnDefault(value = "1")
+    @ColumnDefault(value = "0")
     @Column(name = "LOCKED", nullable = false)
     private boolean locked;
     @Column(name = "MAIL", nullable = false)
