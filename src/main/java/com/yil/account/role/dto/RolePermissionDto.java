@@ -2,7 +2,7 @@
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
 
-package com.yil.account.user.dto;
+package com.yil.account.role.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,9 +15,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPhotoDto implements Serializable {
-    private Long id;
-    private String name;
-    private String extension;
-    private Byte[] content;
+public class RolePermissionDto implements Serializable {
+    private Integer roleId;
+    private Integer permissionId;
 }

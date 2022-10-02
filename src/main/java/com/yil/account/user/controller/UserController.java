@@ -6,10 +6,10 @@ import com.yil.account.base.Mapper;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.*;
 import com.yil.account.role.service.PermissionService;
-import com.yil.account.user.dto.CreateUserDto;
-import com.yil.account.user.dto.CreateUserResponse;
+import com.yil.account.user.dto.UserChangePasswordRequest;
 import com.yil.account.user.dto.UserDto;
-import com.yil.account.user.dto.UserPasswordDto;
+import com.yil.account.user.dto.UserRequest;
+import com.yil.account.user.dto.UserResponse;
 import com.yil.account.user.model.User;
 import com.yil.account.user.service.UserService;
 import com.yil.account.user.service.UserTypeService;
@@ -38,6 +38,7 @@ public class UserController {
 
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PageDto<UserDto>> findAll(
             @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
             @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
@@ -50,19 +51,21 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserDto> findById(@PathVariable Long id) throws UserNotFoundException {
         return ResponseEntity.ok(mapper.map(userService.findById(id)));
     }
 
     @GetMapping(value = "/userName={userName}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserDto> findByUserName(@PathVariable String userName) throws UserNotFoundException {
         return ResponseEntity.ok(mapper.map(userService.findByUserName(userName)));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<CreateUserResponse> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                                     @Valid @RequestBody CreateUserDto request) throws UserNameCannotBeUsedException, UserTypeNotFoundException, NoSuchAlgorithmException {
+    public ResponseEntity<UserResponse> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID, required = false) Long authenticatedUserId,
+                                               @Valid @RequestBody UserRequest request) throws UserNameCannotBeUsedException, UserTypeNotFoundException, NoSuchAlgorithmException {
         if (userService.existsByUserName(request.getUserName()))
             throw new UserNameCannotBeUsedException();
         if (!userTypeService.existsById(request.getUserTypeId()))
@@ -81,13 +84,13 @@ public class UserController {
         user.setCreatedUserId(authenticatedUserId);
         user.setCreatedTime(new Date());
         user = userService.save(user);
-        CreateUserResponse createUserResponse = CreateUserResponse.builder().id(user.getId()).build();
-        return ResponseEntity.created(null).body(createUserResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.builder().id(user.getId()).build());
     }
 
     @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                 @Valid @PathVariable Long id) throws UserNotFoundException {
+                                 @Valid @PathVariable Long id) {
         userService.deleteById(id);
         return ResponseEntity.ok().build();
     }
@@ -136,7 +139,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity changePassword(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                          @PathVariable Long id,
-                                         @RequestBody UserPasswordDto request) throws UserNotFoundException, NoSuchAlgorithmException, LockedUserException, DisabledUserException, WrongPasswordException {
+                                         @RequestBody UserChangePasswordRequest request) throws UserNotFoundException, NoSuchAlgorithmException, LockedUserException, DisabledUserException, WrongPasswordException {
         User user = userService.findById(id);
         if (!user.isEnabled())
             throw new DisabledUserException();
@@ -156,7 +159,7 @@ public class UserController {
     @ResponseStatus(value = HttpStatus.OK)
     public ResponseEntity existsPermission(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                            @PathVariable Long id,
-                                           @PathVariable Long permissionId) {
+                                           @PathVariable Integer permissionId) {
         if (userService.existsByPermission(id, permissionId))
             return ResponseEntity.ok().build();
         else

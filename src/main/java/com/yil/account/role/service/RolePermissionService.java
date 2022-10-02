@@ -1,39 +1,39 @@
 package com.yil.account.role.service;
 
-import com.yil.account.exception.RoleNotFoundException;
-import com.yil.account.exception.RolePermissionNotFound;
-import com.yil.account.role.model.Role;
+import com.yil.account.role.dto.RolePermissionDto;
 import com.yil.account.role.model.RolePermission;
-import com.yil.account.role.repository.RolePermissionRepository;
+import com.yil.account.role.repository.RolePermissionDao;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RolePermissionService {
-    private final RoleService roleService;
-    private final RolePermissionRepository rolePermissionRepository;
+    private final RolePermissionDao rolePermissionDao;
+
+    public static RolePermissionDto toDto(RolePermission rolePermission) {
+        return RolePermissionDto.builder()
+                .permissionId(rolePermission.getId().getPermissionId())
+                .roleId(rolePermission.getId().getRoleId())
+                .build();
+    }
 
     public RolePermission save(RolePermission rolePermission) {
-        return rolePermissionRepository.save(rolePermission);
+        return rolePermissionDao.save(rolePermission);
     }
 
-    public RolePermission findById(RolePermission.Pk id) throws RolePermissionNotFound {
-        return rolePermissionRepository.findById(id).orElseThrow(RolePermissionNotFound::new);
+    public List<RolePermission> findAllByRoleId(Integer roleId) {
+        return rolePermissionDao.findAllById_RoleId(roleId);
     }
 
-    public Page<RolePermission> findAllById_RoleId(Pageable pageable, Long roleId) {
-        return rolePermissionRepository.findAllById_RoleId(pageable, roleId);
-    }
 
     public void delete(RolePermission.Pk id) {
-        rolePermissionRepository.deleteById(id);
+        rolePermissionDao.deleteById(id);
     }
 
     public boolean existsById(RolePermission.Pk id) {
-        return rolePermissionRepository.existsById(id);
+        return rolePermissionDao.existsById(id);
     }
-
 }

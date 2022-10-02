@@ -29,6 +29,7 @@ public class PermissionController {
     private final PermissionService permissionService;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PageDto<PermissionDto>> findAll(
             @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
             @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
@@ -43,7 +44,8 @@ public class PermissionController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PermissionDto> findById(@PathVariable Long id) throws PermissionNotFoundException {
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<PermissionDto> findById(@PathVariable Integer id) throws PermissionNotFoundException {
         Permission entity = permissionService.findById(id);
         PermissionDto dto = PermissionService.convert(entity);
         return ResponseEntity.ok(dto);
@@ -57,20 +59,14 @@ public class PermissionController {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setCreatedUserId(authenticatedUserId);
-        entity.setCreatedTime(new Date());
+        entity.setCreatedDate(new Date());
         entity = permissionService.save(entity);
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(entity.getId())
-                .toUri();
-        return ResponseEntity.created(uri).body(CreatePermissionDto.builder().id(entity.getId()).build());
+        return ResponseEntity.status(HttpStatus.CREATED).body(CreatePermissionDto.builder().id(entity.getId()).build());
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<PermissionDto> replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                                 @PathVariable Long id,
+    public ResponseEntity<PermissionDto> replace(@PathVariable Integer id,
                                                  @Valid @RequestBody PermissionRequest dto) throws PermissionNotFoundException {
         Permission permission = permissionService.findById(id);
         if (permissionService.existsByName(dto.getName()))
@@ -84,10 +80,9 @@ public class PermissionController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                 @PathVariable Long id) throws PermissionNotFoundException {
-        permissionService.delete(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> delete(@PathVariable Integer id) {
+        permissionService.deleteById(id);
+        return ResponseEntity.ok("Deleted");
     }
 
 }

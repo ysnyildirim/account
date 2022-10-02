@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoleDto implements Serializable {
-    private Long id;
+    private Integer id;
     private String name;
     private String description;
     private Boolean assignable;

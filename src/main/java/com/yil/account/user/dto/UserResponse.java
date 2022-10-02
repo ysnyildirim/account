@@ -9,15 +9,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPhotoDto implements Serializable {
+public class UserResponse {
     private Long id;
-    private String name;
-    private String extension;
-    private Byte[] content;
 }

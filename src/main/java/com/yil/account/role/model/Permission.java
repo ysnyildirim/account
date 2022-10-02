@@ -2,8 +2,6 @@ package com.yil.account.role.model;
 
 import com.yil.account.base.IEntity;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -22,18 +20,19 @@ public class Permission implements IEntity {
             sequenceName = "SEQ_PERMISSION_ID")
     @GeneratedValue(generator = "PERMISSION_SEQUENCE_GENERATOR")
     @Column(name = "ID")
-    private Long id;
+    private Integer id;
     @Column(name = "NAME", nullable = false, length = 1000)
     private String name;
     @Column(name = "DESCRIPTION", length = 4000)
     private String description;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIME")
-    private Date createdTime;
+    @Column(name = "CREATED_DATE")
+    private Date createdDate;
     @Column(name = "CREATED_USER_ID")
     private Long createdUserId;
-    @Comment("İzin türü")
-    @ColumnDefault(value = "1")
-    @Column(name = "PERMISSION_TYPE_ID", nullable = false)
-    private Integer permissionTypeId;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "LAST_MODIFY_DATE")
+    private Date lastModifyDate;
+    @Column(name = "LAST_MODIFY_USER_ID")
+    private Long lastModifyUserId;
 }

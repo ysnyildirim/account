@@ -1,9 +1,9 @@
 package com.yil.account.user.service;
 
 import com.yil.account.exception.UserTypeNotFoundException;
+import com.yil.account.user.dao.UserTypeDao;
 import com.yil.account.user.dto.UserTypeDto;
 import com.yil.account.user.model.UserType;
-import com.yil.account.user.repository.UserTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class UserTypeService {
 
-    private final UserTypeRepository userTypeRepository;
+    private final UserTypeDao userTypeDao;
 
     public static UserTypeDto toDto(UserType userType) throws NullPointerException {
         if (userType == null)
@@ -25,23 +25,23 @@ public class UserTypeService {
     }
 
     public UserType save(UserType userType) {
-        return userTypeRepository.save(userType);
+        return userTypeDao.save(userType);
     }
 
     public void deleteById(int id) {
-        userTypeRepository.deleteById(id);
+        userTypeDao.deleteById(id);
     }
 
     public UserType findById(int id) throws UserTypeNotFoundException {
-        return userTypeRepository.findById(id).orElseThrow(() -> new UserTypeNotFoundException());
+        return userTypeDao.findById(id).orElseThrow(() -> new UserTypeNotFoundException());
     }
 
     public boolean existsById(int id) {
-        return userTypeRepository.existsById(id);
+        return userTypeDao.existsById(id);
     }
 
     public List<UserType> findAll() {
-        return userTypeRepository.findAll();
+        return userTypeDao.findAll();
     }
 
 }

@@ -23,15 +23,8 @@ public class PermissionService {
                 .build();
     }
 
-    public Permission findById(Long id) throws PermissionNotFoundException {
+    public Permission findById(Integer id) throws PermissionNotFoundException {
         return permissionDao.findById(id).orElseThrow(() -> new PermissionNotFoundException());
-    }
-
-    public Permission findByName(String name) throws PermissionNotFoundException {
-        Permission permission = permissionDao.findByName(name);
-        if (permission == null)
-            throw new PermissionNotFoundException();
-        return permission;
     }
 
     public boolean existsByName(String name) {
@@ -42,7 +35,7 @@ public class PermissionService {
         return permissionDao.save(user);
     }
 
-    public void delete(Long id) {
+    public void deleteById(Integer id) {
         permissionDao.deleteById(id);
     }
 
@@ -50,7 +43,7 @@ public class PermissionService {
         return permissionDao.findAll(pageable);
     }
 
-    public boolean existsById(Long id) {
+    public boolean existsById(Integer id) {
         return permissionDao.existsById(id);
     }
 }

@@ -1,16 +1,17 @@
 package com.yil.account.user.controller;
 
 import com.yil.account.base.ApiConstant;
+import com.yil.account.base.Mapper;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.UserNotFoundException;
 import com.yil.account.exception.UserPhotoNotFound;
-import com.yil.account.user.dto.CreateUserPhotoDto;
 import com.yil.account.user.dto.UserPhotoDto;
+import com.yil.account.user.dto.UserPhotoRequest;
+import com.yil.account.user.dto.UserPhotoResponse;
 import com.yil.account.user.model.UserPhoto;
 import com.yil.account.user.service.UserPhotoService;
 import com.yil.account.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,8 +28,10 @@ public class UserPhotoController {
 
     private final UserPhotoService userPhotoService;
     private final UserService userService;
+    private final Mapper<UserPhoto, UserPhotoDto> mapper = new Mapper<>(UserPhotoService::toDto);
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PageDto<UserPhotoDto>> findAll(@PathVariable Long userId,
                                                          @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
                                                          @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
@@ -38,33 +40,21 @@ public class UserPhotoController {
         if (size <= 0 || size > 1000)
             size = 1000;
         Pageable pageable = PageRequest.of(page, size);
-        Page<UserPhoto> data = userPhotoService.findAllByUserIdAndDeletedTimeIsNull(pageable, userId);
-        List<UserPhotoDto> dtoData = new ArrayList<>();
-        for (UserPhoto userPhoto : data.getContent()) {
-            UserPhotoDto dto = UserPhotoService.toDto(userPhoto);
-            dtoData.add(dto);
-        }
-        PageDto<UserPhotoDto> pageDto = new PageDto<>();
-        pageDto.setTotalElements(data.getTotalElements());
-        pageDto.setCurrentPage(data.getNumber());
-        pageDto.setTotalPages(data.getTotalPages());
-        pageDto.setContent(dtoData);
-        return ResponseEntity.ok(pageDto);
+        return ResponseEntity.ok(mapper.map(userPhotoService.findAllByUserId(pageable, userId)));
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserPhotoDto> findById(@PathVariable Long id, @PathVariable Long userId) throws UserPhotoNotFound {
-        UserPhoto userPhoto = userPhotoService.findByIdAndUserIdAndDeletedTimeIsNull(id, userId);
-        UserPhotoDto dto = UserPhotoService.toDto(userPhoto);
-        return ResponseEntity.ok(dto);
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<UserPhotoDto> findById(@PathVariable Long userId, @PathVariable Long id) throws UserPhotoNotFound {
+        return ResponseEntity.ok(mapper.map(userPhotoService.findByIdAndUserId(id, userId)));
     }
 
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserPhotoDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                               @PathVariable Long userId,
-                                               @Valid @RequestBody CreateUserPhotoDto request) throws UserNotFoundException {
+    public ResponseEntity<UserPhotoResponse> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+                                                    @PathVariable Long userId,
+                                                    @Valid @NotNull @RequestBody UserPhotoRequest request) throws UserNotFoundException {
         if (!userService.existsById(userId))
             throw new UserNotFoundException();
         UserPhoto userPhoto = new UserPhoto();
@@ -73,22 +63,21 @@ public class UserPhotoController {
         userPhoto.setExtension(request.getExtension());
         userPhoto.setName(request.getName());
         userPhoto = userPhotoService.save(userPhoto);
-        UserPhotoDto dto = UserPhotoService.toDto(userPhoto);
-        return ResponseEntity.created(null).body(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserPhotoResponse.builder().id(userPhoto.getId()).build());
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UserPhotoDto> replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                                @PathVariable Long id,
-                                                @Valid @RequestBody CreateUserPhotoDto request, @PathVariable Long userId) throws UserPhotoNotFound {
-        UserPhoto userPhoto = userPhotoService.findByIdAndUserIdAndDeletedTimeIsNull(id, userId);
+    public ResponseEntity<UserPhotoResponse> replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
+                                                     @PathVariable Long userId,
+                                                     @PathVariable Long id,
+                                                     @Valid @NotNull @RequestBody UserPhotoRequest request) throws UserPhotoNotFound {
+        UserPhoto userPhoto = userPhotoService.findByIdAndUserId(id, userId);
         userPhoto.setName(request.getName());
         userPhoto.setExtension(request.getExtension());
         userPhoto.setContent(request.getContent());
         userPhoto = userPhotoService.save(userPhoto);
-        UserPhotoDto dto = UserPhotoService.toDto(userPhoto);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(UserPhotoResponse.builder().id(userPhoto.getId()).build());
     }
 
 
@@ -96,8 +85,8 @@ public class UserPhotoController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                  @PathVariable Long userId,
-                                 @PathVariable Long id) throws UserPhotoNotFound {
-        userPhotoService.delete(id);
+                                 @PathVariable Long id) {
+        userPhotoService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 

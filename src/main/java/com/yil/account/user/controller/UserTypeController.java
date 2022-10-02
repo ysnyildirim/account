@@ -2,7 +2,7 @@ package com.yil.account.user.controller;
 
 import com.yil.account.base.ApiConstant;
 import com.yil.account.exception.UserTypeNotFoundException;
-import com.yil.account.user.dto.CreateUserTypeDto;
+import com.yil.account.user.dto.CreateUserTypeRequest;
 import com.yil.account.user.dto.UserTypeDto;
 import com.yil.account.user.model.UserType;
 import com.yil.account.user.service.UserTypeService;
@@ -19,10 +19,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/account/v1/user-types")
 public class UserTypeController {
-
     private final UserTypeService userTypeService;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<UserTypeDto>> findAll() {
         List<UserType> data = userTypeService.findAll();
         List<UserTypeDto> dtoData = new ArrayList<>();
@@ -32,8 +32,8 @@ public class UserTypeController {
         return ResponseEntity.ok(dtoData);
     }
 
-
     @GetMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserTypeDto> findById(@PathVariable Integer id) throws UserTypeNotFoundException {
         UserType userType = userTypeService.findById(id);
         UserTypeDto dto = UserTypeService.toDto(userType);
@@ -43,19 +43,19 @@ public class UserTypeController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserTypeDto> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                              @Valid @RequestBody CreateUserTypeDto request) {
+                                              @Valid @RequestBody CreateUserTypeRequest request) {
         UserType userType = new UserType();
         userType.setName(request.getName());
         userType = userTypeService.save(userType);
         UserTypeDto dto = UserTypeService.toDto(userType);
-        return ResponseEntity.created(null).body(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserTypeDto> replace(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                                @PathVariable Integer id,
-                                               @Valid @RequestBody CreateUserTypeDto request) throws UserTypeNotFoundException {
+                                               @Valid @RequestBody CreateUserTypeRequest request) throws UserTypeNotFoundException {
         UserType userType = userTypeService.findById(id);
         userType.setName(request.getName());
         userType = userTypeService.save(userType);
@@ -66,9 +66,8 @@ public class UserTypeController {
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                         @PathVariable Integer id) throws UserTypeNotFoundException {
+                                         @PathVariable Integer id) {
         userTypeService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-
 }

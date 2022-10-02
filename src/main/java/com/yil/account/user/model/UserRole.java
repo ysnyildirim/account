@@ -1,4 +1,8 @@
-package com.yil.account.role.model;
+/*
+ * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
+ */
+
+package com.yil.account.user.model;
 
 import com.yil.account.base.IEntity;
 import lombok.AllArgsConstructor;
@@ -9,13 +13,13 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Data
+@Table(schema = "USR", name = "USER_ROLE")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Data
-@Table(schema = "RL", name = "ROLE_PERMISSION")
-public class RolePermission implements IEntity {
+public class UserRole implements IEntity {
 
     @EmbeddedId
     private Pk id;
@@ -26,9 +30,10 @@ public class RolePermission implements IEntity {
     @AllArgsConstructor
     @Embeddable
     public static class Pk implements Serializable {
+        @Column(name = "USER_ID", nullable = false)
+        private Long userId;
         @Column(name = "ROLE_ID", nullable = false)
         private Integer roleId;
-        @Column(name = "PERMISSION_ID", nullable = false)
-        private Integer permissionId;
     }
+
 }

@@ -11,13 +11,14 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPhotoDto implements Serializable {
-    private Long id;
-    private String name;
-    private String extension;
-    private Byte[] content;
+public class UserRoleDto implements Serializable {
+
+    private Long userId;
+    private Integer roleId;
+
 }
