@@ -19,8 +19,7 @@ public class Group implements IEntity {
     @Id
     @SequenceGenerator(schema = "GRP",
             name = "GROUP_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_GROUP_ID",
-            allocationSize = 1)
+            sequenceName = "SEQ_GROUP_ID")
     @GeneratedValue(generator = "GROUP_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;

@@ -21,8 +21,7 @@ public class User implements IEntity {
     @Id
     @SequenceGenerator(schema = "USR",
             name = "USER_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_USER_ID",
-            allocationSize = 1)
+            sequenceName = "SEQ_USER_ID")
     @GeneratedValue(generator = "USER_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;

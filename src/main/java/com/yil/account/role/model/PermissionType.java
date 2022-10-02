@@ -22,8 +22,7 @@ import javax.persistence.*;
 public class PermissionType implements IEntity {
     @Id
     @SequenceGenerator(name = "PERMISSION_TYPE_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_PERMISSION_TYPE_ID", schema = "USR",
-            allocationSize = 1)
+            sequenceName = "SEQ_PERMISSION_TYPE_ID", schema = "USR")
     @GeneratedValue(generator = "PERMISSION_TYPE_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Integer id;

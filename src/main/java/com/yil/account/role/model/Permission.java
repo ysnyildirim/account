@@ -19,8 +19,7 @@ public class Permission implements IEntity {
     @Id
     @SequenceGenerator(schema = "RL",
             name = "PERMISSION_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_PERMISSION_ID",
-            allocationSize = 1)
+            sequenceName = "SEQ_PERMISSION_ID")
     @GeneratedValue(generator = "PERMISSION_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;

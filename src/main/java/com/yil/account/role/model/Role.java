@@ -21,8 +21,7 @@ public class Role implements IEntity {
     @Id
     @SequenceGenerator(schema = "RL",
             name = "ROLE_ID_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_ROLE_ID",
-            allocationSize = 1)
+            sequenceName = "SEQ_ROLE_ID")
     @GeneratedValue(generator = "ROLE_ID_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;

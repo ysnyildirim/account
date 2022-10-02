@@ -27,8 +27,7 @@ import javax.persistence.*;
 public class GroupUserType implements IEntity {
     @Id
     @SequenceGenerator(name = "GROUP_USER_TYPE_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_GROUP_USER_TYPE_ID", schema = "USR",
-            allocationSize = 1)
+            sequenceName = "SEQ_GROUP_USER_TYPE_ID", schema = "USR")
     @GeneratedValue(generator = "GROUP_USER_TYPE_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Integer id;

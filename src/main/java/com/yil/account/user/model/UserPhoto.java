@@ -21,8 +21,7 @@ public class UserPhoto implements IEntity {
     @Id
     @SequenceGenerator(schema = "USR",
             name = "USER_PHOTO_SEQUENCE_GENERATOR",
-            sequenceName = "SEQ_USER_PHOTO_ID",
-            allocationSize = 1)
+            sequenceName = "SEQ_USER_PHOTO_ID")
     @GeneratedValue(generator = "USER_PHOTO_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;
