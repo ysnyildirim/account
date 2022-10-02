@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
-
 package com.yil.account.base;
 
 import org.springframework.data.domain.Page;
@@ -14,7 +13,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public class Mapper<S extends Serializable, T extends Serializable> {
-
     private final Function<S, T> function;
 
     public Mapper(@NotNull Function<S, T> function) {

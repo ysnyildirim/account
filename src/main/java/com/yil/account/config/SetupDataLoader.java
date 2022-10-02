@@ -52,7 +52,6 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
             initUserTypes();
             initDefaultUsers();
             initDefaultRoles();
-
             // initSikayet();
         } catch (Exception e) {
             e.printStackTrace();

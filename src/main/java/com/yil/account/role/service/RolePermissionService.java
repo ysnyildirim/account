@@ -28,7 +28,6 @@ public class RolePermissionService {
         return rolePermissionDao.findAllById_RoleId(roleId);
     }
 
-
     public void delete(RolePermission.Pk id) {
         rolePermissionDao.deleteById(id);
     }

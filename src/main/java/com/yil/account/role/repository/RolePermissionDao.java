@@ -6,10 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
 public interface RolePermissionDao extends JpaRepository<RolePermission, RolePermission.Pk> {
-
     List<RolePermission> findAllById_RoleId(Integer roleId);
-
 }

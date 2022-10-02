@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
-
 package com.yil.account.auth.dto;
 
 import lombok.AllArgsConstructor;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
-
 
 @Data
 @Builder

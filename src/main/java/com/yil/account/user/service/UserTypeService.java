@@ -12,7 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class UserTypeService {
-
     private final UserTypeDao userTypeDao;
 
     public static UserTypeDto toDto(UserType userType) throws NullPointerException {
@@ -43,5 +42,4 @@ public class UserTypeService {
     public List<UserType> findAll() {
         return userTypeDao.findAll();
     }
-
 }

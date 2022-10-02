@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
-
 package com.yil.account.user.service;
 
 import com.yil.account.user.dao.UserRoleDao;

@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/account/v1/roles/{roleId}/permissions")
 public class RolePermissionController {
-
     private final RolePermissionService rolePermissionService;
     private final PermissionService permissionService;
     private final RoleService roleService;
@@ -56,5 +55,4 @@ public class RolePermissionController {
         rolePermissionService.delete(pk);
         return ResponseEntity.ok("Deleted");
     }
-
 }

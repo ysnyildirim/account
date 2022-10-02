@@ -10,9 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserPhotoDao extends JpaRepository<UserPhoto, Long> {
-
     Page<UserPhoto> findAllByUserId(Pageable pageable, Long userId);
 
     Optional<UserPhoto> findByIdAndUserId(Long id, Long userId);
-
 }

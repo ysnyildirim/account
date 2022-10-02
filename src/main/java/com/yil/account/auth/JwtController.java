@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
-
 package com.yil.account.auth;
 
 import com.yil.account.auth.dto.JwtLoginRequest;
@@ -23,7 +22,6 @@ import java.security.NoSuchAlgorithmException;
 @RestController
 @RequestMapping("/api/account/v1/auth")
 public class JwtController {
-
     private final JwtTokenUtil jwtTokenUtil;
     private final UserService userService;
 
@@ -60,6 +58,4 @@ public class JwtController {
         responce.setRefreshToken(refreshToken);
         return ResponseEntity.ok(responce);
     }
-
-
 }

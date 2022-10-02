@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
-
 package com.yil.account.base;
 
 import lombok.Getter;
@@ -20,14 +19,11 @@ public enum ErrorCode {
     RoleNotFound(2000004, "Role not found"),
     RoleNameCannotBeUsed(2000003, "Role name cannot be used"),
     PermissionNotFound(2000002, "Permission not found");
-
     private final int code;
-
     private final String message;
 
     ErrorCode(int code, String message) {
         this.code = code;
         this.message = message;
     }
-
 }

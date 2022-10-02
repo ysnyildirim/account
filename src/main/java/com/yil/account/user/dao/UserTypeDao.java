@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserTypeDao extends JpaRepository<UserType, Integer> {
-
 }

@@ -23,7 +23,6 @@ import java.util.Date;
 @RestController
 @RequestMapping("/api/account/v1/permissions")
 public class PermissionController {
-
     private final PermissionService permissionService;
     private final Mapper<Permission, PermissionDto> mapper = new Mapper<>(PermissionService::toDto);
 
@@ -81,5 +80,4 @@ public class PermissionController {
         permissionService.deleteById(id);
         return ResponseEntity.ok("Deleted");
     }
-
 }

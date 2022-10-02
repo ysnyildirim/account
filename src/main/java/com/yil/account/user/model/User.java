@@ -62,5 +62,4 @@ public class User implements IEntity {
     private Date lastModifyDate;
     @Column(name = "LAST_MODIFY_USER_ID")
     private Long lastModifyUserId;
-
 }

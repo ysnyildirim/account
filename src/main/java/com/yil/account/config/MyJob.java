@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
-
 package com.yil.account.config;
 
 import com.yil.account.base.ApiConstant;
@@ -25,9 +24,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 @SuppressWarnings({"unused", "unchecked"})
 public class MyJob {
-
     public static final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
     public final String uri = "http://localhost:8082/api/account/v1";
 
     // @Scheduled(fixedDelay = 1, initialDelay = 5 * 1000)
@@ -57,7 +54,6 @@ public class MyJob {
                 .userTypeId(SetupDataLoader.userTypeGercekKisi.getId())
                 .build();
     }
-
 
     private String randomString(int i) {
         String s = "";

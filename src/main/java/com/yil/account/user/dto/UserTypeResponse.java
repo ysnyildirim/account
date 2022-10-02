@@ -1,9 +1,7 @@
 /*
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
-
 package com.yil.account.user.dto;
-
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

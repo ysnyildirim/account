@@ -16,7 +16,6 @@ import java.io.Serializable;
 @Data
 @Table(schema = "RL", name = "ROLE_PERMISSION")
 public class RolePermission implements IEntity {
-
     @EmbeddedId
     private Pk id;
 

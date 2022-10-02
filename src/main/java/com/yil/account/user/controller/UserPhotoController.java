@@ -25,7 +25,6 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequestMapping(value = "/api/account/v1/users/{userId}/photos")
 public class UserPhotoController {
-
     private final UserPhotoService userPhotoService;
     private final UserService userService;
     private final Mapper<UserPhoto, UserPhotoDto> mapper = new Mapper<>(UserPhotoService::toDto);
@@ -48,7 +47,6 @@ public class UserPhotoController {
     public ResponseEntity<UserPhotoDto> findById(@PathVariable Long userId, @PathVariable Long id) throws UserPhotoNotFound {
         return ResponseEntity.ok(mapper.map(userPhotoService.findByIdAndUserId(id, userId)));
     }
-
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -80,7 +78,6 @@ public class UserPhotoController {
         return ResponseEntity.ok(UserPhotoResponse.builder().id(userPhoto.getId()).build());
     }
 
-
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
@@ -89,5 +86,4 @@ public class UserPhotoController {
         userPhotoService.deleteById(id);
         return ResponseEntity.ok().build();
     }
-
 }

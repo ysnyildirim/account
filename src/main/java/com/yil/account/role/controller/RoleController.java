@@ -24,7 +24,6 @@ import java.util.Date;
 @RestController
 @RequestMapping("/api/account/v1/roles")
 public class RoleController {
-
     private final RoleService roleService;
     private final Mapper<Role, RoleDto> mapper = new Mapper<>(RoleService::convert);
 
@@ -88,5 +87,4 @@ public class RoleController {
         roleService.deleteById(id);
         return ResponseEntity.ok("Deleted");
     }
-
 }

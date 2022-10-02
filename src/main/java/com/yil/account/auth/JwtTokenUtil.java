@@ -99,5 +99,4 @@ public class JwtTokenUtil implements Serializable {
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
-
 }

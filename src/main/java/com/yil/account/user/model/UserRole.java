@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2022. Tüm hakları Yasin Yıldırım'a aittir.
  */
-
 package com.yil.account.user.model;
 
 import com.yil.account.base.IEntity;
@@ -20,7 +19,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRole implements IEntity {
-
     @EmbeddedId
     private Pk id;
 
@@ -35,5 +33,4 @@ public class UserRole implements IEntity {
         @Column(name = "ROLE_ID", nullable = false)
         private Integer roleId;
     }
-
 }

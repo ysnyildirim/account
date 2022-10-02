@@ -39,6 +39,3 @@ public class UserPhoto implements IEntity {
     @Column(name = "UPLOADED_DATE", nullable = false)
     private Date uploadedDate;
 }
-
-
-

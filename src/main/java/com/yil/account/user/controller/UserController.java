@@ -29,13 +29,11 @@ import java.util.Date;
 @RestController
 @RequestMapping(value = "/api/account/v1/users")
 public class UserController {
-
     private final UserService userService;
     private final UserTypeService userTypeService;
     @Autowired
     private final PermissionService permissionService;
     private final Mapper<User, UserDto> mapper = new Mapper<>(UserService::toDto);
-
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -159,5 +157,4 @@ public class UserController {
         else
             return ResponseEntity.noContent().build();
     }
-
 }
