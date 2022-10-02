@@ -14,7 +14,6 @@ import com.yil.account.user.model.User;
 import com.yil.account.user.service.UserService;
 import com.yil.account.user.service.UserTypeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -31,7 +30,6 @@ import java.util.Date;
 public class UserController {
     private final UserService userService;
     private final UserTypeService userTypeService;
-    @Autowired
     private final PermissionService permissionService;
     private final Mapper<User, UserDto> mapper = new Mapper<>(UserService::toDto);
 
