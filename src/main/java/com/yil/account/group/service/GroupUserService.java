@@ -51,4 +51,8 @@ public class GroupUserService {
     public List<GroupUser> findAllById_UserId(Long userId) {
         return groupUserRepository.findAllById_UserId(userId);
     }
+
+    public List<Long> getGroupIdByUserId(long userId) {
+        return groupUserRepository.getGroupIdByUserId(userId);
+    }
 }

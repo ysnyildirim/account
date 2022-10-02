@@ -12,7 +12,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(schema = "RL", name = "ROLE")
+@Table(schema = "RL",
+        name = "ROLE",
+        uniqueConstraints = @UniqueConstraint(name = "UC_ROLE_NAME", columnNames = {"NAME"}))
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

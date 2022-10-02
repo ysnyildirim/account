@@ -3,7 +3,6 @@ package com.yil.account.group.service;
 import com.yil.account.exception.GroupNotFoundException;
 import com.yil.account.group.dto.GroupDto;
 import com.yil.account.group.model.Group;
-import com.yil.account.group.model.GroupRole;
 import com.yil.account.group.repository.GroupDao;
 import com.yil.account.role.model.RolePermission;
 import com.yil.account.role.service.RolePermissionService;
@@ -68,9 +67,9 @@ public class GroupService {
     }
 
     public boolean existsGroupPermission(long groupId, long permissionId) {
-        List<GroupRole> groupRoles = groupRoleService.findAllById_GroupId(groupId);
-        for (GroupRole groupRole : groupRoles) {
-            if (rolePermissionService.existsById(RolePermission.Pk.builder().roleId(groupRole.getId().getRoleId()).permissionId(permissionId).build()))
+        List<Long> groupRoles = groupRoleService.getRoleIdByGroupId(groupId);
+        for (Long groupRole : groupRoles) {
+            if (rolePermissionService.existsById(RolePermission.Pk.builder().roleId(groupRole).permissionId(permissionId).build()))
                 return true;
         }
         return false;

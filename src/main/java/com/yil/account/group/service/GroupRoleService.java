@@ -51,4 +51,8 @@ public class GroupRoleService {
     public List<GroupRole> findAllById_GroupId(Long groupId) {
         return groupRoleRepository.findAllById_GroupId(groupId);
     }
+
+    public List<Long> getRoleIdByGroupId(Long groupId) {
+        return groupRoleRepository.getRoleIdByGroupId(groupId);
+    }
 }

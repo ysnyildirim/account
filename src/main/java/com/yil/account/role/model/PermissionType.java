@@ -18,7 +18,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-@Table(schema = "RL", name = "PERMISSION_TYPE")
+@Table(schema = "RL",
+        name = "PERMISSION_TYPE",
+        uniqueConstraints = @UniqueConstraint(name = "UC_PERMISSION_TYPE_NAME", columnNames = {"NAME"}))
 public class PermissionType implements IEntity {
     @Id
     @SequenceGenerator(name = "PERMISSION_TYPE_SEQUENCE_GENERATOR",

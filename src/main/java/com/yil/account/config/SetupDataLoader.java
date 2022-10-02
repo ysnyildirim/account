@@ -17,8 +17,8 @@ import com.yil.account.role.service.RolePermissionService;
 import com.yil.account.role.service.RoleService;
 import com.yil.account.user.model.User;
 import com.yil.account.user.model.UserType;
+import com.yil.account.user.repository.UserTypeRepository;
 import com.yil.account.user.service.UserService;
-import com.yil.account.user.service.UserTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextStartedEvent;
@@ -34,8 +34,8 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
     public static GroupUserType groupUserTypeManager;
     public static GroupUserType groupUserTypeUser;
 
-    public static UserType userTypeAdmin;
-    public static UserType userTypeStandartUser;
+    public static UserType userTypeGercekKisi;
+    public static UserType userTypeTuzelKisi;
 
     public static Group groupHerkes;
     public static Group groupGercekKisiler;
@@ -60,7 +60,8 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
     @Autowired
     private RoleService roleService;
     @Autowired
-    private UserTypeService userTypeService;
+    private UserTypeRepository userTypeRepository;
+
     @Autowired
     private PermissionDao permissionDao;
     @Autowired
@@ -101,10 +102,10 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
     }
 
     private void initUserTypes() {
-        userTypeAdmin = UserType.builder().id(1).name("Admin").build();
-        userTypeService.save(userTypeAdmin);
-        userTypeStandartUser = UserType.builder().id(2).name("Standart User").build();
-        userTypeService.save(userTypeStandartUser);
+        userTypeGercekKisi = UserType.builder().id(1).name("Gerçek Kişi").build();
+        userTypeRepository.save(userTypeGercekKisi);
+        userTypeTuzelKisi = UserType.builder().id(2).name("Tüzel Kişi").build();
+        userTypeRepository.save(userTypeTuzelKisi);
     }
 
     private void initGroupUserTypes() {
@@ -136,7 +137,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .mail("admin@gmail.com")
                 .lastPasswordChangeTime(new Date())
                 .passwordNeedsChanged(false)
-                .userTypeId(userTypeAdmin.getId())
+                .userTypeId(userTypeGercekKisi.getId())
                 .build();
         userService.save(adminUser);
     }
@@ -206,6 +207,12 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         addRolePermission(RolePermission.builder().id(RolePermission.Pk.builder().roleId(roleTuzel.getId()).permissionId(permissionTuzel.getId()).build()).build());
     }
 
+    private void addRolePermission(RolePermission rolePermission) {
+        if (rolePermissionService.existsById(rolePermission.getId()))
+            return;
+        rolePermissionService.save(rolePermission);
+    }
+
     private void initDefaultGroups() {
         groupHerkes = Group
                 .builder()
@@ -245,6 +252,12 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         groupDao.save(groupTuzelKisiler);
 
         addGroupRole(GroupRole.builder().id(GroupRole.Pk.builder().roleId(roleTuzel.getId()).groupId(groupTuzelKisiler.getId()).build()).build());
+    }
+
+    private void addGroupRole(GroupRole groupRole) {
+        if (groupRoleService.existsById(groupRole.getId()))
+            return;
+        groupRoleService.save(groupRole);
     }
 
     private void initSikayet() {
@@ -303,18 +316,6 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
 
         addGroupRole(GroupRole.builder().id(GroupRole.Pk.builder().groupId(4l).roleId(4l).build()).build());
         addGroupRole(GroupRole.builder().id(GroupRole.Pk.builder().groupId(5l).roleId(5l).build()).build());
-    }
-
-    private void addRolePermission(RolePermission rolePermission) {
-        if (rolePermissionService.existsById(rolePermission.getId()))
-            return;
-        rolePermissionService.save(rolePermission);
-    }
-
-    private void addGroupRole(GroupRole groupRole) {
-        if (groupRoleService.existsById(groupRole.getId()))
-            return;
-        groupRoleService.save(groupRole);
     }
 
 

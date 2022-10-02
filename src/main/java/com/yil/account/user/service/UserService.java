@@ -1,7 +1,6 @@
 package com.yil.account.user.service;
 
 import com.yil.account.exception.UserNotFoundException;
-import com.yil.account.group.model.GroupUser;
 import com.yil.account.group.service.GroupRoleService;
 import com.yil.account.group.service.GroupService;
 import com.yil.account.group.service.GroupUserService;
@@ -72,9 +71,9 @@ public class UserService {
     }
 
     public boolean existsByPermission(Long id, Long permissionId) {
-        List<GroupUser> groupUsers = groupUserService.findAllById_UserId(id);
-        for (GroupUser groupUser : groupUsers) {
-            if (groupService.existsGroupPermission(groupUser.getId().getGroupId(), permissionId))
+        List<Long> groupUsers = groupUserService.getGroupIdByUserId(id);
+        for (Long groupUser : groupUsers) {
+            if (groupService.existsGroupPermission(groupUser, permissionId))
                 return true;
         }
         return false;

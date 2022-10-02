@@ -14,7 +14,9 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(schema = "GRP", name = "GROUP")
+@Table(schema = "GRP",
+        name = "GROUP",
+        uniqueConstraints = @UniqueConstraint(name = "UC_GROUP_NAME", columnNames = {"NAME"}))
 public class Group implements IEntity {
     @Id
     @SequenceGenerator(schema = "GRP",

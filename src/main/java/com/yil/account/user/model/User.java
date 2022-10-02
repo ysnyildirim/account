@@ -16,7 +16,9 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(schema = "USR", name = "USER")
+@Table(schema = "USR",
+        name = "USER",
+        uniqueConstraints = @UniqueConstraint(name = "UC_USER_USER_NAME", columnNames = {"USER_NAME"}))
 public class User implements IEntity {
     @Id
     @SequenceGenerator(schema = "USR",
@@ -25,7 +27,7 @@ public class User implements IEntity {
     @GeneratedValue(generator = "USER_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;
-    @Column(name = "USER_NAME", nullable = false, unique = true, length = 100)
+    @Column(name = "USER_NAME", nullable = false, length = 100)
     private String userName;
     @Column(name = "PASSWORD", nullable = false, length = 100)
     private String password;
