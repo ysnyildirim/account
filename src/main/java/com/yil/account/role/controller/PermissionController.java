@@ -1,6 +1,7 @@
 package com.yil.account.role.controller;
 
 import com.yil.account.base.ApiConstant;
+import com.yil.account.base.Mapper;
 import com.yil.account.base.PageDto;
 import com.yil.account.exception.PermissionNotFoundException;
 import com.yil.account.role.dto.CreatePermissionDto;
@@ -9,16 +10,13 @@ import com.yil.account.role.dto.PermissionRequest;
 import com.yil.account.role.model.Permission;
 import com.yil.account.role.service.PermissionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.Date;
 
 @RequiredArgsConstructor
@@ -27,6 +25,7 @@ import java.util.Date;
 public class PermissionController {
 
     private final PermissionService permissionService;
+    private final Mapper<Permission, PermissionDto> mapper = new Mapper<>(PermissionService::toDto);
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -38,16 +37,14 @@ public class PermissionController {
         if (size <= 0 || size > 1000)
             size = 1000;
         Pageable pageable = PageRequest.of(page, size);
-        Page<Permission> permissionPage = permissionService.findAll(pageable);
-        PageDto<PermissionDto> pageDto = PageDto.toDto(permissionPage, PermissionService::convert);
-        return ResponseEntity.ok(pageDto);
+        return ResponseEntity.ok(mapper.map(permissionService.findAll(pageable)));
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PermissionDto> findById(@PathVariable Integer id) throws PermissionNotFoundException {
         Permission entity = permissionService.findById(id);
-        PermissionDto dto = PermissionService.convert(entity);
+        PermissionDto dto = PermissionService.toDto(entity);
         return ResponseEntity.ok(dto);
     }
 
@@ -74,7 +71,7 @@ public class PermissionController {
         permission.setName(dto.getName());
         permission.setDescription(dto.getDescription());
         permission = permissionService.save(permission);
-        PermissionDto responce = PermissionService.convert(permission);
+        PermissionDto responce = PermissionService.toDto(permission);
         return ResponseEntity.ok(responce);
     }
 

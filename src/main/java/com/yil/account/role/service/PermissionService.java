@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class PermissionService {
     private final PermissionDao permissionDao;
 
-    public static PermissionDto convert(@NotNull Permission permission) {
+    public static PermissionDto toDto(@NotNull Permission permission) {
         return PermissionDto.builder()
                 .id(permission.getId())
                 .name(permission.getName())
