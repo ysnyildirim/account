@@ -33,6 +33,8 @@ public class UserService {
                 .mail(user.getMail())
                 .personId(user.getPersonId())
                 .userTypeId(user.getUserTypeId())
+                .lastPasswordChangeDate(user.getLastPasswordChangeDate())
+                .passwordNeedsChanged(user.isPasswordNeedsChanged())
                 .build();
     }
 

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -24,5 +25,15 @@ public class UserType implements IEntity {
     private Integer id;
     @Column(name = "NAME", nullable = false, length = 100)
     private String name;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATED_DATE")
+    private Date createdDate;
+    @Column(name = "CREATED_USER_ID")
+    private Long createdUserId;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "LAST_MODIFY_DATE")
+    private Date lastModifyDate;
+    @Column(name = "LAST_MODIFY_USER_ID")
+    private Long lastModifyUserId;
 
 }

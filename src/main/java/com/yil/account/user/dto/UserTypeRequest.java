@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateUserTypeRequest {
+public class UserTypeRequest {
     @NotBlank
     @Length(min = 1, max = 100)
     private String name;

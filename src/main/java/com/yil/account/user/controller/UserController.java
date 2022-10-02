@@ -79,20 +79,12 @@ public class UserController {
         user.setLocked(request.getLocked());
         user.setMail(request.getMail());
         user.setPasswordNeedsChanged(request.getPasswordNeedsChanged());
-        user.setLastPasswordChangeTime(new Date());
+        user.setLastPasswordChangeDate(new Date());
         user.setPersonId(request.getPersonId());
         user.setCreatedUserId(authenticatedUserId);
-        user.setCreatedTime(new Date());
+        user.setCreatedDate(new Date());
         user = userService.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.builder().id(user.getId()).build());
-    }
-
-    @DeleteMapping(value = "/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity delete(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                 @Valid @PathVariable Long id) {
-        userService.deleteById(id);
-        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}/lock")
@@ -101,6 +93,8 @@ public class UserController {
                                @PathVariable Long id) throws UserNotFoundException {
         User user = userService.findById(id);
         user.setLocked(true);
+        user.setLastModifyUserId(authenticatedUserId);
+        user.setLastModifyDate(new Date());
         userService.save(user);
         return ResponseEntity.ok().build();
     }
@@ -150,7 +144,7 @@ public class UserController {
             throw new WrongPasswordException();
         String newPassword = MD5Util.encode(request.getNewPassword());
         user.setPassword(newPassword);
-        user.setLastPasswordChangeTime(new Date());
+        user.setLastPasswordChangeDate(new Date());
         userService.save(user);
         return ResponseEntity.ok().build();
     }

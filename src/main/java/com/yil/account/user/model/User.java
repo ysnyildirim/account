@@ -49,12 +49,18 @@ public class User implements IEntity {
     @ColumnDefault(value = "1")
     @Column(name = "PASSWORD_NEEDS_CHANGED", nullable = false)
     private boolean passwordNeedsChanged;
-    @Column(name = "LAST_PASSWORD_CHANGE_TIME")
-    private Date lastPasswordChangeTime;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIME")
-    private Date createdTime;
+    @Column(name = "LAST_PASSWORD_CHANGE_DATE")
+    private Date lastPasswordChangeDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATED_DATE")
+    private Date createdDate;
     @Column(name = "CREATED_USER_ID")
     private Long createdUserId;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "LAST_MODIFY_DATE")
+    private Date lastModifyDate;
+    @Column(name = "LAST_MODIFY_USER_ID")
+    private Long lastModifyUserId;
 
 }
