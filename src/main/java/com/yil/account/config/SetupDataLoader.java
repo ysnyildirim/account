@@ -8,8 +8,10 @@ import com.yil.account.role.repository.PermissionDao;
 import com.yil.account.role.repository.RoleDao;
 import com.yil.account.role.repository.RolePermissionDao;
 import com.yil.account.user.dao.UserDao;
+import com.yil.account.user.dao.UserRoleDao;
 import com.yil.account.user.dao.UserTypeDao;
 import com.yil.account.user.model.User;
+import com.yil.account.user.model.UserRole;
 import com.yil.account.user.model.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -23,6 +25,7 @@ import java.util.Date;
 public class SetupDataLoader implements ApplicationListener<ContextStartedEvent> {
     public static UserType userTypeGercekKisi;
     public static UserType userTypeTuzelKisi;
+    public static Role roleAdmin;
     public static Role roleHerkes;
     public static Role roleGercek;
     public static Role roleTuzel;
@@ -37,6 +40,8 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
     private RoleDao roleDao;
     @Autowired
     private RolePermissionDao rolePermissionDao;
+    @Autowired
+    private UserRoleDao userRoleDao;
 
     @Override
     public void onApplicationEvent(ContextStartedEvent event) {
@@ -70,17 +75,27 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .enabled(true)
                 .locked(false)
                 .mail("admin@gmail.com")
-                .lastPasswordChangeTime(new Date())
+                .lastPasswordChangeDate(new Date())
                 .passwordNeedsChanged(false)
                 .userTypeId(userTypeGercekKisi.getId())
                 .build();
         userDao.save(adminUser);
+        userRoleDao.save(UserRole.builder().id(UserRole.Pk.builder().roleId(1).userId(adminUser.getId()).build()).build());
     }
 
     private void initDefaultRoles() {
-        roleHerkes = Role.builder()
+        roleAdmin = Role.builder()
                 .id(1)
-                .name("TUM_KULLANICILAR")
+                .name("ADMIN")
+                .description("Sİstem admini")
+                .assignable(false)
+                .createdDate(new Date())
+                .createdUserId(adminUser.getId())
+                .build();
+        roleDao.save(roleAdmin);
+        roleHerkes = Role.builder()
+                .id(2)
+                .name("HERKES")
                 .description("Sistemdeki tüm kullanıcılar")
                 .assignable(true)
                 .createdDate(new Date())
@@ -88,7 +103,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .build();
         roleDao.save(roleHerkes);
         roleGercek = Role.builder()
-                .id(2)
+                .id(3)
                 .name("GERCEK_KULLANICI")
                 .description("Gerçek kişilerin yetkileri")
                 .assignable(true)
@@ -97,7 +112,7 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .build();
         roleDao.save(roleGercek);
         roleTuzel = Role.builder()
-                .id(3)
+                .id(4)
                 .name("TUZEL_KULLANICI")
                 .description("Tüzel kişilerin yetkileri")
                 .assignable(true)
