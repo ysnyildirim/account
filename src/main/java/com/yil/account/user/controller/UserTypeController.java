@@ -19,7 +19,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/account/v1/user-types")
+@RequestMapping(value = "/api/acc/v1/user-types")
 public class UserTypeController {
     private final UserTypeService userTypeService;
     private final Mapper<UserType, UserTypeDto> mapper = new Mapper<>(UserTypeService::toDto);

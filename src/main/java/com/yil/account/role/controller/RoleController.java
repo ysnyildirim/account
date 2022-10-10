@@ -22,7 +22,7 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/account/v1/roles")
+@RequestMapping("/api/acc/v1/roles")
 public class RoleController {
     private final RoleService roleService;
     private final Mapper<Role, RoleDto> mapper = new Mapper<>(RoleService::convert);

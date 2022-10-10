@@ -20,7 +20,7 @@ import java.security.NoSuchAlgorithmException;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/account/v1/auth")
+@RequestMapping("/api/acc/v1/auth")
 public class JwtController {
     private final JwtTokenUtil jwtTokenUtil;
     private final UserService userService;

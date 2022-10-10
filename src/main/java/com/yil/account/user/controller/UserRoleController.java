@@ -17,7 +17,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/account/v1/users/{userId}/roles")
+@RequestMapping(value = "/api/acc/v1/users/{userId}/roles")
 public class UserRoleController {
     private final UserRoleService userRoleService;
     private final UserService userService;

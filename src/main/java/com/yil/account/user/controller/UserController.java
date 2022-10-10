@@ -26,7 +26,7 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/account/v1/users")
+@RequestMapping(value = "/api/acc/v1/users")
 public class UserController {
     private final UserService userService;
     private final UserTypeService userTypeService;

@@ -21,7 +21,7 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/account/v1/permissions")
+@RequestMapping("/api/acc/v1/permissions")
 public class PermissionController {
     private final PermissionService permissionService;
     private final Mapper<Permission, PermissionDto> mapper = new Mapper<>(PermissionService::toDto);

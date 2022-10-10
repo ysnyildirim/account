@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/account/v1/users/{userId}/photos")
+@RequestMapping(value = "/api/acc/v1/users/{userId}/photos")
 public class UserPhotoController {
     private final UserPhotoService userPhotoService;
     private final UserService userService;
