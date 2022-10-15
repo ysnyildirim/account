@@ -34,5 +34,4 @@ public class UserRequest {
     private String mail;
     @NotNull
     private Boolean passwordNeedsChanged;
-    private Long personId;
 }

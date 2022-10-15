@@ -76,7 +76,6 @@ public class UserController {
         user.setMail(request.getMail());
         user.setPasswordNeedsChanged(request.getPasswordNeedsChanged());
         user.setLastPasswordChangeDate(new Date());
-        user.setPersonId(request.getPersonId());
         user.setCreatedUserId(authenticatedUserId);
         user.setCreatedDate(new Date());
         user = userService.save(user);

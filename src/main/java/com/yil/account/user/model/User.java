@@ -43,8 +43,6 @@ public class User implements IEntity {
     private boolean locked;
     @Column(name = "MAIL", nullable = false)
     private String mail;
-    @Column(name = "PERSON_ID")
-    private Long personId;
     @Type(type = "org.hibernate.type.NumericBooleanType")
     @ColumnDefault(value = "1")
     @Column(name = "PASSWORD_NEEDS_CHANGED", nullable = false)
