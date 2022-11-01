@@ -9,10 +9,8 @@ import com.yil.account.role.repository.RoleDao;
 import com.yil.account.role.repository.RolePermissionDao;
 import com.yil.account.user.dao.UserDao;
 import com.yil.account.user.dao.UserRoleDao;
-import com.yil.account.user.dao.UserTypeDao;
 import com.yil.account.user.model.User;
 import com.yil.account.user.model.UserRole;
-import com.yil.account.user.model.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextStartedEvent;
@@ -23,8 +21,7 @@ import java.util.Date;
 
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextStartedEvent> {
-    public static UserType userTypeGercekKisi;
-    public static UserType userTypeTuzelKisi;
+
     public static Role roleAdmin;
     public static Role roleHerkes;
     public static Role roleGercek;
@@ -32,8 +29,6 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
     public static User adminUser;
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private UserTypeDao userTypeDao;
     @Autowired
     private PermissionDao permissionDao;
     @Autowired
@@ -49,7 +44,6 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         System.out.println(new Date(event.getTimestamp()));
         System.out.println("----------------------");
         try {
-            initUserTypes();
             initDefaultUsers();
             initDefaultRoles();
             // initSikayet();
@@ -58,12 +52,6 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         }
     }
 
-    private void initUserTypes() {
-        userTypeGercekKisi = UserType.builder().id(1).name("Gerçek Kişi").build();
-        userTypeDao.save(userTypeGercekKisi);
-        userTypeTuzelKisi = UserType.builder().id(2).name("Tüzel Kişi").build();
-        userTypeDao.save(userTypeTuzelKisi);
-    }
 
     private void initDefaultUsers() throws NoSuchAlgorithmException {
         adminUser = User
@@ -71,12 +59,10 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .id(1L)
                 .userName("ADMIN")
                 .password(MD5Util.encode("admin"))
-                .enabled(true)
                 .locked(false)
                 .mail("admin@gmail.com")
-                .lastPasswordChangeDate(new Date())
-                .passwordNeedsChanged(false)
-                .userTypeId(userTypeGercekKisi.getId())
+                .lastPasswordChange(new Date())
+                .expiredPassword(false)
                 .build();
         userDao.save(adminUser);
         userRoleDao.save(UserRole.builder().id(UserRole.Pk.builder().roleId(1).userId(adminUser.getId()).build()).build());

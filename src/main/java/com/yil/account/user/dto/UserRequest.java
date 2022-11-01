@@ -23,15 +23,10 @@ public class UserRequest {
     @Length(min = 10, max = 100)
     private String password;
     @NotNull
-    @Min(value = 1)
-    private Integer userTypeId;
-    @NotNull
-    private Boolean enabled;
-    @NotNull
     private Boolean locked;
     @NotBlank
     @Email
     private String mail;
     @NotNull
-    private Boolean passwordNeedsChanged;
+    private Boolean expiredPassword;
 }

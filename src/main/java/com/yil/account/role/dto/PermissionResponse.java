@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreatePermissionDto {
+public class PermissionResponse {
     private Integer id;
 }

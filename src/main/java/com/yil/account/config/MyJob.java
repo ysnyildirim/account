@@ -10,6 +10,7 @@ import com.yil.account.user.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
@@ -25,10 +26,10 @@ import java.util.Random;
 @SuppressWarnings({"unused", "unchecked"})
 public class MyJob {
     public static final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public final String uri = "http://localhost:8082/api/account/v1";
+    public final String uri = "http://localhost:8082/api/acc/v1";
 
-    // @Scheduled(fixedDelay = 1, initialDelay = 5 * 1000)
-    // @Async
+    //@Scheduled(fixedDelay = 1, initialDelay = 5 * 1000)
+    @Async
     public void createUser() throws NoSuchAlgorithmException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders h2 = new HttpHeaders();
@@ -47,11 +48,9 @@ public class MyJob {
                 .builder()
                 .userName(randomString(new Random().nextInt(5, 30)))
                 .password(MD5Util.encode("admin"))
-                .enabled(new Random().nextBoolean())
                 .locked(new Random().nextBoolean())
                 .mail(randomString(new Random().nextInt(1, 50)).toLowerCase() + "@gmail.com")
-                .passwordNeedsChanged(true)
-                .userTypeId(SetupDataLoader.userTypeGercekKisi.getId())
+                .expiredPassword(true)
                 .build();
     }
 

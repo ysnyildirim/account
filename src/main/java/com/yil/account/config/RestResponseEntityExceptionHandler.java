@@ -34,12 +34,10 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             responce.setMessage(ObjectUtils.nullSafeToString(fieldError.getDefaultMessage()));
             errors.add(responce);
         }
-        ApiError[] arr = new ApiError[errors.size()];
-        errors.toArray(arr);
         ApiError responce = ApiError.builder()
                 .message(status.getReasonPhrase())
                 .code(status.value())
-                .errors(arr)
+                .errors(errors)
                 .build();
         return handleApiError(ex, responce, headers, status, request);
     }

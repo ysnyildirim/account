@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -27,29 +28,33 @@ public class User implements IEntity {
     @GeneratedValue(generator = "USER_SEQUENCE_GENERATOR")
     @Column(name = "ID")
     private Long id;
+    @Comment("Kullanıcı adı")
     @Column(name = "USER_NAME", nullable = false, length = 100)
     private String userName;
+    @Comment("Şifre")
     @Column(name = "PASSWORD", nullable = false, length = 100)
     private String password;
-    @Column(name = "USER_TYPE_ID", nullable = false)
-    private Integer userTypeId;
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    @ColumnDefault(value = "1")
-    @Column(name = "ENABLED", nullable = false)
-    private boolean enabled;
+    @Comment("Kullanıcı kilit durumu")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     @ColumnDefault(value = "0")
     @Column(name = "LOCKED", nullable = false)
     private boolean locked;
+    @Comment("Kullanıcı mail bilgisi. Şifre yenileme işlemleri bu mail üzerinden sağlanıcaktır.")
     @Column(name = "MAIL", nullable = false)
     private String mail;
+    @Comment("Şifre süreli mi? Süreli ise belirli periyotlarda değiştirilmesi gerekli")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     @ColumnDefault(value = "1")
-    @Column(name = "PASSWORD_NEEDS_CHANGED", nullable = false)
-    private boolean passwordNeedsChanged;
+    @Column(name = "EXPIRED_PASSWORD", nullable = false)
+    private boolean expiredPassword;
+    @Comment("Son şifre değişiklik tarihi")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "LAST_PASSWORD_CHANGE_DATE")
-    private Date lastPasswordChangeDate;
+    @Column(name = "LAST_PASSWORD_CHANGE")
+    private Date lastPasswordChange;
+    @Comment("Son giriş tarihi")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "LAST_LOGIN")
+    private Date lastLogin;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE")
     private Date createdDate;

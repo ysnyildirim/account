@@ -1,8 +1,10 @@
 package com.yil.account.user.controller;
 
 import com.yil.account.base.Mapper;
+import com.yil.account.exception.RoleNotAssignableException;
 import com.yil.account.exception.RoleNotFoundException;
 import com.yil.account.exception.UserNotFoundException;
+import com.yil.account.role.model.Role;
 import com.yil.account.role.service.RoleService;
 import com.yil.account.user.dto.UserRoleDto;
 import com.yil.account.user.model.UserRole;
@@ -33,12 +35,13 @@ public class UserRoleController {
     @PostMapping(value = "/{roleId}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> create(@PathVariable Long userId,
-                                         @PathVariable Integer roleId) throws RoleNotFoundException, UserNotFoundException {
-        if (!roleService.existsById(roleId))
-            throw new RoleNotFoundException();
+                                         @PathVariable Integer roleId) throws RoleNotFoundException, UserNotFoundException, RoleNotAssignableException {
+        Role role = roleService.findById(roleId);
+        if (!role.isAssignable())
+            throw new RoleNotAssignableException();
         if (!userService.existsById(userId))
             throw new UserNotFoundException();
-        UserRole.Pk pk = UserRole.Pk.builder().userId(userId).roleId(roleId).build();
+        UserRole.Pk pk = UserRole.Pk.builder().userId(userId).roleId(role.getId()).build();
         UserRole userRole = UserRole.builder().id(pk).build();
         userRoleService.save(userRole);
         return ResponseEntity.status(HttpStatus.CREATED).build();

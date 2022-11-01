@@ -14,6 +14,7 @@ import com.yil.account.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +33,7 @@ public class UserPhotoController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PageDto<UserPhotoDto>> findAll(@PathVariable Long userId,
-                                                         @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
-                                                         @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
-        if (page < 0)
-            page = 0;
-        if (size <= 0 || size > 1000)
-            size = 1000;
-        Pageable pageable = PageRequest.of(page, size);
+                                                         @PageableDefault Pageable pageable) {
         return ResponseEntity.ok(mapper.map(userPhotoService.findAllByUserId(pageable, userId)));
     }
 

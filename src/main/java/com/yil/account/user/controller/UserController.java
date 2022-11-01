@@ -4,7 +4,10 @@ import com.yil.account.base.ApiConstant;
 import com.yil.account.base.MD5Util;
 import com.yil.account.base.Mapper;
 import com.yil.account.base.PageDto;
-import com.yil.account.exception.*;
+import com.yil.account.exception.LockedUserException;
+import com.yil.account.exception.UserNameCannotBeUsedException;
+import com.yil.account.exception.UserNotFoundException;
+import com.yil.account.exception.WrongPasswordException;
 import com.yil.account.role.service.PermissionService;
 import com.yil.account.user.dto.UserChangePasswordRequest;
 import com.yil.account.user.dto.UserDto;
@@ -12,10 +15,9 @@ import com.yil.account.user.dto.UserRequest;
 import com.yil.account.user.dto.UserResponse;
 import com.yil.account.user.model.User;
 import com.yil.account.user.service.UserService;
-import com.yil.account.user.service.UserTypeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,20 +31,12 @@ import java.util.Date;
 @RequestMapping(value = "/api/acc/v1/users")
 public class UserController {
     private final UserService userService;
-    private final UserTypeService userTypeService;
     private final PermissionService permissionService;
     private final Mapper<User, UserDto> mapper = new Mapper<>(UserService::toDto);
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<PageDto<UserDto>> findAll(
-            @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
-            @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
-        if (page < 0)
-            page = 0;
-        if (size <= 0 || size > 1000)
-            size = 1000;
-        Pageable pageable = PageRequest.of(page, size);
+    public ResponseEntity<PageDto<UserDto>> findAll(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(mapper.map(userService.findAll(pageable)));
     }
 
@@ -61,21 +55,17 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserResponse> create(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID, required = false) Long authenticatedUserId,
-                                               @Valid @RequestBody UserRequest request) throws UserNameCannotBeUsedException, UserTypeNotFoundException, NoSuchAlgorithmException {
+                                               @Valid @RequestBody UserRequest request) throws UserNameCannotBeUsedException, NoSuchAlgorithmException {
         if (userService.existsByUserName(request.getUserName()))
             throw new UserNameCannotBeUsedException();
-        if (!userTypeService.existsById(request.getUserTypeId()))
-            throw new UserTypeNotFoundException();
         String hashPassword = MD5Util.encode(request.getPassword());
         User user = new User();
         user.setUserName(request.getUserName());
         user.setPassword(hashPassword);
-        user.setUserTypeId(request.getUserTypeId());
-        user.setEnabled(request.getEnabled());
         user.setLocked(request.getLocked());
         user.setMail(request.getMail());
-        user.setPasswordNeedsChanged(request.getPasswordNeedsChanged());
-        user.setLastPasswordChangeDate(new Date());
+        user.setExpiredPassword(request.getExpiredPassword());
+        user.setLastPasswordChange(new Date());
         user.setCreatedUserId(authenticatedUserId);
         user.setCreatedDate(new Date());
         user = userService.save(user);
@@ -104,34 +94,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/active")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity active(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                 @PathVariable Long id) throws UserNotFoundException {
-        User user = userService.findById(id);
-        user.setEnabled(true);
-        userService.save(user);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/{id}/inactive")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity inactive(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
-                                   @PathVariable Long id) throws UserNotFoundException {
-        User user = userService.findById(id);
-        user.setEnabled(false);
-        userService.save(user);
-        return ResponseEntity.ok().build();
-    }
-
     @PutMapping("/{id}/change-password")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity changePassword(@RequestHeader(value = ApiConstant.AUTHENTICATED_USER_ID) Long authenticatedUserId,
                                          @PathVariable Long id,
-                                         @RequestBody UserChangePasswordRequest request) throws UserNotFoundException, NoSuchAlgorithmException, LockedUserException, DisabledUserException, WrongPasswordException {
+                                         @RequestBody UserChangePasswordRequest request) throws UserNotFoundException, NoSuchAlgorithmException, LockedUserException, WrongPasswordException {
         User user = userService.findById(id);
-        if (!user.isEnabled())
-            throw new DisabledUserException();
         if (user.isLocked())
             throw new LockedUserException();
         String currentPassword = MD5Util.encode(request.getCurrentPassword());
@@ -139,7 +107,9 @@ public class UserController {
             throw new WrongPasswordException();
         String newPassword = MD5Util.encode(request.getNewPassword());
         user.setPassword(newPassword);
-        user.setLastPasswordChangeDate(new Date());
+        user.setLastPasswordChange(new Date());
+        user.setLastModifyDate(new Date());
+        user.setLastModifyUserId(authenticatedUserId);
         userService.save(user);
         return ResponseEntity.ok().build();
     }

@@ -2,6 +2,9 @@ package com.yil.account.role.model;
 
 import com.yil.account.base.IEntity;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,6 +28,11 @@ public class Permission implements IEntity {
     private String name;
     @Column(name = "DESCRIPTION", length = 4000)
     private String description;
+    @Comment("Yetki atanabilir mi? Sistem yetkileri uygulama için gerekli yetkilerdir. Bu yetkilere sadece yöneticiler erişebilir.")
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    @ColumnDefault(value = "0")
+    @Column(name = "ASSIGNABLE", nullable = false)
+    private boolean assignable;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE")
     private Date createdDate;

@@ -7,7 +7,10 @@ import com.yil.account.auth.dto.JwtLoginRequest;
 import com.yil.account.auth.dto.JwtRefreshRequest;
 import com.yil.account.auth.dto.JwtResponce;
 import com.yil.account.base.MD5Util;
-import com.yil.account.exception.*;
+import com.yil.account.exception.JwtExpiredException;
+import com.yil.account.exception.LockedUserException;
+import com.yil.account.exception.UserNotFoundException;
+import com.yil.account.exception.WrongPasswordException;
 import com.yil.account.user.model.User;
 import com.yil.account.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +30,8 @@ public class JwtController {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value = "/login")
-    public ResponseEntity<JwtResponce> login(@Valid @RequestBody JwtLoginRequest jwtLoginRequest) throws NoSuchAlgorithmException, DisabledUserException, UserNotFoundException, LockedUserException, WrongPasswordException {
+    public ResponseEntity<JwtResponce> login(@Valid @RequestBody JwtLoginRequest jwtLoginRequest) throws NoSuchAlgorithmException, UserNotFoundException, LockedUserException, WrongPasswordException {
         User user = userService.findByUserName(jwtLoginRequest.getUserName());
-        if (!user.isEnabled())
-            throw new DisabledUserException();
         if (user.isLocked())
             throw new LockedUserException();
         String myHash = MD5Util.encode(jwtLoginRequest.getPassword());

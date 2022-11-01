@@ -13,6 +13,7 @@ import com.yil.account.role.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +30,7 @@ public class RoleController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<PageDto<RoleDto>> findAll(
-            @RequestParam(required = false, defaultValue = ApiConstant.PAGE) int page,
-            @RequestParam(required = false, defaultValue = ApiConstant.PAGE_SIZE) int size) {
-        if (page < 0)
-            page = 0;
-        if (size <= 0 || size > 1000)
-            size = 1000;
-        Pageable pageable = PageRequest.of(page, size);
+    public ResponseEntity<PageDto<RoleDto>> findAll(@PageableDefault Pageable pageable) {
         PageDto<RoleDto> pageDto = mapper.map(roleService.findAll(pageable));
         return ResponseEntity.ok(pageDto);
     }

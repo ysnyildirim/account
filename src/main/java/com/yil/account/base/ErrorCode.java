@@ -7,13 +7,13 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+    PermissionNotAssignable(2000022, "Yetki atanamaz!"),
+    RoleNotAssignable(2000021, "Rol atanamaz!"),
     JwtExpired(2000020, "Token expired"),
     UserPhotoNotFound(2000018, "User photo not found"),
     RolePermissionNotFound(2000015, "Role permission not found"),
     WrongPassword(2000012, "Wrong password"),
     LockedUser(2000011, "User locked"),
-    DisabledUser(2000010, "User disabled"),
-    UserTypeNotFound(2000008, "User type not found"),
     UserNotFound(2000006, "User not found"),
     UserNameCannotBeUsed(2000005, "User name cannot be used"),
     RoleNotFound(2000004, "Role not found"),

@@ -18,11 +18,8 @@ import java.util.Date;
 public class UserDto implements Serializable {
     private Long id;
     private String userName;
-    private Boolean enabled;
     private Boolean locked;
     private Date lastPasswordChangeDate;
-    private Integer userTypeId;
     private String mail;
-    private Long personId;
     private Boolean passwordNeedsChanged;
 }

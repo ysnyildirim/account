@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,5 +19,5 @@ import lombok.NoArgsConstructor;
 public class ApiError {
     private String message;
     private Integer code;
-    private ApiError[] errors;
+    private List<ApiError> errors;
 }
