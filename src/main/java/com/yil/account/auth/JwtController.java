@@ -43,7 +43,7 @@ public class JwtController {
         user.setLastLogin(new Date());
         userService.save(user);
         JwtResponce responce = new JwtResponce();
-        responce.setToken(token);
+        responce.setAccessToken(token);
         responce.setRefreshToken(refreshToken);
         return ResponseEntity.ok(responce);
     }
@@ -58,7 +58,7 @@ public class JwtController {
         String token = jwtTokenUtil.generateToken(user);
         String refreshToken = jwtTokenUtil.refreshToken(token);
         JwtResponce responce = new JwtResponce();
-        responce.setToken(token);
+        responce.setAccessToken(token);
         responce.setRefreshToken(refreshToken);
         return ResponseEntity.ok(responce);
     }
