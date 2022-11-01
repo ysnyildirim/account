@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 
 @RequiredArgsConstructor
 @RestController
@@ -39,6 +40,8 @@ public class JwtController {
             throw new WrongPasswordException();
         String token = jwtTokenUtil.generateToken(user);
         String refreshToken = jwtTokenUtil.refreshToken(token);
+        user.setLastLogin(new Date());
+        userService.save(user);
         JwtResponce responce = new JwtResponce();
         responce.setToken(token);
         responce.setRefreshToken(refreshToken);
