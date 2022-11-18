@@ -21,8 +21,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(schema = "AUTH",
-        name = "REFRESH_TOKEN")
-public class RefreshToken {
+        name = "TOKEN")
+public class Token {
     @Id
     @Column(name = "TOKEN")
     private String token;
@@ -32,4 +32,8 @@ public class RefreshToken {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "EXPIRY_DATE", nullable = false)
     private Date expiryDate;
+    @Comment(value = "Olusturulma tarihi")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "CREATE_DATE", nullable = false)
+    private Date createDate;
 }

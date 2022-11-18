@@ -3,11 +3,11 @@
  */
 package com.yil.account.auth.service;
 
-import com.yil.account.auth.dao.RefreshTokenDao;
+import com.yil.account.auth.dao.TokenDao;
 import com.yil.account.auth.dto.JwtLoginRequest;
 import com.yil.account.auth.dto.JwtRefreshRequest;
 import com.yil.account.auth.dto.JwtResponce;
-import com.yil.account.auth.model.RefreshToken;
+import com.yil.account.auth.model.Token;
 import com.yil.account.base.MD5Util;
 import com.yil.account.exception.*;
 import com.yil.account.user.model.User;
@@ -31,7 +31,7 @@ import java.util.function.Function;
 public class JwtTokenUtil implements Serializable {
     @Serial
     private static final long serialVersionUID = -2550185165626007488L;
-    private final RefreshTokenDao refreshTokenDao;
+    private final TokenDao tokenDao;
     private final UserService userService;
     @Value("${jwt.expiration}")
     private long expiration;
@@ -81,14 +81,14 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public JwtResponce refresh(JwtRefreshRequest jwtRefreshRequest) throws RefreshTokenNotFoundException, RefreshTokenExpiredException, UserNotFoundException, LockedUserException {
-        RefreshToken token = refreshTokenDao.findById(jwtRefreshRequest.getRefreshToken()).orElseThrow(RefreshTokenNotFoundException::new);
+        Token token = tokenDao.findById(jwtRefreshRequest.getRefreshToken()).orElseThrow(RefreshTokenNotFoundException::new);
         if (token.getExpiryDate().compareTo(new Date()) < 0)
             throw new RefreshTokenExpiredException();
         User user = userService.findById(token.getUserId());
         if (user.isLocked())
             throw new LockedUserException();
         JwtResponce responce = generateToken(user);
-        refreshTokenDao.delete(token);
+        tokenDao.delete(token);
         return responce;
     }
 
@@ -96,24 +96,26 @@ public class JwtTokenUtil implements Serializable {
         final Date createdDate = new Date(System.currentTimeMillis());
         final Date expirationDate = new Date(createdDate.getTime() + expiration);
         final Date refreshExpirationDate = new Date(createdDate.getTime() + expiration + refreshExpirationMs);
+
+        Token refreshToken = new Token();
+        refreshToken.setToken(UUID.randomUUID().toString());
+        refreshToken.setUserId(user.getId());
+        refreshToken.setExpiryDate(refreshExpirationDate);
+        refreshToken.setCreateDate(createdDate);
+        tokenDao.save(refreshToken);
+
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
         claims.put("mail", user.getMail());
         String token = Jwts.builder()
                 .setClaims(claims)
-                .setId(UUID.randomUUID().toString())
+                .setId(refreshToken.getToken())
                 .setSubject(user.getUserName())
                 .setIssuedAt(createdDate)
                 .setNotBefore(createdDate)
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
-
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setToken(UUID.randomUUID().toString());
-        refreshToken.setUserId(user.getId());
-        refreshToken.setExpiryDate(refreshExpirationDate);
-        refreshTokenDao.save(refreshToken);
 
         JwtResponce responce = new JwtResponce();
         responce.setToken(token);
