@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class JwtResponce implements Serializable {
     @Serial
     private static final long serialVersionUID = -8091879091924046844L;
-    private String accessToken;
+    private String token;
     private String refreshToken;
-    private String tokenType = "Bearer";
+    private String type = "Bearer";
 }

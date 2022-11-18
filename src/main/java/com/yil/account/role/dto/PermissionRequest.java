@@ -21,4 +21,6 @@ public class PermissionRequest {
     private String description;
     @NotNull
     private Boolean assignable;
+    @NotNull
+    private Integer permissionTypeId;
 }

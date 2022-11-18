@@ -7,6 +7,8 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+    RefreshTokenExpired(2000024, "Yenileme jetonunun süresi doldu. Lütfen yeni bir oturum açma isteğinde bulunun."),
+    RefreshTokenNotFound(2000023, "Yenileme jetonu bulunamadı! Daha önce kullanılmış olabilir. Lütfen yeni bir oturum açma isteğinde bulunun."),
     PermissionNotAssignable(2000022, "Yetki atanamaz!"),
     RoleNotAssignable(2000021, "Rol atanamaz!"),
     JwtExpired(2000020, "Token expired"),

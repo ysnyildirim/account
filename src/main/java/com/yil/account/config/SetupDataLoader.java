@@ -2,9 +2,11 @@ package com.yil.account.config;
 
 import com.yil.account.base.MD5Util;
 import com.yil.account.role.model.Permission;
+import com.yil.account.role.model.PermissionType;
 import com.yil.account.role.model.Role;
 import com.yil.account.role.model.RolePermission;
 import com.yil.account.role.repository.PermissionDao;
+import com.yil.account.role.repository.PermissionTypeDao;
 import com.yil.account.role.repository.RoleDao;
 import com.yil.account.role.repository.RolePermissionDao;
 import com.yil.account.user.dao.UserDao;
@@ -27,6 +29,9 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
     public static Role roleGercek;
     public static Role roleTuzel;
     public static User adminUser;
+    public static PermissionType permissionTypeEndPoint;
+    public static PermissionType permissionTypeAkis;
+
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -38,6 +43,9 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
     @Autowired
     private UserRoleDao userRoleDao;
 
+    @Autowired
+    private PermissionTypeDao permissionTypeDao;
+
     @Override
     public void onApplicationEvent(ContextStartedEvent event) {
         System.out.println("Start Up Events");
@@ -46,12 +54,13 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         try {
             initDefaultUsers();
             initDefaultRoles();
+            initPermissionTypes();
             // initSikayet();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     private void initDefaultUsers() throws NoSuchAlgorithmException {
         adminUser = User
@@ -105,6 +114,17 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
                 .createdUserId(adminUser.getId())
                 .build();
         roleDao.save(roleTuzel);
+    }
+
+    private void initPermissionTypes() {
+        permissionTypeEndPoint = permissionTypeDao.save(PermissionType.builder()
+                .id(1)
+                .name("End Point")
+                .build());
+        permissionTypeAkis = permissionTypeDao.save(PermissionType.builder()
+                .id(2)
+                .name("Akış")
+                .build());
     }
 
     private void initSikayet() {

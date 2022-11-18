@@ -33,6 +33,8 @@ public class Permission implements IEntity {
     @ColumnDefault(value = "0")
     @Column(name = "ASSIGNABLE", nullable = false)
     private boolean assignable;
+    @Column(name = "PERMISSION_TYPE_ID", nullable = false)
+    private Integer permissionTypeId;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE")
     private Date createdDate;

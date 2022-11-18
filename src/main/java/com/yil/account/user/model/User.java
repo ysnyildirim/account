@@ -51,10 +51,6 @@ public class User implements IEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_PASSWORD_CHANGE")
     private Date lastPasswordChange;
-    @Comment("Son giriş tarihi")
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "LAST_LOGIN")
-    private Date lastLogin;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE")
     private Date createdDate;

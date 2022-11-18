@@ -48,6 +48,7 @@ public class PermissionController {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setAssignable(dto.getAssignable());
+        entity.setPermissionTypeId(dto.getPermissionTypeId());
         entity.setCreatedUserId(authenticatedUserId);
         entity.setCreatedDate(new Date());
         entity = permissionService.save(entity);
@@ -65,6 +66,7 @@ public class PermissionController {
         permission.setName(dto.getName());
         permission.setDescription(dto.getDescription());
         permission.setAssignable(dto.getAssignable());
+        permission.setPermissionTypeId(dto.getPermissionTypeId());
         permission.setLastModifyDate(new Date());
         permission.setLastModifyUserId(authenticatedUserId);
         permission = permissionService.save(permission);
