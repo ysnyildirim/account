@@ -1,15 +1,13 @@
 package com.yil.account.role.model;
 
 import com.yil.account.base.IEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -33,8 +31,7 @@ public class Role implements IEntity {
     @Column(name = "DESCRIPTION", length = 4000)
     private String description;
     @Comment(value = "Rol atanabilir mi?")
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    @ColumnDefault(value = "0")
+
     @Column(name = "ASSIGNABLE", nullable = false)
     private boolean assignable;
     @Temporal(TemporalType.TIMESTAMP)

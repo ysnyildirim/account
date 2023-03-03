@@ -4,12 +4,11 @@ import com.yil.account.exception.PermissionNotFoundException;
 import com.yil.account.role.dto.PermissionDto;
 import com.yil.account.role.model.Permission;
 import com.yil.account.role.repository.PermissionDao;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import javax.validation.constraints.NotNull;
 
 @Service
 @RequiredArgsConstructor

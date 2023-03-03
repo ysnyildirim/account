@@ -3,9 +3,9 @@
  */
 package com.yil.account.base;
 
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;

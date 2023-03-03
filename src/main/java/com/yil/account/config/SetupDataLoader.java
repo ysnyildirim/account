@@ -51,15 +51,15 @@ public class SetupDataLoader implements ApplicationListener<ContextStartedEvent>
         System.out.println("Start Up Events");
         System.out.println(new Date(event.getTimestamp()));
         System.out.println("----------------------");
-        try {
-            initDefaultUsers();
-            initDefaultRoles();
-            initPermissionTypes();
-            // initSikayet();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            initDefaultUsers();
+//            initDefaultRoles();
+//            initPermissionTypes();
+//            // initSikayet();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void initDefaultUsers() throws NoSuchAlgorithmException {

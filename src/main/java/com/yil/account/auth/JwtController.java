@@ -8,12 +8,12 @@ import com.yil.account.auth.dto.JwtRefreshRequest;
 import com.yil.account.auth.dto.JwtResponce;
 import com.yil.account.auth.service.JwtTokenUtil;
 import com.yil.account.exception.*;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 
 @RequiredArgsConstructor

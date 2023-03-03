@@ -5,6 +5,7 @@ import com.yil.account.base.ApiException;
 import com.yil.account.base.ApiFieldError;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
@@ -23,9 +24,7 @@ import java.util.List;
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         List<ApiError> errors = new ArrayList<>();
         BindingResult bindingResult = ex.getBindingResult();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -35,7 +34,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
             errors.add(responce);
         }
         ApiError responce = ApiError.builder()
-                .message(status.getReasonPhrase())
                 .code(status.value())
                 .errors(errors)
                 .build();
@@ -43,17 +41,16 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status))
             request.setAttribute("javax.servlet.error.exception", ex, 0);
         ApiError responce = ApiError.builder()
-                .message(status.getReasonPhrase())
                 .code(status.value())
                 .build();
         return handleApiError(ex, responce, headers, status, request);
     }
 
-    protected final ResponseEntity<Object> handleApiError(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected final ResponseEntity<Object> handleApiError(Exception ex, Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         return new ResponseEntity(body, headers, status);
     }
 

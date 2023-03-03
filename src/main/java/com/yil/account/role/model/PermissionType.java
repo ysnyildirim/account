@@ -1,9 +1,8 @@
 package com.yil.account.role.model;
 
 import com.yil.account.base.IEntity;
+import jakarta.persistence.*;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Builder
 @NoArgsConstructor

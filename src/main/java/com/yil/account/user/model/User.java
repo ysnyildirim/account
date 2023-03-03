@@ -1,15 +1,13 @@
 package com.yil.account.user.model;
 
 import com.yil.account.base.IEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -35,16 +33,12 @@ public class User implements IEntity {
     @Column(name = "PASSWORD", nullable = false, length = 100)
     private String password;
     @Comment("Kullanıcı kilit durumu")
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    @ColumnDefault(value = "0")
     @Column(name = "LOCKED", nullable = false)
     private boolean locked;
     @Comment("Kullanıcı mail bilgisi. Şifre yenileme işlemleri bu mail üzerinden sağlanıcaktır.")
     @Column(name = "MAIL", nullable = false)
     private String mail;
     @Comment("Şifre süreli mi? Süreli ise belirli periyotlarda değiştirilmesi gerekli")
-    @Type(type = "org.hibernate.type.NumericBooleanType")
-    @ColumnDefault(value = "1")
     @Column(name = "EXPIRED_PASSWORD", nullable = false)
     private boolean expiredPassword;
     @Comment("Son şifre değişiklik tarihi")

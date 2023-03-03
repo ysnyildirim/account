@@ -15,6 +15,7 @@ import com.yil.account.user.dto.UserRequest;
 import com.yil.account.user.dto.UserResponse;
 import com.yil.account.user.model.User;
 import com.yil.account.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -22,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 

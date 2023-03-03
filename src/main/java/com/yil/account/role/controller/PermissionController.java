@@ -9,6 +9,7 @@ import com.yil.account.role.dto.PermissionRequest;
 import com.yil.account.role.dto.PermissionResponse;
 import com.yil.account.role.model.Permission;
 import com.yil.account.role.service.PermissionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -16,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Date;
 
 @RequiredArgsConstructor

@@ -4,15 +4,13 @@
 
 package com.yil.account.auth.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Entity

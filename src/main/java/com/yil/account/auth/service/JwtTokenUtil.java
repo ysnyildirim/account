@@ -66,9 +66,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public Boolean validateToken(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
-        if (isTokenExpired(token))
-            return false;
-        return true;
+        return !isTokenExpired(token);
     }
 
     private Boolean isTokenExpired(String token) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {

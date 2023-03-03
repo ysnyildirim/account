@@ -1,12 +1,12 @@
 package com.yil.account.role.model;
 
 import com.yil.account.base.IEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
 @Builder
